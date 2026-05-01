@@ -1,4 +1,13 @@
 ---
+let latestPostUrl = 'https://litchfieldledger.beehiiv.com';
+try {
+  const rss = await fetch('https://litchfieldledger.beehiiv.com/feed');
+  const xml = await rss.text();
+  const match = xml.match(/<item>[\s\S]*?<link>(https:\/\/litchfieldledger\.beehiiv\.com\/p\/[^<]+)<\/link>/);
+  if (match) latestPostUrl = match[1].trim();
+} catch (e) {
+  // falls back to homepage if feed unavailable
+}
 ---
 
 <!DOCTYPE html>
@@ -127,7 +136,7 @@
       </div>
       <div class="widget-cta">
         <p>Get the full report in your inbox.</p>
-        <a href="https://litchfieldledger.com" class="btn-outline">Read This Week's Issue</a>
+        <a href={latestPostUrl} class="btn-outline">Read This Week's Issue</a>
         <span class="already-sub">Already subscribed?</span>
       </div>
     </div>
