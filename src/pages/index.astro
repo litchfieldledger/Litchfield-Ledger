@@ -8,7 +8,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>The Litchfield Ledger</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=New+Amsterdam&family=Playfair+Display:ital,wght@0,700;0,900;1,400&family=Libre+Baskerville:ital@0;1&family=Barlow+Condensed:wght@600;700&display=swap" rel="stylesheet"><style>
+<link href="https://fonts.googleapis.com/css2?family=New+Amsterdam&family=Playfair+Display:ital,wght@0,700;0,900;1,400&family=Libre+Baskerville:ital@0;1&family=Barlow+Condensed:wght@600;700&display=swap" rel="stylesheet">
+<script async src="https://subscribe-forms.beehiiv.com/v3/loader.js" data-beehiiv-form="48c597c3-c9e3-4c7a-b09b-db8627e0a48e"></script>
+<style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   :root {
     --green: #1e3d28;
@@ -30,13 +32,12 @@
   .nav-submit:hover { border-color: white; }
   .nav-cta { background: var(--orange) !important; color: white !important; padding: 8px 20px !important; border-radius: 2px; }
   .hero { position: relative; height: 580px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; overflow: hidden; }
-.hero-bg { position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(10,28,14,0.55) 0%, rgba(15,35,18,0.35) 50%, rgba(8,22,12,0.72) 100%), url('/Connecticut-Mountains.jpg') center center / cover no-repeat; }  .hero-content { position: relative; z-index: 2; max-width: 680px; padding: 0 24px; }
+  .hero-bg { position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(10,28,14,0.55) 0%, rgba(15,35,18,0.35) 50%, rgba(8,22,12,0.72) 100%), url('/Connecticut-Mountains.jpg') center center / cover no-repeat; }
+  .hero-content { position: relative; z-index: 2; max-width: 680px; padding: 0 24px; }
   .hero-eyebrow { font-family: 'Barlow Condensed', sans-serif; font-size: 13px; letter-spacing: 0.22em; text-transform: uppercase; color: white; margin-bottom: 16px; }
-.hero-title { font-family: 'New Amsterdam', sans-serif; font-size: 42px; font-weight: 900; line-height: 0.95; color: white; text-transform: uppercase; letter-spacing: -0.01em; margin-bottom: 20px; }  .hero-sub { font-family: 'Libre Baskerville', serif; font-style: italic; color: rgba(255,255,255,0.75); font-size: 17px; margin-bottom: 36px; }
-  .hero-form { display: flex; max-width: 440px; margin: 0 auto 12px; }
-  .hero-form input { flex: 1; padding: 14px 18px; border: none; font-family: 'Libre Baskerville', serif; font-size: 14px; background: rgba(255,255,255,0.92); color: var(--text-dark); outline: none; border-radius: 2px 0 0 2px; }
-  .hero-form button { padding: 14px 24px; background: var(--orange); color: white; border: none; font-family: 'Barlow Condensed', sans-serif; font-size: 15px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer; border-radius: 0 2px 2px 0; white-space: nowrap; }
-  .hero-disclaimer { color: rgba(255,255,255,0.5); font-family: 'Barlow Condensed', sans-serif; font-size: 13px; letter-spacing: 0.05em; font-style: italic; }
+  .hero-title { font-family: 'New Amsterdam', sans-serif; font-size: 42px; font-weight: 900; line-height: 0.95; color: white; text-transform: uppercase; letter-spacing: -0.01em; margin-bottom: 20px; }
+  .hero-sub { font-family: 'Libre Baskerville', serif; font-style: italic; color: rgba(255,255,255,0.75); font-size: 17px; margin-bottom: 36px; }
+  .hero-disclaimer { color: rgba(255,255,255,0.5); font-family: 'Barlow Condensed', sans-serif; font-size: 13px; letter-spacing: 0.05em; font-style: italic; margin-top: 12px; }
   .content { max-width: 960px; margin: 0 auto; padding: 56px 48px; display: grid; grid-template-columns: 320px 1fr; gap: 56px; align-items: start; }
   .field-report { border: 1.5px solid #c8bfa8; border-radius: 2px; background: white; overflow: hidden; }
   .widget-header { background: var(--green); padding: 14px 20px; }
@@ -72,16 +73,9 @@
   .subscribe-box { margin-top: 32px; background: var(--green); padding: 28px; border-radius: 2px; }
   .subscribe-box-label { font-family: 'Barlow Condensed', sans-serif; font-size: 13px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: var(--orange); margin-bottom: 6px; }
   .subscribe-box-copy { font-style: italic; color: rgba(255,255,255,0.7); font-size: 14px; margin-bottom: 18px; }
-  .subscribe-box input { width: 100%; padding: 12px 16px; border: 1px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.1); color: white; font-family: 'Libre Baskerville', serif; font-size: 14px; border-radius: 2px; margin-bottom: 10px; outline: none; }
-  .subscribe-box input::placeholder { color: rgba(255,255,255,0.45); }
-  .subscribe-box button { width: 100%; padding: 13px; background: var(--orange); color: white; border: none; font-family: 'Barlow Condensed', sans-serif; font-size: 15px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; border-radius: 2px; cursor: pointer; }
   footer { background: var(--orange); padding: 48px; text-align: center; margin-top: 24px; }
   .footer-logo { font-family: 'Playfair Display', serif; font-size: 24px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.08em; color: white; margin-bottom: 8px; }
   .footer-sub { font-family: 'Barlow Condensed', sans-serif; font-size: 13px; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(255,255,255,0.7); margin-bottom: 28px; }
-  .footer-form { display: flex; max-width: 380px; margin: 0 auto 16px; }
-  .footer-form input { flex: 1; padding: 12px 16px; border: none; background: rgba(255,255,255,0.2); color: white; font-family: 'Libre Baskerville', serif; font-size: 14px; outline: none; border-radius: 2px 0 0 2px; }
-  .footer-form input::placeholder { color: rgba(255,255,255,0.6); }
-  .footer-form button { padding: 12px 20px; background: var(--green); color: white; border: none; font-family: 'Barlow Condensed', sans-serif; font-size: 14px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer; border-radius: 0 2px 2px 0; }
   .footer-nav { margin-top: 20px; }
   .footer-nav a { font-family: 'Barlow Condensed', sans-serif; font-size: 13px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.65); text-decoration: none; margin: 0 12px; }
   .footer-copy { margin-top: 20px; font-family: 'Barlow Condensed', sans-serif; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(255,255,255,0.4); }
@@ -105,10 +99,7 @@
     <p class="hero-eyebrow">A Northwest Connecticut Newsletter</p>
     <h1 class="hero-title">Exploring<br>Litchfield<br>Hills</h1>
     <p class="hero-sub">Ecology, wildlife, and people of the region.</p>
-    <div class="hero-form">
-      <input type="email" placeholder="your@email.com">
-      <button>Join Free</button>
-    </div>
+    <div data-beehiiv-form="48c597c3-c9e3-4c7a-b09b-db8627e0a48e"></div>
     <p class="hero-disclaimer">Every week. Free. No spam.</p>
   </div>
 </section>
@@ -195,8 +186,7 @@
     <div class="subscribe-box">
       <div class="subscribe-box-label">Get the Newsletter</div>
       <p class="subscribe-box-copy">Every Thursday in your inbox.</p>
-      <input type="email" placeholder="your@email.com">
-      <button>Subscribe</button>
+      <div data-beehiiv-form="48c597c3-c9e3-4c7a-b09b-db8627e0a48e"></div>
     </div>
   </main>
 </div>
@@ -204,10 +194,7 @@
 <footer>
   <div class="footer-logo">The Litchfield Ledger</div>
   <div class="footer-sub">Litchfield County, Connecticut</div>
-  <div class="footer-form">
-    <input type="email" placeholder="your@email.com">
-    <button>Subscribe</button>
-  </div>
+  <div data-beehiiv-form="48c597c3-c9e3-4c7a-b09b-db8627e0a48e"></div>
   <div class="footer-nav">
     <a href="#">Archive</a>
     <a href="#">Events</a>
