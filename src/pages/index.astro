@@ -37,6 +37,8 @@
   .hero-title { font-family: 'New Amsterdam', sans-serif; font-size: 42px; font-weight: 900; line-height: 0.95; color: white; text-transform: uppercase; letter-spacing: -0.01em; margin-bottom: 20px; }
   .hero-sub { font-family: 'Libre Baskerville', serif; font-style: italic; color: rgba(255,255,255,0.75); font-size: 17px; margin-bottom: 36px; }
   .hero-disclaimer { color: rgba(255,255,255,0.5); font-family: 'Barlow Condensed', sans-serif; font-size: 13px; letter-spacing: 0.05em; font-style: italic; margin-top: 12px; }
+  .beehiiv-wrap { width: 100%; max-width: 480px; margin: 0 auto; }
+  .beehiiv-wrap iframe { background: transparent !important; }
   .content { max-width: 960px; margin: 0 auto; padding: 56px 48px; display: grid; grid-template-columns: 320px 1fr; gap: 56px; align-items: start; }
   .field-report { border: 1.5px solid #c8bfa8; border-radius: 2px; background: white; overflow: hidden; }
   .widget-header { background: var(--green); padding: 14px 20px; }
@@ -98,7 +100,9 @@
     <p class="hero-eyebrow">A Northwest Connecticut Newsletter</p>
     <h1 class="hero-title">Exploring<br>Litchfield<br>Hills</h1>
     <p class="hero-sub">Ecology, wildlife, and people of the region.</p>
-    <script is:inline src="https://subscribe-forms.beehiiv.com/v3/loader.js" data-beehiiv-form="48c597c3-c9e3-4c7a-b09b-db8627e0a48e"></script>
+    <div class="beehiiv-wrap">
+      <script is:inline src="https://subscribe-forms.beehiiv.com/v3/loader.js" data-beehiiv-form="48c597c3-c9e3-4c7a-b09b-db8627e0a48e"></script>
+    </div>
     <p class="hero-disclaimer">Every week. Free. No spam.</p>
   </div>
 </section>
@@ -185,7 +189,9 @@
     <div class="subscribe-box">
       <div class="subscribe-box-label">Get the Newsletter</div>
       <p class="subscribe-box-copy">Every Thursday in your inbox.</p>
-      <script is:inline src="https://subscribe-forms.beehiiv.com/v3/loader.js" data-beehiiv-form="48c597c3-c9e3-4c7a-b09b-db8627e0a48e"></script>
+      <div class="beehiiv-wrap">
+        <script is:inline src="https://subscribe-forms.beehiiv.com/v3/loader.js" data-beehiiv-form="48c597c3-c9e3-4c7a-b09b-db8627e0a48e"></script>
+      </div>
     </div>
   </main>
 </div>
@@ -193,7 +199,9 @@
 <footer>
   <div class="footer-logo">The Litchfield Ledger</div>
   <div class="footer-sub">Litchfield County, Connecticut</div>
-  <script is:inline src="https://subscribe-forms.beehiiv.com/v3/loader.js" data-beehiiv-form="48c597c3-c9e3-4c7a-b09b-db8627e0a48e"></script>
+  <div class="beehiiv-wrap">
+    <script is:inline src="https://subscribe-forms.beehiiv.com/v3/loader.js" data-beehiiv-form="48c597c3-c9e3-4c7a-b09b-db8627e0a48e"></script>
+  </div>
   <div class="footer-nav">
     <a href="#">Archive</a>
     <a href="#">Events</a>
