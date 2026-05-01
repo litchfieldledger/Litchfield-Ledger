@@ -1,9 +1,9 @@
 ---
 let latestPostUrl = 'https://litchfieldledger.beehiiv.com';
 try {
-  const rss = await fetch('https://litchfieldledger.beehiiv.com/feed');
+  const rss = await fetch('https://www.litchfieldledger.com/feed');
   const xml = await rss.text();
-  const match = xml.match(/<item>[\s\S]*?<link>(https:\/\/litchfieldledger\.beehiiv\.com\/p\/[^<]+)<\/link>/);
+  const match = xml.match(/<item>[\s\S]*?<link>([^<]+\/p\/[^<]+)<\/link>/);
   if (match) latestPostUrl = match[1].trim();
 } catch (e) {
   // falls back to homepage if feed unavailable
