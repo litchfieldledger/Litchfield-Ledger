@@ -42,8 +42,10 @@
   .content { max-width: 960px; margin: 0 auto; padding: 56px 48px; display: grid; grid-template-columns: 320px 1fr; gap: 56px; align-items: start; }
   .field-report { border: 1.5px solid #c8bfa8; border-radius: 2px; background: white; overflow: hidden; }
   .widget-header { background: var(--green); padding: 14px 20px; }
+  .widget-header-inner { display: flex; justify-content: space-between; align-items: flex-end; }
   .widget-title { font-family: 'Barlow Condensed', sans-serif; font-size: 16px; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; color: white; }
   .widget-date { font-family: 'Barlow Condensed', sans-serif; font-size: 12px; letter-spacing: 0.1em; color: rgba(255,255,255,0.6); text-transform: uppercase; margin-top: 2px; }
+  .widget-live { font-family: 'Barlow Condensed', sans-serif; font-size: 10px; color: rgba(255,255,255,0.35); letter-spacing: 0.08em; }
   .field-row { display: flex; justify-content: space-between; align-items: baseline; padding: 13px 20px; border-bottom: 1px solid #eee8da; }
   .field-row:last-child { border-bottom: none; }
   .field-label { font-family: 'Barlow Condensed', sans-serif; font-size: 13px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-muted); }
@@ -58,6 +60,7 @@
   .pheno-stages { display: flex; justify-content: space-between; margin-top: 6px; }
   .pheno-stage { font-family: 'Barlow Condensed', sans-serif; font-size: 10px; letter-spacing: 0.06em; text-transform: uppercase; color: #aaa; }
   .pheno-stage.active { color: var(--green); font-weight: 700; }
+  .fr-loading { padding: 36px 20px; text-align: center; color: var(--text-muted); font-family: 'Barlow Condensed', sans-serif; font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; }
   .widget-cta { padding: 16px 20px; background: var(--cream); border-top: 1px solid #c8bfa8; text-align: center; }
   .widget-cta p { font-size: 13px; color: var(--text-muted); margin-bottom: 10px; font-style: italic; }
   .btn-outline { display: inline-block; padding: 9px 24px; background: var(--orange); color: white; text-decoration: none; font-family: 'Barlow Condensed', sans-serif; font-size: 14px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; border-radius: 2px; }
@@ -109,46 +112,22 @@
 
 <div class="content">
   <aside>
-    <div class="field-report">
+    <div class="field-report" id="field-report-widget">
       <div class="widget-header">
-        <div class="widget-title">Field Report</div>
-        <div class="widget-date">May 1, 2026 — Litchfield County</div>
-      </div>
-      <div>
-        <div class="field-row">
-          <span class="field-label">Bantam Lake</span>
-          <span class="field-value good">58°<span class="unit">F — rising</span></span>
-        </div>
-        <div class="field-row">
-          <span class="field-label">Trail Conditions</span>
-          <span class="field-value caution">Muddy<span class="unit">— boots req.</span></span>
-        </div>
-        <div class="field-row">
-          <span class="field-label">Vernal Pools</span>
-          <span class="field-value good">Active<span class="unit">— peak season</span></span>
-        </div>
-        <div class="field-row">
-          <span class="field-label">Sunrise / Sunset</span>
-          <span class="field-value">6:03 <span class="unit">AM</span> / 7:49 <span class="unit">PM</span></span>
-        </div>
-        <div class="phenology-bar">
-          <div class="pheno-label">Spring Progression</div>
-          <div class="pheno-track"><div class="pheno-fill" style="width: 62%"></div></div>
-          <div class="pheno-stages">
-            <span class="pheno-stage">Mud</span>
-            <span class="pheno-stage active">Before Bloom</span>
-            <span class="pheno-stage">Peak</span>
-            <span class="pheno-stage">Summer</span>
+        <div class="widget-header-inner">
+          <div>
+            <div class="widget-title">Field Report</div>
+            <div class="widget-date" id="fr-date">Loading...</div>
           </div>
+          <div class="widget-live" id="fr-live"></div>
         </div>
-        <div class="field-row">
-          <span class="field-label">What's Emerging</span>
-          <span class="field-value" style="font-size:13px; font-style:italic;">Trout lily, bloodroot</span>
-        </div>
+      </div>
+      <div id="fr-body">
+        <div class="fr-loading">Fetching field conditions...</div>
       </div>
       <div class="widget-cta">
         <p>Get the full report in your inbox.</p>
-        <a href="#" class="btn-outline">Read This Week's Issue</a>
+        <a href="https://litchfieldledger.com" class="btn-outline">Read This Week's Issue</a>
         <span class="already-sub">Already subscribed?</span>
       </div>
     </div>
@@ -209,6 +188,121 @@
   </div>
   <p class="footer-copy">© 2026 The Litchfield Ledger</p>
 </footer>
+
+<script is:inline>
+(function () {
+  const LAT = 41.7448, LNG = -73.2354;
+
+  function doy(date) {
+    return Math.floor((date - new Date(date.getFullYear(), 0, 0)) / 86400000);
+  }
+
+  function emerging(d) {
+    if (d < 74)  return 'Dormant';
+    if (d < 85)  return 'Skunk cabbage, hepatica';
+    if (d < 100) return 'Bloodroot, spring beauty';
+    if (d < 115) return 'Trout lily, coltsfoot';
+    if (d < 130) return 'Wild ginger, jack-in-the-pulpit';
+    if (d < 150) return 'Mayapple, wild columbine';
+    if (d < 166) return 'Mountain laurel';
+    return 'Summer flora';
+  }
+
+  function springPct(d) {
+    return Math.max(0, Math.min(100, Math.round(((d - 74) / (166 - 74)) * 100)));
+  }
+
+  function springStage(p) {
+    if (p < 18) return 'Mud';
+    if (p < 45) return 'Before Bloom';
+    if (p < 72) return 'Peak';
+    return 'Summer';
+  }
+
+  function trailCond(mm) {
+    if (mm > 25) return { l: 'Muddy',  n: 'boots req.',   cls: 'caution', dot: '#c85c1e' };
+    if (mm > 10) return { l: 'Soft',   n: 'wet in spots', cls: 'caution', dot: '#c85c1e' };
+    if (mm > 3)  return { l: 'Damp',   n: 'mostly firm',  cls: 'good',    dot: '#2a5236' };
+    return             { l: 'Good',   n: 'firm & dry',   cls: 'good',    dot: '#1e3d28' };
+  }
+
+  function sunFmt(iso) {
+    const d = new Date(iso), h = d.getHours(), m = d.getMinutes().toString().padStart(2, '0');
+    return `${h % 12 || 12}:${m} <span class="unit">${h >= 12 ? 'PM' : 'AM'}</span>`;
+  }
+
+  function row(label, valueHTML, cls) {
+    return `<div class="field-row">
+      <span class="field-label">${label}</span>
+      <span class="field-value ${cls || ''}">${valueHTML}</span>
+    </div>`;
+  }
+
+  const now   = new Date();
+  const month = now.getMonth() + 1;
+  const d     = doy(now);
+  const pct   = springPct(d);
+  const stage = springStage(pct);
+
+  document.getElementById('fr-date').textContent =
+    now.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }) +
+    ' — Litchfield County';
+
+  Promise.allSettled([
+    fetch(`https://api.sunrise-sunset.org/json?lat=${LAT}&lng=${LNG}&formatted=0`).then(r => r.json()),
+    fetch(`https://api.open-meteo.com/v1/forecast?latitude=${LAT}&longitude=${LNG}&daily=temperature_2m_mean,precipitation_sum&past_days=14&forecast_days=0&timezone=America%2FNew_York`).then(r => r.json()),
+  ]).then(([sunRes, weatherRes]) => {
+
+    let sunHTML = '—';
+    if (sunRes.status === 'fulfilled') {
+      const s = sunRes.value.results;
+      sunHTML = `${sunFmt(s.sunrise)} <span style="color:#ccc;margin:0 4px">/</span> ${sunFmt(s.sunset)}`;
+    }
+
+    let lakeTempHTML = '<span style="color:var(--text-muted)">—</span>';
+    let lakeClass = '';
+    if (weatherRes.status === 'fulfilled') {
+      const temps = weatherRes.value.daily?.temperature_2m_mean || [];
+      if (temps.length) {
+        const avg  = temps.filter(Boolean).reduce((a, b) => a + b, 0) / temps.filter(Boolean).length;
+        const lag  = month <= 4 ? 14 : month === 5 ? 10 : 6;
+        const temp = Math.round((avg * 9 / 5 + 32) - lag);
+        lakeTempHTML = `${temp}°<span class="unit">F — est.</span>`;
+        lakeClass = 'good';
+      }
+    }
+
+    let trailHTML = 'Unknown<span class="unit">— check locally</span>';
+    let trailClass = '';
+    if (weatherRes.status === 'fulfilled') {
+      const precip = (weatherRes.value.daily?.precipitation_sum || []).slice(-3);
+      const total  = precip.reduce((a, b) => a + (b || 0), 0);
+      const tc     = trailCond(total);
+      trailHTML = `<span style="display:inline-block;width:7px;height:7px;border-radius:50%;background:${tc.dot};margin-right:5px;vertical-align:middle;"></span>${tc.l}<span class="unit">— ${tc.n}</span>`;
+      trailClass = tc.cls;
+    }
+
+    document.getElementById('fr-live').textContent =
+      'Live · ' + now.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+
+    document.getElementById('fr-body').innerHTML = `
+      ${row('Bantam Lake', lakeTempHTML, lakeClass)}
+      ${row('Trail Conditions', trailHTML, trailClass)}
+      ${row('Sunrise / Sunset', sunHTML)}
+      <div class="phenology-bar">
+        <div class="pheno-label">Spring Progression</div>
+        <div class="pheno-track"><div class="pheno-fill" style="width:${pct}%"></div></div>
+        <div class="pheno-stages">
+          ${['Mud','Before Bloom','Peak','Summer'].map(s =>
+            `<span class="pheno-stage ${s === stage ? 'active' : ''}">${s}</span>`
+          ).join('')}
+        </div>
+      </div>
+      ${row("What's Emerging", `<em style="font-size:13px">${emerging(d)}</em>`)}
+    `;
+  });
+})();
+</script>
 
 </body>
 </html>
