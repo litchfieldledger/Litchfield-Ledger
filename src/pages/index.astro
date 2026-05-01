@@ -1,17 +1,220 @@
 ---
-
 ---
 
+<!DOCTYPE html>
 <html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Litchfield Ledger</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=New+Amsterdam&family=Playfair+Display:ital,wght@0,700;0,900;1,400&family=Libre+Baskerville:ital@0;1&family=Barlow+Condensed:wght@600;700&display=swap" rel="stylesheet"><style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --green: #1e3d28;
+    --green-mid: #2a5236;
+    --orange: #c85c1e;
+    --orange-dark: #a84a16;
+    --cream: #f0ebe0;
+    --cream-dark: #e4ddd0;
+    --text-dark: #1a2218;
+    --text-mid: #3d4f3a;
+    --text-muted: #6b7d68;
+  }
+  body { font-family: 'Libre Baskerville', Georgia, serif; background: var(--cream); color: var(--text-dark); font-size: 16px; line-height: 1.7; }
+  .main-nav { position: absolute; top: 0; left: 0; right: 0; z-index: 10; display: flex; align-items: center; justify-content: space-between; padding: 20px 48px; }
+  .nav-logo img { height: 42px; width: auto; display: block; }
+  .nav-links { display: flex; align-items: center; gap: 16px; list-style: none; }
+  .nav-links a { color: rgba(255,255,255,0.85); text-decoration: none; font-family: 'Barlow Condensed', sans-serif; font-size: 14px; letter-spacing: 0.1em; text-transform: uppercase; }
+  .nav-submit { border: 1.5px solid rgba(255,255,255,0.5); color: white !important; padding: 8px 20px; border-radius: 2px; transition: border-color 0.2s; }
+  .nav-submit:hover { border-color: white; }
+  .nav-cta { background: var(--orange) !important; color: white !important; padding: 8px 20px !important; border-radius: 2px; }
+  .hero { position: relative; height: 580px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; overflow: hidden; }
+.hero-bg { position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(10,28,14,0.55) 0%, rgba(15,35,18,0.35) 50%, rgba(8,22,12,0.72) 100%), url('/Connecticut-Mountains.jpg') center center / cover no-repeat; }  .hero-content { position: relative; z-index: 2; max-width: 680px; padding: 0 24px; }
+  .hero-eyebrow { font-family: 'Barlow Condensed', sans-serif; font-size: 13px; letter-spacing: 0.22em; text-transform: uppercase; color: white; margin-bottom: 16px; }
+.hero-title { font-family: 'New Amsterdam', sans-serif; font-size: 42px; font-weight: 900; line-height: 0.95; color: white; text-transform: uppercase; letter-spacing: -0.01em; margin-bottom: 20px; }  .hero-sub { font-family: 'Libre Baskerville', serif; font-style: italic; color: rgba(255,255,255,0.75); font-size: 17px; margin-bottom: 36px; }
+  .hero-form { display: flex; max-width: 440px; margin: 0 auto 12px; }
+  .hero-form input { flex: 1; padding: 14px 18px; border: none; font-family: 'Libre Baskerville', serif; font-size: 14px; background: rgba(255,255,255,0.92); color: var(--text-dark); outline: none; border-radius: 2px 0 0 2px; }
+  .hero-form button { padding: 14px 24px; background: var(--orange); color: white; border: none; font-family: 'Barlow Condensed', sans-serif; font-size: 15px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer; border-radius: 0 2px 2px 0; white-space: nowrap; }
+  .hero-disclaimer { color: rgba(255,255,255,0.5); font-family: 'Barlow Condensed', sans-serif; font-size: 13px; letter-spacing: 0.05em; font-style: italic; }
+  .content { max-width: 960px; margin: 0 auto; padding: 56px 48px; display: grid; grid-template-columns: 320px 1fr; gap: 56px; align-items: start; }
+  .field-report { border: 1.5px solid #c8bfa8; border-radius: 2px; background: white; overflow: hidden; }
+  .widget-header { background: var(--green); padding: 14px 20px; }
+  .widget-title { font-family: 'Barlow Condensed', sans-serif; font-size: 16px; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; color: white; }
+  .widget-date { font-family: 'Barlow Condensed', sans-serif; font-size: 12px; letter-spacing: 0.1em; color: rgba(255,255,255,0.6); text-transform: uppercase; margin-top: 2px; }
+  .field-row { display: flex; justify-content: space-between; align-items: baseline; padding: 13px 20px; border-bottom: 1px solid #eee8da; }
+  .field-row:last-child { border-bottom: none; }
+  .field-label { font-family: 'Barlow Condensed', sans-serif; font-size: 13px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-muted); }
+  .field-value { font-family: 'Playfair Display', serif; font-size: 15px; font-weight: 700; color: var(--text-dark); text-align: right; }
+  .field-value .unit { font-family: 'Barlow Condensed', sans-serif; font-size: 12px; font-weight: 600; color: var(--text-muted); margin-left: 4px; }
+  .field-value.good { color: var(--green); }
+  .field-value.caution { color: var(--orange); }
+  .phenology-bar { padding: 16px 20px; border-bottom: 1px solid #eee8da; }
+  .pheno-label { font-family: 'Barlow Condensed', sans-serif; font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 8px; }
+  .pheno-track { height: 6px; background: #e8e0d0; border-radius: 3px; overflow: hidden; }
+  .pheno-fill { height: 100%; border-radius: 3px; background: var(--green); }
+  .pheno-stages { display: flex; justify-content: space-between; margin-top: 6px; }
+  .pheno-stage { font-family: 'Barlow Condensed', sans-serif; font-size: 10px; letter-spacing: 0.06em; text-transform: uppercase; color: #aaa; }
+  .pheno-stage.active { color: var(--green); font-weight: 700; }
+  .widget-cta { padding: 16px 20px; background: var(--cream); border-top: 1px solid #c8bfa8; text-align: center; }
+  .widget-cta p { font-size: 13px; color: var(--text-muted); margin-bottom: 10px; font-style: italic; }
+  .btn-outline { display: inline-block; padding: 9px 24px; background: var(--orange); color: white; text-decoration: none; font-family: 'Barlow Condensed', sans-serif; font-size: 14px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; border-radius: 2px; }
+  .already-sub { display: block; margin-top: 8px; font-family: 'Barlow Condensed', sans-serif; font-size: 12px; color: var(--text-muted); text-decoration: underline; cursor: pointer; }
+  .explore-header { display: flex; align-items: center; gap: 16px; margin-bottom: 24px; }
+  .explore-title { font-family: 'Barlow Condensed', sans-serif; font-size: 14px; font-weight: 700; letter-spacing: 0.22em; text-transform: uppercase; color: var(--orange); flex-shrink: 0; }
+  .explore-rule { flex: 1; height: 1.5px; background: var(--orange); }
+  .post-list { list-style: none; }
+  .post-item { padding: 18px 0; border-bottom: 1px solid #c8bfa8; cursor: pointer; }
+  .post-item:last-child { border-bottom: none; }
+  .post-meta { font-family: 'Barlow Condensed', sans-serif; font-size: 13px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--orange); margin-bottom: 5px; }
+  .post-title { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; color: var(--text-dark); line-height: 1.25; text-transform: uppercase; letter-spacing: 0.02em; }
+  .post-excerpt { font-size: 14px; color: var(--text-muted); margin-top: 6px; line-height: 1.6; font-style: italic; }
+  .subscribe-box { margin-top: 32px; background: var(--green); padding: 28px; border-radius: 2px; }
+  .subscribe-box-label { font-family: 'Barlow Condensed', sans-serif; font-size: 13px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: var(--orange); margin-bottom: 6px; }
+  .subscribe-box-copy { font-style: italic; color: rgba(255,255,255,0.7); font-size: 14px; margin-bottom: 18px; }
+  .subscribe-box input { width: 100%; padding: 12px 16px; border: 1px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.1); color: white; font-family: 'Libre Baskerville', serif; font-size: 14px; border-radius: 2px; margin-bottom: 10px; outline: none; }
+  .subscribe-box input::placeholder { color: rgba(255,255,255,0.45); }
+  .subscribe-box button { width: 100%; padding: 13px; background: var(--orange); color: white; border: none; font-family: 'Barlow Condensed', sans-serif; font-size: 15px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; border-radius: 2px; cursor: pointer; }
+  footer { background: var(--orange); padding: 48px; text-align: center; margin-top: 24px; }
+  .footer-logo { font-family: 'Playfair Display', serif; font-size: 24px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.08em; color: white; margin-bottom: 8px; }
+  .footer-sub { font-family: 'Barlow Condensed', sans-serif; font-size: 13px; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(255,255,255,0.7); margin-bottom: 28px; }
+  .footer-form { display: flex; max-width: 380px; margin: 0 auto 16px; }
+  .footer-form input { flex: 1; padding: 12px 16px; border: none; background: rgba(255,255,255,0.2); color: white; font-family: 'Libre Baskerville', serif; font-size: 14px; outline: none; border-radius: 2px 0 0 2px; }
+  .footer-form input::placeholder { color: rgba(255,255,255,0.6); }
+  .footer-form button { padding: 12px 20px; background: var(--green); color: white; border: none; font-family: 'Barlow Condensed', sans-serif; font-size: 14px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer; border-radius: 0 2px 2px 0; }
+  .footer-nav { margin-top: 20px; }
+  .footer-nav a { font-family: 'Barlow Condensed', sans-serif; font-size: 13px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.65); text-decoration: none; margin: 0 12px; }
+  .footer-copy { margin-top: 20px; font-family: 'Barlow Condensed', sans-serif; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(255,255,255,0.4); }
+</style>
+</head>
+<body>
+
+<nav class="main-nav">
+  <a href="/" class="nav-logo">
+    <img src="/orange-logo.png" alt="Litchfield Ledger" />
+  </a>
+  <ul class="nav-links">
+    <li><a href="#" class="nav-submit">Submit Your Event</a></li>
+    <li><a href="#" class="nav-cta">Subscribe</a></li>
+  </ul>
+</nav>
+
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-content">
+    <p class="hero-eyebrow">A Northwest Connecticut Newsletter</p>
+    <h1 class="hero-title">Exploring<br>Litchfield<br>Hills</h1>
+    <p class="hero-sub">Ecology, wildlife, and people of the region.</p>
+    <div class="hero-form">
+      <input type="email" placeholder="your@email.com">
+      <button>Join Free</button>
+    </div>
+    <p class="hero-disclaimer">Every week. Free. No spam.</p>
+  </div>
+</section>
+
+<div class="content">
+  <aside>
+    <div class="field-report">
+      <div class="widget-header">
+        <div class="widget-title">Field Report</div>
+        <div class="widget-date">April 30, 2026 — Litchfield County</div>
+      </div>
+      <div>
+        <div class="field-row">
+          <span class="field-label">Bantam Lake</span>
+          <span class="field-value good">58°<span class="unit">F — rising</span></span>
+        </div>
+        <div class="field-row">
+          <span class="field-label">Trail Conditions</span>
+          <span class="field-value caution">Muddy<span class="unit">— boots req.</span></span>
+        </div>
+        <div class="field-row">
+          <span class="field-label">Vernal Pools</span>
+          <span class="field-value good">Active<span class="unit">— peak season</span></span>
+        </div>
+        <div class="field-row">
+          <span class="field-label">Sunrise / Sunset</span>
+          <span class="field-value">6:03 <span class="unit">AM</span> / 7:49 <span class="unit">PM</span></span>
+        </div>
+        <div class="phenology-bar">
+          <div class="pheno-label">Spring Progression</div>
+          <div class="pheno-track"><div class="pheno-fill" style="width: 62%"></div></div>
+          <div class="pheno-stages">
+            <span class="pheno-stage">Mud</span>
+            <span class="pheno-stage active">Before Bloom</span>
+            <span class="pheno-stage">Peak</span>
+            <span class="pheno-stage">Summer</span>
+          </div>
+        </div>
+        <div class="field-row">
+          <span class="field-label">What's Emerging</span>
+          <span class="field-value" style="font-size:13px; font-style:italic;">Trout lily, bloodroot</span>
+        </div>
+      </div>
+      <div class="widget-cta">
+        <p>Get the full report in your inbox.</p>
+        <a href="#" class="btn-outline">Read This Week's Issue</a>
+        <span class="already-sub">Already subscribed?</span>
+      </div>
+    </div>
+  </aside>
+
+  <main>
+    <div class="explore-header">
+      <span class="explore-title">Explore</span>
+      <div class="explore-rule"></div>
+    </div>
+    <ul class="post-list">
+      <li class="post-item">
+        <div class="post-meta">Apr 23, 2026</div>
+        <div class="post-title">The Oldest Residents</div>
+        <div class="post-excerpt">On lichens, geologic time, and what it means to live slowly on stone.</div>
+      </li>
+      <li class="post-item">
+        <div class="post-meta">Apr 16, 2026</div>
+        <div class="post-title">Before the Bloom</div>
+        <div class="post-excerpt">Mud season is over. Something new is about to arrive in the hills.</div>
+      </li>
+      <li class="post-item">
+        <div class="post-meta">Apr 9, 2026</div>
+        <div class="post-title">Fairy Shrimp & Vernal Pools</div>
+        <div class="post-excerpt">The miniature world that wakes up only after the snow melts.</div>
+      </li>
+      <li class="post-item">
+        <div class="post-meta">Apr 2, 2026</div>
+        <div class="post-title">Spring Lands All at Once</div>
+        <div class="post-excerpt">One week of rain, one week of warmth — and the whole county changed.</div>
+      </li>
+      <li class="post-item">
+        <div class="post-meta">Mar 26, 2026</div>
+        <div class="post-title">The Bantam River in March</div>
+        <div class="post-excerpt">Cold, fast, and full of itself. The river at its most honest.</div>
+      </li>
+    </ul>
+    <div class="subscribe-box">
+      <div class="subscribe-box-label">Get the Newsletter</div>
+      <p class="subscribe-box-copy">Every Thursday in your inbox.</p>
+      <input type="email" placeholder="your@email.com">
+      <button>Subscribe</button>
+    </div>
+  </main>
+</div>
+
+<footer>
+  <div class="footer-logo">The Litchfield Ledger</div>
+  <div class="footer-sub">Litchfield County, Connecticut</div>
+  <div class="footer-form">
+    <input type="email" placeholder="your@email.com">
+    <button>Subscribe</button>
+  </div>
+  <div class="footer-nav">
+    <a href="#">Archive</a>
+    <a href="#">Events</a>
+    <a href="#">Contact</a>
+  </div>
+  <p class="footer-copy">© 2026 The Litchfield Ledger</p>
+</footer>
+
+</body>
 </html>
