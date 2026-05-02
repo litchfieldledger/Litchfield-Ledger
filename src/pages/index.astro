@@ -1,30 +1,5 @@
 ---
-const PUB_ID = 'pub_7f5318d3-907e-4e7c-8154-45ed98cf130e';
-let latestPostUrl = 'https://www.litchfieldledger.com';
 
-try {
-  const apiKey = import.meta.env.BEEHIIV_API_KEY;
-
-  // Step 1: get latest published post ID
-  const listRes = await fetch(
-    `https://api.beehiiv.com/v2/publications/${PUB_ID}/posts?status=published&order_by=newest_first&limit=1`,
-    { headers: { Authorization: `Bearer ${apiKey}` } }
-  );
-  const listData = await listRes.json();
-  const postId = listData.data?.[0]?.id;
-
-  // Step 2: get full post details including URL
-  if (postId) {
-    const postRes = await fetch(
-      `https://api.beehiiv.com/v2/publications/${PUB_ID}/posts/${postId}`,
-      { headers: { Authorization: `Bearer ${apiKey}` } }
-    );
-    const postData = await postRes.json();
-    if (postData.data?.url) latestPostUrl = postData.data.url;
-  }
-} catch (e) {
-  // falls back to homepage if API unavailable
-}
 ---
 
 <!DOCTYPE html>
@@ -151,11 +126,7 @@ try {
       <div id="fr-body">
         <div class="fr-loading">Fetching field conditions...</div>
       </div>
-      <div class="widget-cta">
-        <p>Get the full report in your inbox.</p>
-        <a href={latestPostUrl} class="btn-outline">Read This Week's Issue</a>
-        <span class="already-sub">Already subscribed?</span>
-      </div>
+      
     </div>
   </aside>
 
