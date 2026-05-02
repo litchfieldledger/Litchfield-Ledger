@@ -194,7 +194,7 @@ try {
 </div>
 
 <footer>
-  <img src="/green-logo.png" alt="The Litchfield Ledger" class="footer-logo-img" />
+  <img src="/orange-bigblock.png" alt="The Litchfield Ledger" class="footer-logo-img" />
   <div class="beehiiv-wrap" style="margin-top: 0;">
     <script is:inline src="https://subscribe-forms.beehiiv.com/v3/loader.js" data-beehiiv-form="48c597c3-c9e3-4c7a-b09b-db8627e0a48e"></script>
   </div>
@@ -243,6 +243,28 @@ try {
     return             { l: 'Good',   n: 'firm & dry',   cls: 'good',    dot: '#1e3d28' };
   }
 
+  function moonPhase(date) {
+    const synodic = 29.530588853;
+    const ref = new Date(Date.UTC(2000, 0, 6, 18, 14));
+    const days = (date - ref) / 86400000;
+    return ((days % synodic) + synodic) % synodic / synodic;
+  }
+
+  function moonName(p) {
+    if (p < 0.03 || p > 0.97) return 'New Moon';
+    if (p < 0.22) return 'Waxing Crescent';
+    if (p < 0.28) return 'First Quarter';
+    if (p < 0.47) return 'Waxing Gibbous';
+    if (p < 0.53) return 'Full Moon';
+    if (p < 0.72) return 'Waning Gibbous';
+    if (p < 0.78) return 'Last Quarter';
+    return 'Waning Crescent';
+  }
+
+  function moonIllum(p) {
+    return Math.round((1 - Math.cos(p * 2 * Math.PI)) / 2 * 100);
+  }
+
   function sunFmt(iso) {
     const d = new Date(iso), h = d.getHours(), m = d.getMinutes().toString().padStart(2, '0');
     return `${h % 12 || 12}:${m} <span class="unit">${h >= 12 ? 'PM' : 'AM'}</span>`;
@@ -267,13 +289,24 @@ try {
 
   Promise.allSettled([
     fetch(`https://api.sunrise-sunset.org/json?lat=${LAT}&lng=${LNG}&formatted=0`).then(r => r.json()),
-    fetch(`https://api.open-meteo.com/v1/forecast?latitude=${LAT}&longitude=${LNG}&daily=temperature_2m_mean,precipitation_sum&past_days=14&forecast_days=0&timezone=America%2FNew_York`).then(r => r.json()),
+    fetch(`https://api.open-meteo.com/v1/forecast?latitude=${LAT}&longitude=${LNG}&current=temperature_2m&daily=temperature_2m_mean,precipitation_sum&past_days=14&forecast_days=1&timezone=America%2FNew_York`).then(r => r.json()),
   ]).then(([sunRes, weatherRes]) => {
 
     let sunHTML = '—';
     if (sunRes.status === 'fulfilled') {
       const s = sunRes.value.results;
       sunHTML = `${sunFmt(s.sunrise)} <span style="color:#ccc;margin:0 4px">/</span> ${sunFmt(s.sunset)}`;
+    }
+
+    let airTempHTML = '<span style="color:var(--text-muted)">—</span>';
+    let airClass = '';
+    if (weatherRes.status === 'fulfilled') {
+      const c = weatherRes.value.current?.temperature_2m;
+      if (typeof c === 'number') {
+        const f = Math.round(c * 9 / 5 + 32);
+        airTempHTML = `${f}°<span class="unit">F</span>`;
+        airClass = 'good';
+      }
     }
 
     let lakeTempHTML = '<span style="color:var(--text-muted)">—</span>';
@@ -299,13 +332,18 @@ try {
       trailClass = tc.cls;
     }
 
+    const mp = moonPhase(now);
+    const moonHTML = `${moonName(mp)}<span class="unit">— ${moonIllum(mp)}% illum.</span>`;
+
     document.getElementById('fr-live').textContent =
       'Live · ' + now.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
 
     document.getElementById('fr-body').innerHTML = `
+      ${row('Air Temperature', airTempHTML, airClass)}
       ${row('Bantam Lake', lakeTempHTML, lakeClass)}
       ${row('Trail Conditions', trailHTML, trailClass)}
       ${row('Sunrise / Sunset', sunHTML)}
+      ${row('Moon Phase', moonHTML)}
       <div class="phenology-bar">
         <div class="pheno-label">Spring Progression</div>
         <div class="pheno-track"><div class="pheno-fill" style="width:${pct}%"></div></div>
