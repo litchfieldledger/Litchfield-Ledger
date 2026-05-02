@@ -1,12 +1,29 @@
 ---
-let latestPostUrl = 'https://litchfieldledger.beehiiv.com';
+const PUB_ID = 'pub_7f5318d3-907e-4e7c-8154-45ed98cf130e';
+let latestPostUrl = 'https://www.litchfieldledger.com';
+
 try {
-  const rss = await fetch('https://www.litchfieldledger.com/feed');
-  const xml = await rss.text();
-  const match = xml.match(/<item>[\s\S]*?<link>([^<]+\/p\/[^<]+)<\/link>/);
-  if (match) latestPostUrl = match[1].trim();
+  const apiKey = import.meta.env.BEEHIIV_API_KEY;
+
+  // Step 1: get latest published post ID
+  const listRes = await fetch(
+    `https://api.beehiiv.com/v2/publications/${PUB_ID}/posts?status=published&order_by=newest_first&limit=1`,
+    { headers: { Authorization: `Bearer ${apiKey}` } }
+  );
+  const listData = await listRes.json();
+  const postId = listData.data?.[0]?.id;
+
+  // Step 2: get full post details including URL
+  if (postId) {
+    const postRes = await fetch(
+      `https://api.beehiiv.com/v2/publications/${PUB_ID}/posts/${postId}`,
+      { headers: { Authorization: `Bearer ${apiKey}` } }
+    );
+    const postData = await postRes.json();
+    if (postData.data?.url) latestPostUrl = postData.data.url;
+  }
 } catch (e) {
-  // falls back to homepage if feed unavailable
+  // falls back to homepage if API unavailable
 }
 ---
 
