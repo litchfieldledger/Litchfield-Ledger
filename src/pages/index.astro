@@ -1,5 +1,52 @@
 ---
+const PUBLICATION_ID = import.meta.env.BEEHIIV_PUBLICATION_ID;
+const API_KEY = import.meta.env.BEEHIIV_API_KEY;
+const POST_LIMIT = 5;
 
+type LedgerPost = {
+  title: string;
+  excerpt: string;
+  url: string;
+  date: string;
+};
+
+let posts: LedgerPost[] = [];
+
+try {
+  const res = await fetch(
+    `https://api.beehiiv.com/v2/publications/${PUBLICATION_ID}/posts` +
+      `?limit=${POST_LIMIT}` +
+      `&status=confirmed` +
+      `&order_by=publish_date` +
+      `&direction=desc` +
+      `&platform=both` +
+      `&hidden_from_feed=false`,
+    {
+      headers: {
+        Authorization: `Bearer ${API_KEY}`,
+        Accept: 'application/json',
+      },
+    }
+  );
+
+  if (res.ok) {
+    const json = await res.json();
+    posts = (json.data ?? []).map((p: any) => ({
+      title: p.title ?? '',
+      excerpt: (p.subtitle || p.preview_text || '').trim(),
+      url: p.web_url ?? '#',
+      date: new Date((p.publish_date ?? 0) * 1000).toLocaleDateString('en-US', {
+        month: 'short',
+        day: 'numeric',
+        year: 'numeric',
+      }),
+    }));
+  } else {
+    console.error('Beehiiv posts fetch failed:', res.status, await res.text());
+  }
+} catch (err) {
+  console.error('Beehiiv posts fetch error:', err);
+}
 ---
 
 <!DOCTYPE html>
@@ -70,8 +117,11 @@
   .explore-title { font-family: 'Barlow Condensed', sans-serif; font-size: 14px; font-weight: 700; letter-spacing: 0.22em; text-transform: uppercase; color: var(--orange); flex-shrink: 0; }
   .explore-rule { flex: 1; height: 1.5px; background: var(--orange); }
   .post-list { list-style: none; }
-  .post-item { padding: 18px 0; border-bottom: 1px solid #c8bfa8; cursor: pointer; }
+  .post-item { padding: 18px 0; border-bottom: 1px solid #c8bfa8; }
   .post-item:last-child { border-bottom: none; }
+  .post-link { display: block; text-decoration: none; color: inherit; }
+  .post-link:hover .post-title { color: var(--orange); transition: color 0.15s; }
+  .post-empty { opacity: 0.6; }
   .post-meta { font-family: 'Barlow Condensed', sans-serif; font-size: 13px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--orange); margin-bottom: 5px; }
   .post-title { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; color: var(--text-dark); line-height: 1.25; text-transform: uppercase; letter-spacing: 0.02em; }
   .post-excerpt { font-size: 14px; color: var(--text-muted); margin-top: 6px; line-height: 1.6; font-style: italic; }
@@ -126,7 +176,6 @@
       <div id="fr-body">
         <div class="fr-loading">Fetching field conditions...</div>
       </div>
-      
     </div>
   </aside>
 
@@ -136,31 +185,20 @@
       <div class="explore-rule"></div>
     </div>
     <ul class="post-list">
-      <li class="post-item">
-        <div class="post-meta">Apr 23, 2026</div>
-        <div class="post-title">The Oldest Residents</div>
-        <div class="post-excerpt">On lichens, geologic time, and what it means to live slowly on stone.</div>
-      </li>
-      <li class="post-item">
-        <div class="post-meta">Apr 16, 2026</div>
-        <div class="post-title">Before the Bloom</div>
-        <div class="post-excerpt">Mud season is over. Something new is about to arrive in the hills.</div>
-      </li>
-      <li class="post-item">
-        <div class="post-meta">Apr 9, 2026</div>
-        <div class="post-title">Fairy Shrimp & Vernal Pools</div>
-        <div class="post-excerpt">The miniature world that wakes up only after the snow melts.</div>
-      </li>
-      <li class="post-item">
-        <div class="post-meta">Apr 2, 2026</div>
-        <div class="post-title">Spring Lands All at Once</div>
-        <div class="post-excerpt">One week of rain, one week of warmth — and the whole county changed.</div>
-      </li>
-      <li class="post-item">
-        <div class="post-meta">Mar 26, 2026</div>
-        <div class="post-title">The Bantam River in March</div>
-        <div class="post-excerpt">Cold, fast, and full of itself. The river at its most honest.</div>
-      </li>
+      {posts.length === 0 && (
+        <li class="post-item post-empty">
+          <div class="post-excerpt">New posts will appear here on the next build.</div>
+        </li>
+      )}
+      {posts.map((post) => (
+        <li class="post-item">
+          <a href={post.url} class="post-link" target="_blank" rel="noopener">
+            <div class="post-meta">{post.date}</div>
+            <div class="post-title">{post.title}</div>
+            {post.excerpt && <div class="post-excerpt">{post.excerpt}</div>}
+          </a>
+        </li>
+      ))}
     </ul>
     <div class="subscribe-box">
       <div class="subscribe-box-label">Get the Newsletter</div>
