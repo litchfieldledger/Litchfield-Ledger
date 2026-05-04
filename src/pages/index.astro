@@ -121,9 +121,20 @@ try {
   .post-title { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; color: var(--text-dark); line-height: 1.25; text-transform: uppercase; letter-spacing: 0.02em; }
   .post-excerpt { font-size: 14px; color: var(--text-muted); margin-top: 6px; line-height: 1.6; font-style: italic; }
   footer { background: var(--green); padding: 48px; text-align: center; margin-top: 24px; }
-.footer-logo-img { height: 252px; width: auto; display: block; margin: 0 auto 28px; }  .footer-nav { margin-top: 20px; }
+  .footer-logo-img { height: 252px; width: auto; display: block; margin: 0 auto 28px; }
+  .footer-nav { margin-top: 20px; }
   .footer-nav a { font-family: 'Barlow Condensed', sans-serif; font-size: 13px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.65); text-decoration: none; margin: 0 12px; }
   .footer-copy { margin-top: 20px; font-family: 'Barlow Condensed', sans-serif; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(255,255,255,0.4); }
+
+  @media (max-width: 768px) {
+    .main-nav { padding: 16px 20px; }
+    .nav-links { display: none; }
+    .hero { height: auto; padding: 100px 24px 56px; }
+    .content { grid-template-columns: 1fr; gap: 32px; padding: 32px 20px; }
+    .post-title { font-size: 17px; }
+    footer { padding: 40px 20px; }
+    .footer-logo-img { height: 160px; }
+  }
 </style>
 </head>
 <body>
@@ -133,7 +144,8 @@ try {
     <img src="/orange-logo.png" alt="Litchfield Ledger" />
   </a>
   <ul class="nav-links">
-<li><a href="https://www.litchfieldledger.com/add-your-event" class="nav-submit">Submit Your Event</a></li>  </ul>
+    <li><a href="https://litchfieldledger.beehiiv.com/add-your-event" class="nav-submit">Submit Your Event</a></li>
+  </ul>
 </nav>
 
 <section class="hero">
@@ -197,8 +209,8 @@ try {
     <script is:inline src="https://subscribe-forms.beehiiv.com/v3/loader.js" data-beehiiv-form="48c597c3-c9e3-4c7a-b09b-db8627e0a48e"></script>
   </div>
   <div class="footer-nav">
-  <a href="mailto:patrick@litchfieldledger.com">Contact</a>
-</div>
+    <a href="mailto:patrick@litchfieldledger.com">Contact</a>
+  </div>
   <p class="footer-copy">© 2026 The Litchfield Ledger</p>
 </footer>
 
