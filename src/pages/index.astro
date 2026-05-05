@@ -55,7 +55,6 @@ try {
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>The Litchfield Ledger</title>
-<link rel="icon" type="image/svg+xml" href="/favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=New+Amsterdam&family=Playfair+Display:ital,wght@0,700;0,900;1,400&family=Libre+Baskerville:ital@0;1&family=Barlow+Condensed:wght@600;700&display=swap" rel="stylesheet">
 <style is:global>
@@ -129,7 +128,8 @@ try {
 
   @media (max-width: 768px) {
     .main-nav { padding: 16px 20px; }
-    .nav-links { display: none; }
+    .nav-links { gap: 8px; }
+    .nav-submit { padding: 6px 12px; font-size: 12px; }
     .hero { height: auto; padding: 100px 24px 56px; }
     .content { grid-template-columns: 1fr; gap: 32px; padding: 32px 20px; }
     .post-title { font-size: 17px; }
@@ -193,7 +193,7 @@ try {
       )}
       {posts.map((post) => (
         <li class="post-item">
-          <a href={post.url} class="post-link" target="_blank" rel="noopener">
+          <a href={post.url} class="post-link">
             <div class="post-meta">{post.date}</div>
             <div class="post-title">{post.title}</div>
             {post.excerpt && <div class="post-excerpt">{post.excerpt}</div>}
