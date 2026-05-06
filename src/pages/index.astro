@@ -94,6 +94,7 @@ try {
   .nav-logo img { height: 42px; width: auto; display: block; }
   .nav-links { display: flex; align-items: center; gap: 16px; list-style: none; }
   .nav-links a { color: rgba(255,255,255,0.85); text-decoration: none; font-family: 'Barlow Condensed', sans-serif; font-size: 14px; letter-spacing: 0.1em; text-transform: uppercase; }
+  .nav-support { color: rgba(255,255,255,0.65) !important; }
   .nav-submit { border: 1.5px solid rgba(255,255,255,0.5); color: white !important; padding: 8px 20px; border-radius: 2px; transition: border-color 0.2s; }
   .nav-submit:hover { border-color: white; }
   .hero { position: relative; height: 580px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; overflow: hidden; }
@@ -141,6 +142,10 @@ try {
   .post-excerpt { font-size: 14px; color: var(--text-muted); margin-top: 6px; line-height: 1.6; font-style: italic; }
   footer { background: var(--green); padding: 48px; text-align: center; margin-top: 24px; }
   .footer-logo-img { height: 252px; width: auto; display: block; margin: 0 auto 28px; }
+  .footer-support { border-top: 1px solid rgba(255,255,255,0.15); padding-top: 28px; margin-bottom: 28px; }
+  .footer-support p { font-family: 'Libre Baskerville', serif; font-style: italic; color: rgba(255,255,255,0.65); font-size: 15px; margin-bottom: 14px; }
+  .footer-support a { font-family: 'Barlow Condensed', sans-serif; font-size: 13px; letter-spacing: 0.12em; text-transform: uppercase; color: white; border: 1.5px solid rgba(255,255,255,0.4); padding: 10px 24px; text-decoration: none; display: inline-block; border-radius: 2px; transition: border-color 0.2s; }
+  .footer-support a:hover { border-color: white; }
   .footer-nav { margin-top: 20px; }
   .footer-nav a { font-family: 'Barlow Condensed', sans-serif; font-size: 13px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.65); text-decoration: none; margin: 0 12px; }
   .footer-copy { margin-top: 20px; font-family: 'Barlow Condensed', sans-serif; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(255,255,255,0.4); }
@@ -164,6 +169,7 @@ try {
     <img src="/orange-logo.png" alt="Litchfield Ledger" />
   </a>
   <ul class="nav-links">
+    <li><a href="https://litchfieldledger.beehiiv.com/upgrade" class="nav-support">Support</a></li>
     <li><a href="https://litchfieldledger.beehiiv.com/add-your-event" class="nav-submit">Submit Your Event</a></li>
   </ul>
 </nav>
@@ -227,6 +233,10 @@ try {
   <img src="/orange-bigblock.png" alt="The Litchfield Ledger" class="footer-logo-img" />
   <div class="beehiiv-wrap" style="margin-top: 0;">
     <script is:inline src="https://subscribe-forms.beehiiv.com/v3/loader.js" data-beehiiv-form="48c597c3-c9e3-4c7a-b09b-db8627e0a48e"></script>
+  </div>
+  <div class="footer-support">
+    <p>The Ledger is free and independent. If you find value in it, consider supporting it.</p>
+    <a href="https://litchfieldledger.beehiiv.com/upgrade">Support the Ledger</a>
   </div>
   <div class="footer-nav">
     <a href="mailto:patrick@litchfieldledger.com">Contact</a>
