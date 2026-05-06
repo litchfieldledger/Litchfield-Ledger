@@ -4,5 +4,5 @@
 /subscribe https://litchfieldledger.beehiiv.com/subscribe      200
 /tag/*     https://litchfieldledger.beehiiv.com/tag/:splat     200
 /author/*  https://litchfieldledger.beehiiv.com/author/:splat  200
-/upgrade   https://litchfieldledger.beehiiv.com/upgrade        200
+/upgrade   https://litchfieldledger.beehiiv.com/upgrade        301
 /login     https://litchfieldledger.beehiiv.com/login          200
