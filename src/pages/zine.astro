@@ -1,4 +1,5 @@
 ---
+import "../styles/zine.css";
 const PUBLICATION_ID = import.meta.env.BEEHIIV_PUBLICATION_ID;
 const API_KEY = import.meta.env.BEEHIIV_API_KEY;
 const POST_LIMIT = 5;
@@ -76,91 +77,7 @@ try {
   })(window, document, "clarity", "script", "wmug74fcme");
 </script>
 
-<style is:global>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  :root {
-    --green: #1e3d28;
-    --green-mid: #2a5236;
-    --orange: #c85c1e;
-    --orange-dark: #a84a16;
-    --cream: #f0ebe0;
-    --cream-dark: #e4ddd0;
-    --text-dark: #1a2218;
-    --text-mid: #3d4f3a;
-    --text-muted: #6b7d68;
-  }
-  body { font-family: 'Libre Baskerville', Georgia, serif; background: var(--cream); color: var(--text-dark); font-size: 16px; line-height: 1.7; }
-  .main-nav { position: absolute; top: 0; left: 0; right: 0; z-index: 10; display: flex; align-items: center; justify-content: space-between; padding: 20px 48px; }
-  .nav-logo img { height: 42px; width: auto; display: block; }
-  .nav-links { display: flex; align-items: center; gap: 16px; list-style: none; }
-  .nav-links a { color: rgba(255,255,255,0.85); text-decoration: none; font-family: 'Barlow Condensed', sans-serif; font-size: 14px; letter-spacing: 0.1em; text-transform: uppercase; }
-  .nav-support { color: rgba(255,255,255,0.65) !important; }
-  .nav-submit { border: 1.5px solid rgba(255,255,255,0.5); color: white !important; padding: 8px 20px; border-radius: 2px; transition: border-color 0.2s; }
-  .nav-submit:hover { border-color: white; }
-  .hero { position: relative; height: 580px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; overflow: hidden; }
-  .hero-bg { position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(10,28,14,0.55) 0%, rgba(15,35,18,0.35) 50%, rgba(8,22,12,0.72) 100%), url('/Waterfall.jpg') center center / cover no-repeat; }
-  .hero-content { position: relative; z-index: 2; max-width: 680px; padding: 0 24px; }
-  .hero-eyebrow { font-family: 'Barlow Condensed', sans-serif; font-size: 13px; letter-spacing: 0.22em; text-transform: uppercase; color: white; margin-bottom: 16px; }
-  .hero-title { font-family: 'New Amsterdam', sans-serif; font-size: 42px; font-weight: 900; line-height: 0.95; color: white; text-transform: uppercase; letter-spacing: -0.01em; margin-bottom: 20px; }
-  .hero-sub { font-family: 'Libre Baskerville', serif; font-style: italic; color: rgba(255,255,255,0.75); font-size: 17px; margin-bottom: 28px; }
-  .hero-disclaimer { color: white; font-family: 'Barlow Condensed', sans-serif; font-size: 13px; letter-spacing: 0.05em; font-style: italic; margin-top: 12px; }
-  .beehiiv-wrap { width: 100%; max-width: 560px; margin: 0 auto; }
-  .beehiiv-wrap iframe { background: transparent !important; }
-  .content { max-width: 960px; margin: 0 auto; padding: 56px 48px; display: grid; grid-template-columns: 320px 1fr; gap: 56px; align-items: start; }
-  .field-report { border: 1.5px solid #c8bfa8; border-radius: 2px; background: white; overflow: hidden; }
-  .widget-header { background: var(--green); padding: 14px 20px; }
-  .widget-header-inner { display: flex; justify-content: space-between; align-items: flex-end; }
-  .widget-title { font-family: 'Barlow Condensed', sans-serif; font-size: 16px; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; color: white; }
-  .widget-date { font-family: 'Barlow Condensed', sans-serif; font-size: 12px; letter-spacing: 0.1em; color: rgba(255,255,255,0.6); text-transform: uppercase; margin-top: 2px; }
-  .widget-live { font-family: 'Barlow Condensed', sans-serif; font-size: 10px; color: rgba(255,255,255,0.35); letter-spacing: 0.08em; }
-  .field-row { display: flex; justify-content: space-between; align-items: baseline; padding: 13px 20px; border-bottom: 1px solid #eee8da; }
-  .field-row:last-child { border-bottom: none; }
-  .field-label { font-family: 'Barlow Condensed', sans-serif; font-size: 13px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-muted); }
-  .field-value { font-family: 'Playfair Display', serif; font-size: 15px; font-weight: 700; color: var(--text-dark); text-align: right; }
-  .field-value .unit { font-family: 'Barlow Condensed', sans-serif; font-size: 12px; font-weight: 600; color: var(--text-muted); margin-left: 4px; }
-  .field-value.good { color: var(--green); }
-  .field-value.caution { color: var(--orange); }
-  .phenology-bar { padding: 16px 20px; border-bottom: 1px solid #eee8da; }
-  .pheno-label { font-family: 'Barlow Condensed', sans-serif; font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 8px; }
-  .pheno-track { height: 6px; background: #e8e0d0; border-radius: 3px; overflow: hidden; }
-  .pheno-fill { height: 100%; border-radius: 3px; background: var(--green); }
-  .pheno-stages { display: flex; justify-content: space-between; margin-top: 6px; }
-  .pheno-stage { font-family: 'Barlow Condensed', sans-serif; font-size: 10px; letter-spacing: 0.06em; text-transform: uppercase; color: #aaa; }
-  .pheno-stage.active { color: var(--green); font-weight: 700; }
-  .fr-loading { padding: 36px 20px; text-align: center; color: var(--text-muted); font-family: 'Barlow Condensed', sans-serif; font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; }
-  .explore-header { display: flex; align-items: center; gap: 16px; margin-bottom: 24px; }
-  .explore-title { font-family: 'Barlow Condensed', sans-serif; font-size: 14px; font-weight: 700; letter-spacing: 0.22em; text-transform: uppercase; color: var(--orange); flex-shrink: 0; }
-  .explore-rule { flex: 1; height: 1.5px; background: var(--orange); }
-  .post-list { list-style: none; }
-  .post-item { padding: 18px 0; border-bottom: 1px solid #c8bfa8; }
-  .post-item:last-child { border-bottom: none; }
-  .post-link { display: block; text-decoration: none; color: inherit; }
-  .post-link:hover .post-title { color: var(--orange); transition: color 0.15s; }
-  .post-empty { opacity: 0.6; }
-  .post-meta { font-family: 'Barlow Condensed', sans-serif; font-size: 13px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--orange); margin-bottom: 5px; }
-  .post-title { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; color: var(--text-dark); line-height: 1.25; text-transform: uppercase; letter-spacing: 0.02em; }
-  .post-excerpt { font-size: 14px; color: var(--text-muted); margin-top: 6px; line-height: 1.6; font-style: italic; }
-  footer { background: var(--green); padding: 48px; text-align: center; margin-top: 24px; }
-  .footer-logo-img { height: 252px; width: auto; display: block; margin: 0 auto 28px; }
-  .footer-support { border-top: 1px solid rgba(255,255,255,0.15); padding-top: 28px; margin-bottom: 28px; }
-  .footer-support p { font-family: 'Libre Baskerville', serif; font-style: italic; color: rgba(255,255,255,0.65); font-size: 15px; margin-bottom: 14px; }
-  .footer-support a { font-family: 'Barlow Condensed', sans-serif; font-size: 13px; letter-spacing: 0.12em; text-transform: uppercase; color: white; border: 1.5px solid rgba(255,255,255,0.4); padding: 10px 24px; text-decoration: none; display: inline-block; border-radius: 2px; transition: border-color 0.2s; }
-  .footer-support a:hover { border-color: white; }
-  .footer-nav { margin-top: 20px; }
-  .footer-nav a { font-family: 'Barlow Condensed', sans-serif; font-size: 13px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.65); text-decoration: none; margin: 0 12px; }
-  .footer-copy { margin-top: 20px; font-family: 'Barlow Condensed', sans-serif; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(255,255,255,0.4); }
 
-  @media (max-width: 768px) {
-    .main-nav { padding: 16px 20px; }
-    .nav-links { gap: 8px; }
-    .nav-submit { padding: 6px 12px; font-size: 12px; }
-    .hero { height: auto; padding: 100px 24px 56px; }
-    .content { grid-template-columns: 1fr; gap: 32px; padding: 32px 20px; }
-    .post-title { font-size: 17px; }
-    footer { padding: 40px 20px; }
-    .footer-logo-img { height: 160px; }
-  }
-</style>
 </head>
 <body>
 
