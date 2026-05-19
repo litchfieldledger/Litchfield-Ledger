@@ -1,52 +1,7 @@
 ---
-const PUBLICATION_ID = import.meta.env.BEEHIIV_PUBLICATION_ID;
-const API_KEY = import.meta.env.BEEHIIV_API_KEY;
-const POST_LIMIT = 5;
+import { getLedgerPosts } from '../lib/beehiiv';
 
-type LedgerPost = {
-  title: string;
-  excerpt: string;
-  url: string;
-  date: string;
-};
-
-let posts: LedgerPost[] = [];
-
-try {
-  const res = await fetch(
-    `https://api.beehiiv.com/v2/publications/${PUBLICATION_ID}/posts` +
-      `?limit=${POST_LIMIT}` +
-      `&status=confirmed` +
-      `&order_by=publish_date` +
-      `&direction=desc` +
-      `&platform=both` +
-      `&hidden_from_feed=false`,
-    {
-      headers: {
-        Authorization: `Bearer ${API_KEY}`,
-        Accept: 'application/json',
-      },
-    }
-  );
-
-  if (res.ok) {
-    const json = await res.json();
-    posts = (json.data ?? []).map((p: any) => ({
-      title: p.title ?? '',
-      excerpt: (p.subtitle || p.preview_text || '').trim(),
-      url: p.web_url ?? '#',
-      date: new Date((p.publish_date ?? 0) * 1000).toLocaleDateString('en-US', {
-        month: 'short',
-        day: 'numeric',
-        year: 'numeric',
-      }),
-    }));
-  } else {
-    console.error('Beehiiv posts fetch failed:', res.status, await res.text());
-  }
-} catch (err) {
-  console.error('Beehiiv posts fetch error:', err);
-}
+const posts = await getLedgerPosts();
 ---
 
 <!DOCTYPE html>
@@ -169,7 +124,7 @@ try {
     <img src="/orange-logo.png" alt="Litchfield Ledger" />
   </a>
   <ul class="nav-links">
-    <li><a href="https://litchfieldledger.beehiiv.com/upgrade" class="nav-support">Support</a></li>
+    <li><a href="https://resy.com/cities/litchfield-ct/venues/lost-fox-inn/events/litchfield-ledger-summer-social-2026-06-11?date=2026-05-19&seats=2" class="nav-support">Summer Social 2026</a></li>
     <li><a href="https://litchfieldledger.beehiiv.com/add-your-event" class="nav-submit">Submit Your Event</a></li>
   </ul>
 </nav>
