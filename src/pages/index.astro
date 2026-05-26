@@ -49,9 +49,9 @@ const posts = await getLedgerPosts();
   .nav-logo img { height: 42px; width: auto; display: block; }
   .nav-links { display: flex; align-items: center; gap: 16px; list-style: none; }
   .nav-links a { color: rgba(255,255,255,0.85); text-decoration: none; font-family: 'Barlow Condensed', sans-serif; font-size: 14px; letter-spacing: 0.1em; text-transform: uppercase; }
-  .nav-support { color: rgba(255,255,255,0.65) !important; }
-  .nav-submit { border: 1.5px solid rgba(255,255,255,0.5); color: white !important; padding: 8px 20px; border-radius: 2px; transition: border-color 0.2s; }
-  .nav-submit:hover { border-color: white; }
+  .nav-support { border: 1.5px solid rgba(255,255,255,0.5); color: white !important; padding: 8px 18px; border-radius: 2px; transition: border-color 0.2s; }
+  .nav-support:hover { border-color: white; }
+  .nav-submit { color: rgba(255,255,255,0.72) !important; }
   .hero { position: relative; height: 580px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; overflow: hidden; }
   .hero-bg { position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(10,28,14,0.55) 0%, rgba(15,35,18,0.35) 50%, rgba(8,22,12,0.72) 100%), url('/Waterfall.jpg') center center / cover no-repeat; }
   .hero-content { position: relative; z-index: 2; max-width: 680px; padding: 0 24px; }
@@ -106,9 +106,12 @@ const posts = await getLedgerPosts();
   .footer-copy { margin-top: 20px; font-family: 'Barlow Condensed', sans-serif; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(255,255,255,0.4); }
 
   @media (max-width: 768px) {
-    .main-nav { padding: 16px 20px; }
-    .nav-links { gap: 8px; }
-    .nav-submit { padding: 6px 12px; font-size: 12px; }
+    .main-nav { padding: 16px 20px; align-items: flex-start; }
+    .nav-logo img { height: 34px; }
+    .nav-links { gap: 10px; align-items: flex-start; }
+    .nav-links a { font-size: 12px; letter-spacing: 0.08em; line-height: 1.2; }
+    .nav-support { padding: 6px 10px; max-width: 112px; text-align: center; }
+    .nav-submit { max-width: 64px; text-align: center; }
     .hero { height: auto; padding: 100px 24px 56px; }
     .content { grid-template-columns: 1fr; gap: 32px; padding: 32px 20px; }
     .post-title { font-size: 17px; }
@@ -125,7 +128,7 @@ const posts = await getLedgerPosts();
   </a>
   <ul class="nav-links">
     <li><a href="https://resy.com/cities/litchfield-ct/venues/lost-fox-inn/events/litchfield-ledger-summer-social-2026-06-11?date=2026-05-19&seats=2" class="nav-support">Summer Social 2026</a></li>
-    <li><a href="https://litchfieldledger.beehiiv.com/add-your-event" class="nav-submit">Submit Your Event</a></li>
+    <li><a href="https://litchfieldledger.beehiiv.com/add-your-event" class="nav-submit">Submit Event</a></li>
   </ul>
 </nav>
 
