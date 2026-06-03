@@ -127,7 +127,7 @@ try {
       <span class="explore-title">Explore</span>
       <div class="explore-rule"></div>
     </div>
-    <ul class="post-list">
+    <ul class="post-list" data-beehiiv-feed>
       {posts.length === 0 && (
         <li class="post-item post-empty">
           <div class="post-excerpt">New posts will appear here on the next build.</div>
@@ -145,6 +145,8 @@ try {
     </ul>
   </main>
 </div>
+
+<script is:inline src="/beehiiv-feed.js"></script>
 
 <footer>
   <img src="/orange-bigblock.png" alt="The Litchfield Ledger" class="footer-logo-img" />
