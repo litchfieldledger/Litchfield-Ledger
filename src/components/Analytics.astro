@@ -1,0 +1,35 @@
+---
+const gaId = 'G-P31K2EFL2L';
+const clarityId = 'wmug74fcme';
+---
+
+<script is:inline define:vars={{ gaId, clarityId }}>
+  (function () {
+    const runWhenIdle = window.requestIdleCallback || function (callback) {
+      return window.setTimeout(callback, 1800);
+    };
+
+    function loadScript(src) {
+      const script = document.createElement('script');
+      script.async = true;
+      script.src = src;
+      document.head.appendChild(script);
+    }
+
+    window.dataLayer = window.dataLayer || [];
+    window.gtag = window.gtag || function () {
+      window.dataLayer.push(arguments);
+    };
+
+    runWhenIdle(function () {
+      loadScript('https://www.googletagmanager.com/gtag/js?id=' + gaId);
+      window.gtag('js', new Date());
+      window.gtag('config', gaId);
+
+      window.clarity = window.clarity || function () {
+        (window.clarity.q = window.clarity.q || []).push(arguments);
+      };
+      loadScript('https://www.clarity.ms/tag/' + clarityId);
+    });
+  })();
+</script>

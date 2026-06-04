@@ -2,6 +2,7 @@
   const feeds = document.querySelectorAll('[data-beehiiv-feed]');
 
   if (!feeds.length) return;
+  if (!document.querySelector('.post-empty')) return;
 
   const stripHtml = (value) => {
     const div = document.createElement('div');
@@ -52,33 +53,41 @@
   const getText = (item, selector) =>
     item.querySelector(selector)?.textContent?.trim() || '';
 
-  fetch(`/feed?fresh=${Date.now()}`, { cache: 'no-store' })
-    .then((response) => {
-      if (!response.ok) throw new Error(`Feed request failed: ${response.status}`);
-      return response.text();
-    })
-    .then((xml) => {
-      const doc = new DOMParser().parseFromString(xml, 'application/xml');
-      const items = Array.from(doc.querySelectorAll('item')).slice(0, 5);
+  const loadFeed = () => {
+    fetch('/feed')
+      .then((response) => {
+        if (!response.ok) throw new Error(`Feed request failed: ${response.status}`);
+        return response.text();
+      })
+      .then((xml) => {
+        const doc = new DOMParser().parseFromString(xml, 'application/xml');
+        const items = Array.from(doc.querySelectorAll('item')).slice(0, 5);
 
-      const posts = items
-        .map((item) => {
-          const title = stripHtml(getText(item, 'title'));
-          const url = getText(item, 'link');
-          const date = formatDate(getText(item, 'pubDate'));
-          const excerpt = stripHtml(
-            getText(item, 'description') || getText(item, 'encoded')
-          );
+        const posts = items
+          .map((item) => {
+            const title = stripHtml(getText(item, 'title'));
+            const url = getText(item, 'link');
+            const date = formatDate(getText(item, 'pubDate'));
+            const excerpt = stripHtml(
+              getText(item, 'description') || getText(item, 'encoded')
+            );
 
-          return { title, url, date, excerpt };
-        })
-        .filter((post) => post.title && post.url);
+            return { title, url, date, excerpt };
+          })
+          .filter((post) => post.title && post.url);
 
-      if (!posts.length) return;
+        if (!posts.length) return;
 
-      feeds.forEach((feed) => renderPosts(feed, posts));
-    })
-    .catch((error) => {
-      console.warn('Beehiiv feed refresh failed:', error);
-    });
+        feeds.forEach((feed) => renderPosts(feed, posts));
+      })
+      .catch((error) => {
+        console.warn('Beehiiv feed refresh failed:', error);
+      });
+  };
+
+  if ('requestIdleCallback' in window) {
+    window.requestIdleCallback(loadFeed);
+  } else {
+    window.setTimeout(loadFeed, 1500);
+  }
 })();

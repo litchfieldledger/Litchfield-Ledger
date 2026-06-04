@@ -1,55 +1,11 @@
 ---
 import SiteNav from "../components/SiteNav.astro";
 import SiteFooter from "../components/SiteFooter.astro";
+import Analytics from "../components/Analytics.astro";
+import { getLedgerPosts } from "../lib/beehiiv";
 import "../styles/zine.css";
-const PUBLICATION_ID = import.meta.env.BEEHIIV_PUBLICATION_ID;
-const API_KEY = import.meta.env.BEEHIIV_API_KEY;
-const POST_LIMIT = 5;
 
-type LedgerPost = {
-  title: string;
-  excerpt: string;
-  url: string;
-  date: string;
-};
-
-let posts: LedgerPost[] = [];
-
-try {
-  const res = await fetch(
-    `https://api.beehiiv.com/v2/publications/${PUBLICATION_ID}/posts` +
-      `?limit=${POST_LIMIT}` +
-      `&status=confirmed` +
-      `&order_by=publish_date` +
-      `&direction=desc` +
-      `&platform=both` +
-      `&hidden_from_feed=false`,
-    {
-      headers: {
-        Authorization: `Bearer ${API_KEY}`,
-        Accept: 'application/json',
-      },
-    }
-  );
-
-  if (res.ok) {
-    const json = await res.json();
-    posts = (json.data ?? []).map((p: any) => ({
-      title: p.title ?? '',
-      excerpt: (p.subtitle || p.preview_text || '').trim(),
-      url: p.web_url ?? '#',
-      date: new Date((p.publish_date ?? 0) * 1000).toLocaleDateString('en-US', {
-        month: 'short',
-        day: 'numeric',
-        year: 'numeric',
-      }),
-    }));
-  } else {
-    console.error('Beehiiv posts fetch failed:', res.status, await res.text());
-  }
-} catch (err) {
-  console.error('Beehiiv posts fetch error:', err);
-}
+const posts = await getLedgerPosts();
 ---
 
 <!DOCTYPE html>
@@ -59,26 +15,10 @@ try {
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>The Litchfield Ledger</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" as="image" href="/images/connecticut-mountains.jpg" type="image/jpeg" fetchpriority="high">
 <link href="https://fonts.googleapis.com/css2?family=New+Amsterdam&family=Playfair+Display:ital,wght@0,700;0,900;1,400&family=Libre+Baskerville:ital@0;1&family=Barlow+Condensed:wght@600;700&display=swap" rel="stylesheet">
-
-<!-- Google Analytics 4 -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-P31K2EFL2L"></script>
-<script is:inline>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-P31K2EFL2L');
-</script>
-
-<!-- Microsoft Clarity -->
-<script type="text/javascript">
-  (function(c,l,a,r,i,t,y){
-    c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-    t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-    y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-  })(window, document, "clarity", "script", "wmug74fcme");
-</script>
-
+<Analytics />
 
 </head>
 <body>
@@ -86,7 +26,9 @@ try {
 <SiteNav submitLabel="Submit Your Event" />
 
 <section class="hero">
-  <div class="hero-bg"></div>
+  <picture class="hero-bg">
+    <img src="/images/connecticut-mountains.jpg" alt="" width="1300" height="868" decoding="async" fetchpriority="high" aria-hidden="true">
+  </picture>
   <div class="hero-content">
     <p class="hero-eyebrow">A Northwest Connecticut Newsletter</p>
     <h1 class="hero-title">Exploring<br>Litchfield<br>Hills</h1>
