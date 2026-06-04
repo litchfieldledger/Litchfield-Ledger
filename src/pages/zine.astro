@@ -1,4 +1,6 @@
 ---
+import SiteNav from "../components/SiteNav.astro";
+import SiteFooter from "../components/SiteFooter.astro";
 import "../styles/zine.css";
 const PUBLICATION_ID = import.meta.env.BEEHIIV_PUBLICATION_ID;
 const API_KEY = import.meta.env.BEEHIIV_API_KEY;
@@ -81,15 +83,7 @@ try {
 </head>
 <body>
 
-<nav class="main-nav">
-  <a href="/" class="nav-logo">
-    <img src="/orange-logo.png" alt="Litchfield Ledger" />
-  </a>
-  <ul class="nav-links">
-    <li><a href="https://resy.com/cities/litchfield-ct/venues/lost-fox-inn/events/litchfield-ledger-summer-social-2026-06-11?date=2026-05-19&seats=2" class="nav-support">Summer Social 2026</a></li>
-    <li><a href="https://litchfieldledger.beehiiv.com/add-your-event" class="nav-submit">Submit Your Event</a></li>
-  </ul>
-</nav>
+<SiteNav submitLabel="Submit Your Event" />
 
 <section class="hero">
   <div class="hero-bg"></div>
@@ -148,20 +142,7 @@ try {
 
 <script is:inline src="/beehiiv-feed.js"></script>
 
-<footer>
-  <img src="/orange-bigblock.png" alt="The Litchfield Ledger" class="footer-logo-img" />
-  <div class="beehiiv-wrap" style="margin-top: 0;">
-    <script is:inline src="https://subscribe-forms.beehiiv.com/v3/loader.js" data-beehiiv-form="48c597c3-c9e3-4c7a-b09b-db8627e0a48e"></script>
-  </div>
-  <div class="footer-support">
-    <p>The Ledger is free and independent. If you find value in it, consider supporting it.</p>
-    <a href="https://litchfieldledger.beehiiv.com/upgrade">Support the Ledger</a>
-  </div>
-  <div class="footer-nav">
-    <a href="mailto:patrick@litchfieldledger.com">Contact</a>
-  </div>
-  <p class="footer-copy">© 2026 The Litchfield Ledger</p>
-</footer>
+<SiteFooter />
 
 <script is:inline>
 (function () {

@@ -1,43 +1,62 @@
-# Astro Starter Kit: Minimal
+# Litchfield Ledger
+
+Astro site for The Litchfield Ledger, including the homepage, zine-style page, Beehiiv post feed, newsletter signup embeds, and Netlify redirects.
+
+## Local Development
 
 ```sh
-npm create astro@latest -- --template minimal
+npm install
+npm run dev
 ```
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+The local dev server usually runs at [http://localhost:4321](http://localhost:4321).
 
-## 🚀 Project Structure
+## Build
 
-Inside of your Astro project, you'll see the following folders and files:
+```sh
+npm run build
+```
+
+Astro writes the production build to `dist/`. The `dist/` folder is generated and should not be edited directly.
+
+## Project Structure
 
 ```text
-/
-├── public/
-├── src/
-│   └── pages/
-│       └── index.astro
-└── package.json
+public/
+  images/          Static site images served from /images/...
+  zine-assets/     Texture and collage assets for the zine page
+  _redirects       Netlify redirects and Beehiiv proxy routes
+src/
+  components/      Shared Astro components such as nav and footer
+  lib/             Beehiiv API helpers
+  pages/           Astro routes
+  styles/          Page stylesheets
 ```
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+## Environment Variables
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
+Copy `.env.example` to `.env` for local Beehiiv API builds:
 
-Any static assets, like images, can be placed in the `public/` directory.
+```sh
+cp .env.example .env
+```
 
-## 🧞 Commands
+Required values:
 
-All commands are run from the root of the project, from a terminal:
+- `BEEHIIV_PUBLICATION_ID`
+- `BEEHIIV_API_KEY`
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
+The browser-side feed refresher also uses the Netlify `/feed` redirect in `public/_redirects`.
 
-## 👀 Want to learn more?
+## Common Commands
 
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+| Command | Purpose |
+| --- | --- |
+| `npm run dev` | Start Astro locally |
+| `npm run build` | Build the production site |
+| `npm run preview` | Preview the built site locally |
+
+## Notes
+
+- Put reusable images in `public/images/` and reference them with paths like `/images/orange-logo.png`.
+- Do not commit generated folders such as `dist/`, `.astro/`, or `node_modules/`.

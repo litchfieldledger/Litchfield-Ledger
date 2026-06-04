@@ -1,0 +1,29 @@
+---
+interface Props {
+  showInstagram?: boolean;
+}
+
+const { showInstagram = false } = Astro.props;
+---
+
+<footer>
+  <img src="/images/orange-bigblock.png" alt="The Litchfield Ledger" class="footer-logo-img" />
+  <div class="beehiiv-wrap" style="margin-top: 0;">
+    <script is:inline src="https://subscribe-forms.beehiiv.com/v3/loader.js" data-beehiiv-form="48c597c3-c9e3-4c7a-b09b-db8627e0a48e"></script>
+  </div>
+  <div class="footer-support">
+    <p>The Ledger is free and independent. If you find value in it, consider supporting it.</p>
+    <a href="https://litchfieldledger.beehiiv.com/upgrade">Support the Ledger</a>
+  </div>
+  {showInstagram && (
+    <div class="footer-social">
+      <a href="https://www.instagram.com/litchfieldledger/" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+        <img src="/images/instagram-logo.png" alt="Instagram" />
+      </a>
+    </div>
+  )}
+  <div class="footer-nav">
+    <a href="mailto:patrick@litchfieldledger.com">Contact</a>
+  </div>
+  <p class="footer-copy">© 2026 The Litchfield Ledger</p>
+</footer>

@@ -1,0 +1,18 @@
+---
+interface Props {
+  submitLabel?: string;
+}
+
+const { submitLabel = 'Submit Event' } = Astro.props;
+const summerSocialUrl = 'https://resy.com/cities/litchfield-ct/venues/lost-fox-inn/events/litchfield-ledger-summer-social-2026-06-11?date=2026-05-19&seats=2';
+---
+
+<nav class="main-nav">
+  <a href="/" class="nav-logo">
+    <img src="/images/orange-logo.png" alt="Litchfield Ledger" />
+  </a>
+  <ul class="nav-links">
+    <li><a href={summerSocialUrl} class="nav-support">Summer Social 2026</a></li>
+    <li><a href="https://litchfieldledger.beehiiv.com/add-your-event" class="nav-submit">{submitLabel}</a></li>
+  </ul>
+</nav>
