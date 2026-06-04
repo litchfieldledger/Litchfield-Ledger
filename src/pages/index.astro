@@ -14,10 +14,12 @@ const posts = await getLedgerPosts();
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>The Litchfield Ledger</title>
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preload" as="image" href="/images/waterfall-1600.avif" type="image/avif" fetchpriority="high">
-<link href="https://fonts.googleapis.com/css2?family=New+Amsterdam&family=Playfair+Display:ital,wght@0,700;0,900;1,400&family=Libre+Baskerville:ital@0;1&family=Barlow+Condensed:wght@600;700&display=swap" rel="stylesheet">
+<link rel="preload" as="image" href="/images/waterfall-1400.webp" type="image/webp" fetchpriority="high">
+<link rel="preload" href="https://fonts.googleapis.com/css2?family=New+Amsterdam&family=Playfair+Display:ital,wght@0,700;0,900;1,400&family=Libre+Baskerville:ital@0;1&family=Barlow+Condensed:wght@600;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link href="https://fonts.googleapis.com/css2?family=New+Amsterdam&family=Playfair+Display:ital,wght@0,700;0,900;1,400&family=Libre+Baskerville:ital@0;1&family=Barlow+Condensed:wght@600;700&display=swap" rel="stylesheet"></noscript>
 <Analytics />
 
 </head>
@@ -27,9 +29,9 @@ const posts = await getLedgerPosts();
 
 <section class="hero">
   <picture class="hero-bg">
-    <source srcset="/images/waterfall-1600.avif" type="image/avif">
     <source srcset="/images/waterfall-1400.webp" type="image/webp">
-    <img src="/images/waterfall.jpg" alt="" width="2048" height="1365" decoding="async" fetchpriority="high" aria-hidden="true">
+    <source srcset="/images/waterfall-1600.avif" type="image/avif">
+    <img src="/images/waterfall.jpg" alt="" width="2048" height="1365" decoding="sync" fetchpriority="high" aria-hidden="true">
   </picture>
   <div class="hero-content">
     <p class="hero-eyebrow">A Northwest Connecticut Newsletter</p>
