@@ -5,9 +5,10 @@ const clarityId = 'wmug74fcme';
 
 <script is:inline define:vars={{ gaId, clarityId }}>
   (function () {
-    const runWhenIdle = window.requestIdleCallback || function (callback) {
-      return window.setTimeout(callback, 1800);
-    };
+    const analyticsDelay = 8000;
+    const interactionEvents = ['click', 'keydown', 'pointerdown', 'scroll', 'touchstart'];
+    let hasLoaded = false;
+    let fallbackTimer;
 
     function loadScript(src) {
       const script = document.createElement('script');
@@ -21,7 +22,15 @@ const clarityId = 'wmug74fcme';
       window.dataLayer.push(arguments);
     };
 
-    runWhenIdle(function () {
+    function loadAnalytics() {
+      if (hasLoaded) return;
+      hasLoaded = true;
+
+      window.clearTimeout(fallbackTimer);
+      interactionEvents.forEach(function (eventName) {
+        window.removeEventListener(eventName, loadAnalytics, { passive: true });
+      });
+
       loadScript('https://www.googletagmanager.com/gtag/js?id=' + gaId);
       window.gtag('js', new Date());
       window.gtag('config', gaId);
@@ -30,6 +39,12 @@ const clarityId = 'wmug74fcme';
         (window.clarity.q = window.clarity.q || []).push(arguments);
       };
       loadScript('https://www.clarity.ms/tag/' + clarityId);
+    }
+
+    interactionEvents.forEach(function (eventName) {
+      window.addEventListener(eventName, loadAnalytics, { once: true, passive: true });
     });
+
+    fallbackTimer = window.setTimeout(loadAnalytics, analyticsDelay);
   })();
 </script>
