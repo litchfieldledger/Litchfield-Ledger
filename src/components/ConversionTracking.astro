@@ -1,0 +1,107 @@
+<script is:inline>
+  (function () {
+    const viewedSignupLocations = new Set();
+    const signupClickTimes = new Map();
+    let activeSignupLocation = '';
+
+    function eventParams(extra) {
+      return Object.assign({
+        page_path: window.location.pathname,
+        page_title: document.title,
+      }, extra || {});
+    }
+
+    function track(name, params) {
+      if (typeof window.gtag !== 'function') return;
+      window.gtag('event', name, eventParams(params));
+    }
+
+    function trackSignupView(entry) {
+      const location = entry.target.dataset.trackSignupView || entry.target.dataset.trackSignup;
+      if (!location || viewedSignupLocations.has(location)) return;
+
+      viewedSignupLocations.add(location);
+      track('newsletter_form_view', {
+        signup_location: location,
+      });
+    }
+
+    function setupSignupViews() {
+      const signupBlocks = document.querySelectorAll('[data-track-signup-view], [data-track-signup]');
+      if (!signupBlocks.length) return;
+
+      if (!('IntersectionObserver' in window)) {
+        signupBlocks.forEach((block) => trackSignupView({ target: block }));
+        return;
+      }
+
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          trackSignupView(entry);
+          observer.unobserve(entry.target);
+        });
+      }, { threshold: 0.5 });
+
+      signupBlocks.forEach((block) => observer.observe(block));
+    }
+
+    function setupSignupClicks() {
+      function trackSignupClick(location) {
+        const now = Date.now();
+        const lastTrackedAt = signupClickTimes.get(location) || 0;
+
+        if (!location || now - lastTrackedAt < 1000) return;
+
+        signupClickTimes.set(location, now);
+        track('newsletter_form_click', {
+          signup_location: location,
+        });
+      }
+
+      document.addEventListener('pointerdown', (event) => {
+        const signupBlock = event.target?.closest?.('[data-track-signup]');
+        if (!signupBlock) return;
+
+        trackSignupClick(signupBlock.dataset.trackSignup);
+      }, { capture: true, passive: true });
+
+      document.addEventListener('pointerover', (event) => {
+        if (event.target?.tagName?.toLowerCase() !== 'iframe') return;
+
+        const signupBlock = event.target.closest('[data-track-signup]');
+        activeSignupLocation = signupBlock?.dataset.trackSignup || '';
+      }, { capture: true, passive: true });
+
+      window.addEventListener('blur', () => {
+        if (document.activeElement?.tagName?.toLowerCase() !== 'iframe') return;
+        trackSignupClick(activeSignupLocation);
+      });
+    }
+
+    function setupLinkClicks() {
+      document.addEventListener('click', (event) => {
+        const link = event.target?.closest?.('a[data-track-click]');
+        if (!link) return;
+
+        track(link.dataset.trackClick, {
+          link_location: link.dataset.trackLocation || '',
+          link_text: link.textContent.trim().replace(/\s+/g, ' ').slice(0, 120),
+          link_url: link.href,
+        });
+      });
+    }
+
+    function init() {
+      setupSignupViews();
+      setupSignupClicks();
+      setupLinkClicks();
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', init, { once: true });
+    } else {
+      init();
+    }
+  })();
+</script>

@@ -85,7 +85,7 @@
 
         return `
           <li class="post-item">
-            <a href="${escapeHtml(post.url)}" class="post-link">
+            <a href="${escapeHtml(post.url)}" class="post-link" data-track-click="outbound_post_click" data-track-location="post_list">
               <div class="post-meta">${escapeHtml(post.date)}</div>
               <div class="post-title">${escapeHtml(post.title)}</div>
               ${excerpt}
@@ -115,6 +115,8 @@
       link.className = title.className;
       link.id = title.id;
       link.textContent = post.title;
+      link.dataset.trackClick = 'outbound_post_click';
+      link.dataset.trackLocation = 'latest_issue';
       title.replaceWith(link);
     }
 
