@@ -6,6 +6,7 @@ import { getLedgerPosts } from '../lib/beehiiv';
 import '../styles/home.css';
 
 const posts = await getLedgerPosts();
+const footerPosts = posts.slice(0, 3);
 ---
 
 <!DOCTYPE html>
@@ -88,7 +89,7 @@ const posts = await getLedgerPosts();
 
 <script is:inline src="/beehiiv-feed.js"></script>
 
-<SiteFooter showInstagram={true} />
+<SiteFooter showInstagram={true} posts={footerPosts} />
 
 <script is:inline>
 (function () {

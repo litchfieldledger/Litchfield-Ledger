@@ -64,6 +64,17 @@
   .post-title { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; color: var(--text-dark); line-height: 1.25; text-transform: uppercase; letter-spacing: 0.02em; }
   .post-excerpt { font-size: 14px; color: var(--text-muted); margin-top: 6px; line-height: 1.6; font-style: italic; }
   footer { background: var(--green); padding: 48px; text-align: center; margin-top: 24px; }
+  .footer-reads { max-width: 960px; margin: 0 auto 42px; text-align: left; }
+  .footer-reads-empty { display: none; }
+  .footer-reads-header { display: flex; align-items: center; gap: 16px; margin-bottom: 18px; }
+  .footer-reads h2 { font-family: 'Barlow Condensed', sans-serif; font-size: 14px; font-weight: 700; letter-spacing: 0.22em; text-transform: uppercase; color: var(--orange); flex-shrink: 0; }
+  .footer-reads-rule { flex: 1; height: 1.5px; background: rgba(200,92,30,0.85); }
+  .footer-reads-list { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border-top: 1px solid rgba(255,255,255,0.18); border-bottom: 1px solid rgba(255,255,255,0.18); }
+  .footer-read { min-height: 112px; padding: 18px 20px; color: white; text-decoration: none; border-right: 1px solid rgba(255,255,255,0.18); display: flex; flex-direction: column; justify-content: center; transition: background-color 0.15s; }
+  .footer-read:last-child { border-right: none; }
+  .footer-read:hover { background: rgba(255,255,255,0.06); }
+  .footer-read-date { font-family: 'Barlow Condensed', sans-serif; font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(255,255,255,0.55); margin-bottom: 8px; }
+  .footer-read-title { font-family: 'Playfair Display', serif; font-size: 18px; font-weight: 700; line-height: 1.25; text-transform: uppercase; letter-spacing: 0.02em; }
   .footer-logo-img { height: 252px; width: auto; display: block; margin: 0 auto 28px; }
   .footer-support { border-top: 1px solid rgba(255,255,255,0.15); padding-top: 28px; margin-bottom: 28px; }
   .footer-support p { font-family: 'Libre Baskerville', serif; font-style: italic; color: rgba(255,255,255,0.65); font-size: 15px; margin-bottom: 14px; }
@@ -86,5 +97,10 @@
     .content { grid-template-columns: 1fr; gap: 32px; padding: 32px 20px; }
     .post-title { font-size: 17px; }
     footer { padding: 40px 20px; }
+    .footer-reads { margin-bottom: 34px; }
+    .footer-reads-list { grid-template-columns: 1fr; }
+    .footer-read { min-height: 92px; padding: 16px 0; border-right: none; border-bottom: 1px solid rgba(255,255,255,0.18); }
+    .footer-read:last-child { border-bottom: none; }
+    .footer-read-title { font-size: 17px; }
     .footer-logo-img { height: 160px; }
   }

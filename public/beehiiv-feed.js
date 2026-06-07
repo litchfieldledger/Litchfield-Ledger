@@ -1,7 +1,8 @@
 (function () {
   const feeds = document.querySelectorAll('[data-beehiiv-feed]');
+  const footerFeeds = document.querySelectorAll('[data-beehiiv-footer-feed]');
 
-  if (!feeds.length) return;
+  if (!feeds.length && !footerFeeds.length) return;
   if (!document.querySelector('.post-empty')) return;
 
   const stripHtml = (value) => {
@@ -50,6 +51,26 @@
       .join('');
   };
 
+  const renderFooterPosts = (container, posts) => {
+    const list = container.querySelector('.footer-reads-list');
+
+    if (!list) return;
+
+    list.innerHTML = posts
+      .slice(0, 3)
+      .map(
+        (post) => `
+          <a href="${escapeHtml(post.url)}" class="footer-read">
+            <span class="footer-read-date">${escapeHtml(post.date)}</span>
+            <span class="footer-read-title">${escapeHtml(post.title)}</span>
+          </a>
+        `
+      )
+      .join('');
+
+    container.classList.remove('footer-reads-empty');
+  };
+
   const getText = (item, selector) =>
     item.querySelector(selector)?.textContent?.trim() || '';
 
@@ -79,6 +100,7 @@
         if (!posts.length) return;
 
         feeds.forEach((feed) => renderPosts(feed, posts));
+        footerFeeds.forEach((feed) => renderFooterPosts(feed, posts));
       })
       .catch((error) => {
         console.warn('Beehiiv feed refresh failed:', error);
