@@ -6,6 +6,7 @@ interface Props {
 }
 
 const { post } = Astro.props;
+const preview = post?.preview || post?.excerpt;
 ---
 
 <section class:list={['latest-issue', !post && 'latest-issue-empty']} aria-labelledby="latest-issue-title" data-beehiiv-latest-preview>
@@ -18,9 +19,9 @@ const { post } = Astro.props;
       {post ? (
         <>
           <a href={post.url} class="latest-issue-title" id="latest-issue-title">{post.title}</a>
-          {post.excerpt && (
+          {preview && (
             <div class="latest-issue-preview">
-              <p>{post.excerpt}</p>
+              <p>{preview}</p>
             </div>
           )}
         </>

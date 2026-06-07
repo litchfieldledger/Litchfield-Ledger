@@ -23,6 +23,22 @@
     });
   };
 
+  const truncateText = (value, maxLength) => {
+    if (!value || value.length <= maxLength) return value || '';
+
+    const clipped = value.slice(0, maxLength);
+    const sentenceEnd = Math.max(
+      clipped.lastIndexOf('. '),
+      clipped.lastIndexOf('? '),
+      clipped.lastIndexOf('! ')
+    );
+
+    if (sentenceEnd > maxLength * 0.55) return clipped.slice(0, sentenceEnd + 1);
+
+    const wordEnd = clipped.lastIndexOf(' ');
+    return `${clipped.slice(0, wordEnd > 0 ? wordEnd : maxLength).trim()}...`;
+  };
+
   const escapeHtml = (value) =>
     String(value || '')
       .replace(/&/g, '&amp;')
@@ -35,7 +51,7 @@
     container.innerHTML = posts
       .map((post) => {
         const excerpt = post.excerpt
-          ? `<div class="post-excerpt">${escapeHtml(post.excerpt)}</div>`
+          ? `<div class="post-excerpt">${escapeHtml(truncateText(post.excerpt, 180))}</div>`
           : '';
 
         return `
@@ -72,12 +88,17 @@
       title.replaceWith(link);
     }
 
-    preview.innerHTML = post.excerpt ? `<p>${escapeHtml(post.excerpt)}</p>` : '';
+    preview.innerHTML = post.preview ? `<p>${escapeHtml(post.preview)}</p>` : '';
     container.classList.remove('latest-issue-empty');
   };
 
   const getText = (item, selector) =>
     item.querySelector(selector)?.textContent?.trim() || '';
+
+  const getContentText = (item) =>
+    item.querySelector('content\\:encoded')?.textContent?.trim() ||
+    item.getElementsByTagName('content:encoded')[0]?.textContent?.trim() ||
+    '';
 
   const loadFeed = () => {
     fetch('/feed')
@@ -94,11 +115,13 @@
             const title = stripHtml(getText(item, 'title'));
             const url = getText(item, 'link');
             const date = formatDate(getText(item, 'pubDate'));
-            const excerpt = stripHtml(
-              getText(item, 'description') || getText(item, 'encoded')
+            const excerpt = stripHtml(getText(item, 'description'));
+            const preview = truncateText(
+              stripHtml(getContentText(item) || getText(item, 'description')),
+              1000
             );
 
-            return { title, url, date, excerpt };
+            return { title, url, date, excerpt, preview };
           })
           .filter((post) => post.title && post.url);
 
