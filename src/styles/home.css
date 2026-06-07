@@ -71,10 +71,10 @@
   .latest-issue-kicker { display: flex; gap: 12px; align-items: center; font-family: 'Barlow Condensed', sans-serif; font-size: 14px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: #b78370; margin-bottom: 12px; }
   .latest-issue-kicker span:first-child { color: var(--orange); }
   .latest-issue-kicker span + span::before { content: "·"; margin-right: 12px; color: #c8bfa8; }
-  .latest-issue-title { display: block; font-family: 'Playfair Display', serif; font-size: 32px; font-weight: 900; line-height: 1.12; text-transform: uppercase; letter-spacing: 0.01em; color: var(--text-dark); text-decoration: none; margin-bottom: 18px; }
+  .latest-issue-title { display: block; max-width: 620px; font-family: 'Playfair Display', serif; font-size: 26px; font-weight: 900; line-height: 1.15; text-transform: uppercase; letter-spacing: 0.01em; color: var(--text-dark); text-decoration: none; margin-bottom: 16px; }
   .latest-issue-title:hover { color: var(--orange); }
   .latest-issue-deck { font-size: 17px; line-height: 1.55; color: var(--text-muted); font-style: italic; margin: -8px 0 20px; }
-  .latest-issue-preview { font-size: 18px; line-height: 1.72; color: var(--text-dark); }
+  .latest-issue-preview { font-size: 17px; line-height: 1.7; color: var(--text-dark); }
   .latest-issue-preview p + p { margin-top: 18px; }
   .latest-issue-gate { position: absolute; left: 50%; bottom: 0; z-index: 2; width: min(100%, 620px); transform: translateX(-50%); text-align: center; }
   .latest-issue-gate h3 { font-family: 'Barlow Condensed', sans-serif; font-size: 28px; line-height: 1.05; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-dark); margin-bottom: 18px; }
