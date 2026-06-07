@@ -3,35 +3,46 @@ import type { LedgerPost } from '../lib/beehiiv';
 
 interface Props {
   showInstagram?: boolean;
-  posts?: LedgerPost[];
+  latestPost?: LedgerPost;
 }
 
-const { showInstagram = false, posts = [] } = Astro.props;
+const { showInstagram = false, latestPost } = Astro.props;
 ---
 
 <footer>
-  <section class:list={['footer-reads', posts.length === 0 && 'footer-reads-empty']} aria-labelledby="footer-reads-title" data-beehiiv-footer-feed>
-    <div class="footer-reads-header">
-      <h2 id="footer-reads-title">Recent Reads</h2>
-      <div class="footer-reads-rule"></div>
-    </div>
-    <div class="footer-reads-list">
-      {posts.length > 0 && (
-        <>
-        {posts.map((post) => (
-          <a href={post.url} class="footer-read">
-            <span class="footer-read-date">{post.date}</span>
-            <span class="footer-read-title">{post.title}</span>
-          </a>
-        ))}
-        </>
-      )}
+  <section class:list={['latest-issue', !latestPost && 'latest-issue-empty']} aria-labelledby="latest-issue-title" data-beehiiv-latest-preview>
+    <div class="latest-issue-inner">
+      <div class="latest-issue-content">
+        <div class="latest-issue-kicker">
+          <span>This Week</span>
+          {latestPost?.date && <span>{latestPost.date}</span>}
+        </div>
+        {latestPost ? (
+          <>
+            <a href={latestPost.url} class="latest-issue-title" id="latest-issue-title">{latestPost.title}</a>
+            {latestPost.excerpt && (
+              <div class="latest-issue-preview">
+                <p>{latestPost.excerpt}</p>
+              </div>
+            )}
+          </>
+        ) : (
+          <>
+            <span class="latest-issue-title" id="latest-issue-title">Latest Issue</span>
+            <div class="latest-issue-preview"></div>
+          </>
+        )}
+      </div>
+      <div class="latest-issue-gate">
+        <h3>Your week is waiting. Join The Litchfield Ledger.</h3>
+        <div class="beehiiv-wrap latest-issue-signup">
+          <script is:inline src="https://subscribe-forms.beehiiv.com/v3/loader.js" data-beehiiv-form="48c597c3-c9e3-4c7a-b09b-db8627e0a48e"></script>
+        </div>
+        <p>Free, every Tuesday.</p>
+      </div>
     </div>
   </section>
   <img src="/images/orange-bigblock.png" alt="The Litchfield Ledger" class="footer-logo-img" width="715" height="508" loading="lazy" decoding="async" />
-  <div class="beehiiv-wrap" style="margin-top: 0;">
-    <script is:inline src="https://subscribe-forms.beehiiv.com/v3/loader.js" data-beehiiv-form="48c597c3-c9e3-4c7a-b09b-db8627e0a48e"></script>
-  </div>
   <div class="footer-support">
     <p>The Ledger is free and independent. If you find value in it, consider supporting it.</p>
     <a href="https://litchfieldledger.beehiiv.com/upgrade">Support the Ledger</a>

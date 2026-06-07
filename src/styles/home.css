@@ -64,17 +64,22 @@
   .post-title { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; color: var(--text-dark); line-height: 1.25; text-transform: uppercase; letter-spacing: 0.02em; }
   .post-excerpt { font-size: 14px; color: var(--text-muted); margin-top: 6px; line-height: 1.6; font-style: italic; }
   footer { background: var(--green); padding: 48px; text-align: center; margin-top: 24px; }
-  .footer-reads { max-width: 960px; margin: 0 auto 42px; text-align: left; }
-  .footer-reads-empty { display: none; }
-  .footer-reads-header { display: flex; align-items: center; gap: 16px; margin-bottom: 18px; }
-  .footer-reads h2 { font-family: 'Barlow Condensed', sans-serif; font-size: 14px; font-weight: 700; letter-spacing: 0.22em; text-transform: uppercase; color: var(--orange); flex-shrink: 0; }
-  .footer-reads-rule { flex: 1; height: 1.5px; background: rgba(200,92,30,0.85); }
-  .footer-reads-list { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border-top: 1px solid rgba(255,255,255,0.18); border-bottom: 1px solid rgba(255,255,255,0.18); }
-  .footer-read { min-height: 112px; padding: 18px 20px; color: white; text-decoration: none; border-right: 1px solid rgba(255,255,255,0.18); display: flex; flex-direction: column; justify-content: center; transition: background-color 0.15s; }
-  .footer-read:last-child { border-right: none; }
-  .footer-read:hover { background: rgba(255,255,255,0.06); }
-  .footer-read-date { font-family: 'Barlow Condensed', sans-serif; font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(255,255,255,0.55); margin-bottom: 8px; }
-  .footer-read-title { font-family: 'Playfair Display', serif; font-size: 18px; font-weight: 700; line-height: 1.25; text-transform: uppercase; letter-spacing: 0.02em; }
+  .latest-issue { max-width: 880px; margin: 0 auto 48px; padding: 0 0 36px; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.16); }
+  .latest-issue-empty { display: none; }
+  .latest-issue-inner { position: relative; overflow: hidden; padding-bottom: 188px; }
+  .latest-issue-content { max-height: 430px; overflow: hidden; }
+  .latest-issue-inner::after { content: ""; position: absolute; left: 0; right: 0; bottom: 120px; height: 190px; pointer-events: none; background: linear-gradient(to bottom, rgba(30,61,40,0), var(--green) 78%); }
+  .latest-issue-kicker { display: flex; gap: 12px; align-items: center; font-family: 'Barlow Condensed', sans-serif; font-size: 14px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(255,255,255,0.58); margin-bottom: 12px; }
+  .latest-issue-kicker span:first-child { color: var(--orange); }
+  .latest-issue-kicker span + span::before { content: "·"; margin-right: 12px; color: rgba(255,255,255,0.35); }
+  .latest-issue-title { display: block; font-family: 'Playfair Display', serif; font-size: 46px; font-weight: 900; line-height: 1.02; text-transform: uppercase; letter-spacing: 0.01em; color: white; text-decoration: none; max-width: 760px; margin-bottom: 24px; }
+  .latest-issue-title:hover { color: #f6e6d6; }
+  .latest-issue-preview { max-width: 760px; font-size: 20px; line-height: 1.75; color: rgba(255,255,255,0.78); }
+  .latest-issue-preview p + p { margin-top: 18px; }
+  .latest-issue-gate { position: absolute; left: 50%; bottom: 0; z-index: 2; width: min(100%, 620px); transform: translateX(-50%); text-align: center; }
+  .latest-issue-gate h3 { font-family: 'Barlow Condensed', sans-serif; font-size: 28px; line-height: 1.05; letter-spacing: 0.08em; text-transform: uppercase; color: white; margin-bottom: 18px; }
+  .latest-issue-signup { max-width: 560px; }
+  .latest-issue-gate p { margin-top: 12px; font-family: 'Barlow Condensed', sans-serif; font-size: 14px; letter-spacing: 0.14em; color: rgba(255,255,255,0.5); text-transform: uppercase; }
   .footer-logo-img { height: 252px; width: auto; display: block; margin: 0 auto 28px; }
   .footer-support { border-top: 1px solid rgba(255,255,255,0.15); padding-top: 28px; margin-bottom: 28px; }
   .footer-support p { font-family: 'Libre Baskerville', serif; font-style: italic; color: rgba(255,255,255,0.65); font-size: 15px; margin-bottom: 14px; }
@@ -97,10 +102,13 @@
     .content { grid-template-columns: 1fr; gap: 32px; padding: 32px 20px; }
     .post-title { font-size: 17px; }
     footer { padding: 40px 20px; }
-    .footer-reads { margin-bottom: 34px; }
-    .footer-reads-list { grid-template-columns: 1fr; }
-    .footer-read { min-height: 92px; padding: 16px 0; border-right: none; border-bottom: 1px solid rgba(255,255,255,0.18); }
-    .footer-read:last-child { border-bottom: none; }
-    .footer-read-title { font-size: 17px; }
+    .latest-issue { margin-bottom: 36px; padding-bottom: 30px; }
+    .latest-issue-inner { padding-bottom: 196px; }
+    .latest-issue-content { max-height: 420px; }
+    .latest-issue-inner::after { bottom: 132px; height: 170px; }
+    .latest-issue-kicker { flex-wrap: wrap; gap: 8px; font-size: 12px; }
+    .latest-issue-title { font-size: 30px; margin-bottom: 18px; }
+    .latest-issue-preview { font-size: 16px; line-height: 1.7; }
+    .latest-issue-gate h3 { font-size: 22px; }
     .footer-logo-img { height: 160px; }
   }

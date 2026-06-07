@@ -1,8 +1,8 @@
 (function () {
   const feeds = document.querySelectorAll('[data-beehiiv-feed]');
-  const footerFeeds = document.querySelectorAll('[data-beehiiv-footer-feed]');
+  const latestPreviews = document.querySelectorAll('[data-beehiiv-latest-preview]');
 
-  if (!feeds.length && !footerFeeds.length) return;
+  if (!feeds.length && !latestPreviews.length) return;
   if (!document.querySelector('.post-empty')) return;
 
   const stripHtml = (value) => {
@@ -51,24 +51,29 @@
       .join('');
   };
 
-  const renderFooterPosts = (container, posts) => {
-    const list = container.querySelector('.footer-reads-list');
+  const renderLatestPreview = (container, post) => {
+    const kicker = container.querySelector('.latest-issue-kicker');
+    const title = container.querySelector('.latest-issue-title');
+    const preview = container.querySelector('.latest-issue-preview');
 
-    if (!list) return;
+    if (!kicker || !title || !preview) return;
 
-    list.innerHTML = posts
-      .slice(0, 3)
-      .map(
-        (post) => `
-          <a href="${escapeHtml(post.url)}" class="footer-read">
-            <span class="footer-read-date">${escapeHtml(post.date)}</span>
-            <span class="footer-read-title">${escapeHtml(post.title)}</span>
-          </a>
-        `
-      )
-      .join('');
+    kicker.innerHTML = `<span>This Week</span><span>${escapeHtml(post.date)}</span>`;
 
-    container.classList.remove('footer-reads-empty');
+    if (title.tagName.toLowerCase() === 'a') {
+      title.href = post.url;
+      title.textContent = post.title;
+    } else {
+      const link = document.createElement('a');
+      link.href = post.url;
+      link.className = title.className;
+      link.id = title.id;
+      link.textContent = post.title;
+      title.replaceWith(link);
+    }
+
+    preview.innerHTML = post.excerpt ? `<p>${escapeHtml(post.excerpt)}</p>` : '';
+    container.classList.remove('latest-issue-empty');
   };
 
   const getText = (item, selector) =>
@@ -100,7 +105,7 @@
         if (!posts.length) return;
 
         feeds.forEach((feed) => renderPosts(feed, posts));
-        footerFeeds.forEach((feed) => renderFooterPosts(feed, posts));
+        latestPreviews.forEach((preview) => renderLatestPreview(preview, posts[0]));
       })
       .catch((error) => {
         console.warn('Beehiiv feed refresh failed:', error);
