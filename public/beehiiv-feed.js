@@ -70,6 +70,7 @@
   const renderLatestPreview = (container, post) => {
     const kicker = container.querySelector('.latest-issue-kicker');
     const title = container.querySelector('.latest-issue-title');
+    const deck = container.querySelector('.latest-issue-deck');
     const preview = container.querySelector('.latest-issue-preview');
 
     if (!kicker || !title || !preview) return;
@@ -86,6 +87,19 @@
       link.id = title.id;
       link.textContent = post.title;
       title.replaceWith(link);
+    }
+
+    if (deck) {
+      if (post.excerpt && post.excerpt !== post.preview) {
+        deck.textContent = post.excerpt;
+      } else {
+        deck.remove();
+      }
+    } else if (post.excerpt && post.excerpt !== post.preview && preview) {
+      const deckEl = document.createElement('p');
+      deckEl.className = 'latest-issue-deck';
+      deckEl.textContent = post.excerpt;
+      preview.before(deckEl);
     }
 
     preview.innerHTML = post.preview ? `<p>${escapeHtml(post.preview)}</p>` : '';

@@ -19,6 +19,9 @@ const preview = post?.preview || post?.excerpt;
       {post ? (
         <>
           <a href={post.url} class="latest-issue-title" id="latest-issue-title">{post.title}</a>
+          {post.excerpt && post.excerpt !== preview && (
+            <p class="latest-issue-deck">{post.excerpt}</p>
+          )}
           {preview && (
             <div class="latest-issue-preview">
               <p>{preview}</p>
