@@ -38,6 +38,35 @@ const truncateText = (value: string, maxLength: number) => {
   return `${clipped.slice(0, wordEnd > 0 ? wordEnd : maxLength).trim()}...`;
 };
 
+const escapeRegExp = (value: string) => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
+const cleanPreviewText = (value: string, title: string) => {
+  let text = value.trim();
+
+  if (!text) return '';
+
+  const knownBodyStart = text.search(/now that we've completed/i);
+  if (knownBodyStart > -1 && knownBodyStart < 600) {
+    text = text.slice(knownBodyStart);
+  }
+
+  const titlePattern = title ? new RegExp(`^${escapeRegExp(title)}\\s*`, 'i') : null;
+  const datePattern =
+    /^(?:jan(?:uary)?|feb(?:ruary)?|mar(?:ch)?|apr(?:il)?|may|jun(?:e)?|jul(?:y)?|aug(?:ust)?|sep(?:t(?:ember)?)?|oct(?:ober)?|nov(?:ember)?|dec(?:ember)?)\.?\s+\d{1,2},?\s+\d{4}\s*/i;
+  const newsletterPattern = /^the\s+tuesday\s+letter\s*:\s*[^.?!]*?(?:edition)?\s*/i;
+
+  for (let i = 0; i < 4; i += 1) {
+    const before = text;
+    if (titlePattern) text = text.replace(titlePattern, '');
+    text = text.replace(datePattern, '');
+    text = text.replace(newsletterPattern, '');
+    text = text.trim();
+    if (text === before) break;
+  }
+
+  return text;
+};
+
 const contentValue = (post: any) =>
   post.content?.free?.web ||
   post.content?.free?.rss ||
@@ -83,11 +112,12 @@ export async function getLedgerPosts(): Promise<LedgerPost[]> {
     const json = await res.json();
 
     return (json.data ?? []).map((p: any) => {
+      const title = p.title ?? '';
       const excerpt = (p.subtitle || p.preview_text || '').trim();
-      const contentPreview = stripHtml(contentValue(p));
+      const contentPreview = cleanPreviewText(stripHtml(contentValue(p)), title);
 
       return {
-        title: p.title ?? '',
+        title,
         excerpt,
         preview: truncateText(contentPreview || excerpt, 1000),
         url: p.web_url ?? '#',
