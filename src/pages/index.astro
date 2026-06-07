@@ -1,6 +1,7 @@
 ---
 import SiteNav from '../components/SiteNav.astro';
 import SiteFooter from '../components/SiteFooter.astro';
+import LatestIssuePreview from '../components/LatestIssuePreview.astro';
 import Analytics from '../components/Analytics.astro';
 import { getLedgerPosts } from '../lib/beehiiv';
 import '../styles/home.css';
@@ -89,7 +90,9 @@ const latestPost = posts[0];
 
 <script is:inline src="/beehiiv-feed.js"></script>
 
-<SiteFooter showInstagram={true} latestPost={latestPost} />
+<LatestIssuePreview post={latestPost} />
+
+<SiteFooter showInstagram={true} />
 
 <script is:inline>
 (function () {

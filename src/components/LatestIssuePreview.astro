@@ -1,0 +1,42 @@
+---
+import type { LedgerPost } from '../lib/beehiiv';
+
+interface Props {
+  post?: LedgerPost;
+}
+
+const { post } = Astro.props;
+---
+
+<section class:list={['latest-issue', !post && 'latest-issue-empty']} aria-labelledby="latest-issue-title" data-beehiiv-latest-preview>
+  <div class="latest-issue-inner">
+    <div class="latest-issue-content">
+      <div class="latest-issue-kicker">
+        <span>This Week</span>
+        {post?.date && <span>{post.date}</span>}
+      </div>
+      {post ? (
+        <>
+          <a href={post.url} class="latest-issue-title" id="latest-issue-title">{post.title}</a>
+          {post.excerpt && (
+            <div class="latest-issue-preview">
+              <p>{post.excerpt}</p>
+            </div>
+          )}
+        </>
+      ) : (
+        <>
+          <span class="latest-issue-title" id="latest-issue-title">Latest Issue</span>
+          <div class="latest-issue-preview"></div>
+        </>
+      )}
+    </div>
+    <div class="latest-issue-gate">
+      <h3>Your week is waiting. Join The Litchfield Ledger.</h3>
+      <div class="beehiiv-wrap latest-issue-signup">
+        <script is:inline src="https://subscribe-forms.beehiiv.com/v3/loader.js" data-beehiiv-form="48c597c3-c9e3-4c7a-b09b-db8627e0a48e"></script>
+      </div>
+      <p>Free, every Tuesday.</p>
+    </div>
+  </div>
+</section>
