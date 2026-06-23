@@ -104,26 +104,40 @@ const latestPost = posts[0];
     return Math.floor((date - new Date(date.getFullYear(), 0, 0)) / 86400000);
   }
 
-  function emerging(d) {
-    if (d < 74)  return 'Dormant';
-    if (d < 85)  return 'Skunk cabbage, hepatica';
-    if (d < 100) return 'Bloodroot, spring beauty';
-    if (d < 115) return 'Trout lily, coltsfoot';
-    if (d < 130) return 'Wild ginger, jack-in-the-pulpit';
-    if (d < 150) return 'Mayapple, wild columbine';
-    if (d < 166) return 'Mountain laurel';
-    return 'Summer flora';
+  function clampPct(v) {
+    return Math.max(0, Math.min(100, Math.round(v)));
   }
 
-  function springPct(d) {
-    return Math.max(0, Math.min(100, Math.round(((d - 74) / (166 - 74)) * 100)));
-  }
-
-  function springStage(p) {
-    if (p < 18) return 'Mud';
-    if (p < 45) return 'Before Bloom';
-    if (p < 72) return 'Peak';
-    return 'Summer';
+  // Season-aware phenology model for Litchfield County (NW Connecticut).
+  // Returns the progression bar (title, pct, stage list, active stage) and the
+  // currently-emerging flora for the given day-of-year.
+  function season(d) {
+    // Spring — snowmelt (Mar 15, doy 74) → mountain laurel (mid-Jun, doy 166)
+    if (d <= 166) {
+      const stages = ['Mud', 'Before Bloom', 'Peak', 'Summer'];
+      const pct = clampPct(((d - 74) / (166 - 74)) * 100);
+      const stage = pct < 18 ? 'Mud' : pct < 45 ? 'Before Bloom' : pct < 72 ? 'Peak' : 'Summer';
+      let flora = 'Dormant';
+      if (d >= 150)      flora = 'Mountain laurel';
+      else if (d >= 130) flora = 'Mayapple, wild columbine';
+      else if (d >= 115) flora = 'Wild ginger, jack-in-the-pulpit';
+      else if (d >= 100) flora = 'Trout lily, coltsfoot';
+      else if (d >= 85)  flora = 'Bloodroot, spring beauty';
+      else if (d >= 74)  flora = 'Skunk cabbage, hepatica';
+      return { title: 'Spring Progression', pct, stage, stages, flora };
+    }
+    // Summer — solstice window (mid-Jun, doy 166) → autumnal equinox (Sep 22, doy 266)
+    const stages = ['Early Summer', 'High Summer', 'Late Summer', 'Goldenrod'];
+    const pct = clampPct(((d - 166) / (266 - 166)) * 100);
+    const stage = pct < 25 ? 'Early Summer' : pct < 50 ? 'High Summer' : pct < 75 ? 'Late Summer' : 'Goldenrod';
+    let flora = 'Goldenrod, New England aster';
+    if (d < 180)      flora = 'Mountain laurel, wild lupine';
+    else if (d < 195) flora = 'Common milkweed, ox-eye daisy';
+    else if (d < 210) flora = 'Black-eyed Susan, bee balm';
+    else if (d < 225) flora = "Queen Anne's lace, chicory";
+    else if (d < 240) flora = 'Joe-Pye weed, cardinal flower';
+    else if (d < 255) flora = 'Goldenrod, ironweed';
+    return { title: 'Summer Progression', pct, stage, stages, flora };
   }
 
   function trailCond(mm) {
@@ -170,8 +184,7 @@ const latestPost = posts[0];
   const now   = new Date();
   const month = now.getMonth() + 1;
   const d     = doy(now);
-  const pct   = springPct(d);
-  const stage = springStage(pct);
+  const ph    = season(d);
 
   document.getElementById('fr-date').textContent =
     now.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }) +
@@ -235,15 +248,15 @@ const latestPost = posts[0];
       ${row('Sunrise / Sunset', sunHTML)}
       ${row('Moon Phase', moonHTML)}
       <div class="phenology-bar">
-        <div class="pheno-label">Spring Progression</div>
-        <div class="pheno-track"><div class="pheno-fill" style="width:${pct}%"></div></div>
+        <div class="pheno-label">${ph.title}</div>
+        <div class="pheno-track"><div class="pheno-fill" style="width:${ph.pct}%"></div></div>
         <div class="pheno-stages">
-          ${['Mud','Before Bloom','Peak','Summer'].map(s =>
-            `<span class="pheno-stage ${s === stage ? 'active' : ''}">${s}</span>`
+          ${ph.stages.map(s =>
+            `<span class="pheno-stage ${s === ph.stage ? 'active' : ''}">${s}</span>`
           ).join('')}
         </div>
       </div>
-      ${row("What's Emerging", `<em style="font-size:13px">${emerging(d)}</em>`)}
+      ${row("What's Emerging", `<em style="font-size:13px">${ph.flora}</em>`)}
     `;
   });
 })();
