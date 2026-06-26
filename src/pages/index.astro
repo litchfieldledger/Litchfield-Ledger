@@ -4,11 +4,14 @@ import SiteFooter from '../components/SiteFooter.astro';
 import LatestIssuePreview from '../components/LatestIssuePreview.astro';
 import Analytics from '../components/Analytics.astro';
 import ConversionTracking from '../components/ConversionTracking.astro';
-import { getLedgerPosts } from '../lib/beehiiv';
+import { getLedgerPosts, getLedgerStats } from '../lib/beehiiv';
 import '../styles/home.css';
 
 const posts = await getLedgerPosts();
 const latestPost = posts[0];
+
+const stats = await getLedgerStats();
+const numberFmt = new Intl.NumberFormat('en-US');
 ---
 
 <!DOCTYPE html>
@@ -45,6 +48,17 @@ const latestPost = posts[0];
       <script is:inline src="https://subscribe-forms.beehiiv.com/v3/loader.js" data-beehiiv-form="48c597c3-c9e3-4c7a-b09b-db8627e0a48e"></script>
     </div>
     <p class="hero-disclaimer">GET THE FREE TUESDAY LETTER TRUSTED BY 3,500+ NEIGHBORS, WEEKENDERS, AND SEEKERS</p>
+    {stats && stats.activeSubscribers > 0 && (
+      <p class="hero-stats">
+        <span class="hero-stats-count">{numberFmt.format(stats.activeSubscribers)}</span> locals reading
+        {stats.joinedThisWeek > 0 && (
+          <>
+            <span class="hero-stats-sep">·</span>
+            <span class="hero-stats-new"><span class="hero-stats-dot"></span>+{numberFmt.format(stats.joinedThisWeek)}</span> joined this week
+          </>
+        )}
+      </p>
+    )}
   </div>
 </section>
 

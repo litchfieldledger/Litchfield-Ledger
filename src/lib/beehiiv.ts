@@ -10,6 +10,87 @@ export type LedgerPost = {
   date: string;
 };
 
+export type LedgerStats = {
+  activeSubscribers: number;
+  joinedThisWeek: number;
+};
+
+// Pulls the total active subscriber count and the number of active
+// subscribers created in the last 7 days. Runs at build time, so the
+// figures are accurate as of the most recent deploy.
+export async function getLedgerStats(): Promise<LedgerStats | null> {
+  if (!PUBLICATION_ID || !API_KEY) {
+    console.warn('Missing Beehiiv env vars.');
+    return null;
+  }
+
+  const headers = {
+    Authorization: `Bearer ${API_KEY}`,
+    Accept: 'application/json',
+  };
+
+  let activeSubscribers = 0;
+  try {
+    const res = await fetch(
+      `https://api.beehiiv.com/v2/publications/${PUBLICATION_ID}?expand=stats`,
+      { headers }
+    );
+    if (res.ok) {
+      const json = await res.json();
+      activeSubscribers = json.data?.stats?.active_subscriptions ?? 0;
+    } else {
+      console.error('Beehiiv stats fetch failed:', res.status, await res.text());
+    }
+  } catch (err) {
+    console.error('Beehiiv stats fetch error:', err);
+  }
+
+  // Count active subscriptions created within the last 7 days by walking the
+  // list newest-first and stopping once we pass the cutoff.
+  const cutoff = Math.floor(Date.now() / 1000) - 7 * 24 * 60 * 60;
+  let joinedThisWeek = 0;
+  try {
+    for (let page = 1; page <= 20; page += 1) {
+      const params = new URLSearchParams({
+        limit: '100',
+        status: 'active',
+        order_by: 'created',
+        direction: 'desc',
+        page: String(page),
+      });
+
+      const res = await fetch(
+        `https://api.beehiiv.com/v2/publications/${PUBLICATION_ID}/subscriptions?${params}`,
+        { headers }
+      );
+
+      if (!res.ok) {
+        console.error('Beehiiv subscriptions fetch failed:', res.status, await res.text());
+        break;
+      }
+
+      const json = await res.json();
+      const subs: any[] = json.data ?? [];
+      if (subs.length === 0) break;
+
+      let passedCutoff = false;
+      for (const sub of subs) {
+        if ((sub.created ?? 0) >= cutoff) joinedThisWeek += 1;
+        else {
+          passedCutoff = true;
+          break;
+        }
+      }
+
+      if (passedCutoff || subs.length < 100) break;
+    }
+  } catch (err) {
+    console.error('Beehiiv subscriptions fetch error:', err);
+  }
+
+  return { activeSubscribers, joinedThisWeek };
+}
+
 const stripHtml = (value: string) =>
   value
     .replace(/<style[\s\S]*?<\/style>/gi, ' ')
