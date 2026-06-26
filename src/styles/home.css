@@ -26,7 +26,6 @@
   .hero-eyebrow { font-family: 'Barlow Condensed', sans-serif; font-size: 13px; letter-spacing: 0.22em; text-transform: uppercase; color: white; margin-bottom: 16px; }
   .hero-title { font-family: 'New Amsterdam', sans-serif; font-size: 52px; font-weight: 900; line-height: 0.95; color: white; text-transform: uppercase; letter-spacing: 0; white-space: nowrap; margin-bottom: 20px; }
   .hero-sub { font-family: 'Libre Baskerville', serif; font-style: italic; color: rgba(255,255,255,0.75); font-size: 17px; margin-bottom: 28px; }
-  .hero-disclaimer { color: white; font-family: 'Barlow Condensed', sans-serif; font-size: 13px; letter-spacing: 0.05em; font-style: italic; margin-top: 12px; }
   .hero-stats { font-family: 'Barlow Condensed', sans-serif; font-size: 14px; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(255,255,255,0.78); margin-top: 18px; }
   .hero-stats-count { font-weight: 700; color: white; }
   .hero-stats-sep { margin: 0 10px; color: rgba(255,255,255,0.45); }
