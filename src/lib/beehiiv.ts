@@ -250,8 +250,22 @@ const cleanIssueHtml = (rss: string): string => {
   // We already show the post title in the kicker, so drop the leading heading.
   html = html.replace(/^\s*<h1[^>]*>[\s\S]*?<\/h1>/i, '');
 
-  // Defer offscreen images so the full issue doesn't block first paint.
-  html = html.replace(/<img\b/gi, '<img loading="lazy" decoding="async"');
+  // Process each <img>: lazy-load, and tag the recurring hand-drawn
+  // section-header banners (roundup/outdoors/events/… .png) so CSS can cap
+  // their width. Real photos (JPGs, or camera/screenshot names like IMG_*,
+  // DSCF*, CleanShot*) stay full column width.
+  html = html.replace(/<img\b[^>]*>/gi, (tag) => {
+    let out = tag.replace(/^<img\b/i, '<img loading="lazy" decoding="async"');
+    const src = (out.match(/\bsrc="([^"]*)"/i)?.[1] || '');
+    const file = (src.match(/\/file\/[a-f0-9-]+\/([^?"']+)/i)?.[1] || src).toLowerCase();
+    const isPhoto = /(^img[-_])|(^dscf?\d)|(^dsc\d)|(^pxl)|cleanshot|screenshot|\.jpe?g(\?|$|")/i.test(file);
+    if (!isPhoto) {
+      out = /\bclass="/i.test(out)
+        ? out.replace(/\bclass="([^"]*)"/i, 'class="$1 nl-banner"')
+        : out.replace(/^<img\b/i, '<img class="nl-banner"');
+    }
+    return out;
+  });
 
   return html.trim();
 };

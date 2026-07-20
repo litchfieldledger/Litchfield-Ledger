@@ -90,6 +90,7 @@
   .newsletter-body a:hover { color: var(--orange-dark); }
   .newsletter-body .image { margin: 22px 0; }
   .newsletter-body img, .newsletter-body .image__image { max-width: 100%; height: auto; display: block; margin: 8px auto; border-radius: 3px; }
+  .newsletter-body img.nl-banner { max-width: 360px; border-radius: 0; }
   .newsletter-body hr, .newsletter-body .content_break { border: none; border-top: 1.5px solid var(--cream-dark); margin: 34px auto; width: 100%; }
   .newsletter-body ul, .newsletter-body ol { margin: 0 0 18px; padding-left: 22px; }
   .newsletter-body li { margin-bottom: 8px; }
@@ -138,6 +139,7 @@
     .newsletter-body { font-size: 14.5px; line-height: 1.65; padding-top: 24px; }
     .newsletter-body h1, .newsletter-body h2 { font-size: 20px; }
     .newsletter-body h3 { font-size: 17px; }
+    .newsletter-body img.nl-banner { max-width: 240px; }
     .latest-issue-cta { margin-top: 40px; padding-top: 34px; }
     .latest-issue-cta h3 { font-size: 19px; line-height: 1.12; margin-bottom: 14px; }
     .latest-issue-cta p { font-size: 12px; margin-top: 10px; }
