@@ -73,19 +73,19 @@
   .latest-issue-kicker { display: flex; gap: 12px; align-items: center; font-family: 'Barlow Condensed', sans-serif; font-size: 14px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: #b78370; margin-bottom: 12px; }
   .latest-issue-kicker span:first-child { color: var(--orange); }
   .latest-issue-kicker span + span::before { content: "·"; margin-right: 12px; color: #c8bfa8; }
-  .latest-issue-title { display: block; font-family: 'Playfair Display', serif; font-size: 30px; font-weight: 900; line-height: 1.12; text-transform: uppercase; letter-spacing: 0.01em; color: var(--text-dark); text-decoration: none; margin-bottom: 14px; }
+  .latest-issue-title { display: block; font-family: 'Playfair Display', serif; font-size: 26px; font-weight: 900; line-height: 1.14; text-transform: uppercase; letter-spacing: 0.01em; color: var(--text-dark); text-decoration: none; margin-bottom: 14px; }
   .latest-issue-title:hover { color: var(--orange); }
-  .latest-issue-deck { font-size: 17px; line-height: 1.55; color: var(--text-muted); font-style: italic; margin: -2px 0 22px; }
+  .latest-issue-deck { font-size: 15px; line-height: 1.55; color: var(--text-muted); font-style: italic; margin: -2px 0 22px; }
 
   /* Full issue, rendered inline and ungated */
-  .newsletter-body { font-size: 17px; line-height: 1.75; color: var(--text-dark); border-top: 1.5px solid var(--cream-dark); padding-top: 30px; }
+  .newsletter-body { font-size: 15px; line-height: 1.7; color: var(--text-dark); border-top: 1.5px solid var(--cream-dark); padding-top: 30px; }
   .newsletter-body > :first-child { margin-top: 0; }
   .newsletter-body p { margin: 0 0 18px; }
   .newsletter-body .heading,
   .newsletter-body h1, .newsletter-body h2, .newsletter-body h3, .newsletter-body h4 { font-family: 'Playfair Display', serif; font-weight: 900; color: var(--text-dark); line-height: 1.2; letter-spacing: 0.01em; margin: 38px 0 12px; }
-  .newsletter-body h1, .newsletter-body h2 { font-size: 26px; }
-  .newsletter-body h3 { font-size: 21px; text-transform: uppercase; letter-spacing: 0.02em; }
-  .newsletter-body h4 { font-size: 18px; }
+  .newsletter-body h1, .newsletter-body h2 { font-size: 22px; }
+  .newsletter-body h3 { font-size: 18px; text-transform: uppercase; letter-spacing: 0.02em; }
+  .newsletter-body h4 { font-size: 16px; }
   .newsletter-body a, .newsletter-body a.link { color: var(--orange); text-decoration: underline; text-underline-offset: 2px; text-decoration-thickness: 1px; }
   .newsletter-body a:hover { color: var(--orange-dark); }
   .newsletter-body .image { margin: 22px 0; }
@@ -133,11 +133,11 @@
     footer { padding: 40px 20px; }
     .latest-issue { margin: 2px auto 44px; padding: 0 26px; }
     .latest-issue-kicker { flex-wrap: wrap; gap: 8px; font-size: 12px; margin-bottom: 10px; }
-    .latest-issue-title { font-size: 25px; line-height: 1.08; margin-bottom: 14px; }
-    .latest-issue-deck { font-size: 15px; line-height: 1.55; margin: -2px 0 18px; }
-    .newsletter-body { font-size: 16px; line-height: 1.72; padding-top: 24px; }
-    .newsletter-body h1, .newsletter-body h2 { font-size: 23px; }
-    .newsletter-body h3 { font-size: 19px; }
+    .latest-issue-title { font-size: 22px; line-height: 1.1; margin-bottom: 14px; }
+    .latest-issue-deck { font-size: 14px; line-height: 1.55; margin: -2px 0 18px; }
+    .newsletter-body { font-size: 14.5px; line-height: 1.65; padding-top: 24px; }
+    .newsletter-body h1, .newsletter-body h2 { font-size: 20px; }
+    .newsletter-body h3 { font-size: 17px; }
     .latest-issue-cta { margin-top: 40px; padding-top: 34px; }
     .latest-issue-cta h3 { font-size: 19px; line-height: 1.12; margin-bottom: 14px; }
     .latest-issue-cta p { font-size: 12px; margin-top: 10px; }
