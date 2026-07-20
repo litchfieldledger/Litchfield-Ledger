@@ -15,6 +15,14 @@ export type LedgerStats = {
   joinedThisWeek: number;
 };
 
+export type LedgerIssue = {
+  title: string;
+  subtitle: string;
+  date: string;
+  url: string;
+  html: string;
+};
+
 // Pulls the total active subscriber count and the number of active
 // subscribers created in the last 7 days. Runs at build time, so the
 // figures are accurate as of the most recent deploy.
@@ -212,5 +220,96 @@ export async function getLedgerPosts(): Promise<LedgerPost[]> {
   } catch (err) {
     console.error('Beehiiv posts fetch error:', err);
     return [];
+  }
+}
+
+// Beehiiv's RSS content wraps the article in
+//   <div class='beehiiv'><style>…</style><div class='beehiiv__body'>…</div>
+//   <div class='beehiiv__footer'>…Powered by beehiiv…</div></div>
+// Pull just the inner body: drop the outer wrapper, the <style> block, and the
+// beehiiv footer, so we can render the full issue inline with our own styling.
+const extractIssueBody = (rss: string): string => {
+  if (!rss) return '';
+
+  const bodyOpen = rss.search(/<div[^>]*class=['"][^'"]*beehiiv__body[^'"]*['"][^>]*>/i);
+  if (bodyOpen === -1) return '';
+
+  const afterOpenTag = rss.slice(bodyOpen).replace(/^<div[^>]*>/i, '');
+  const footerIdx = afterOpenTag.search(/<div[^>]*class=['"][^'"]*beehiiv__footer/i);
+  let body = footerIdx === -1 ? afterOpenTag : afterOpenTag.slice(0, footerIdx);
+
+  // Remove the trailing </div> that closed beehiiv__body.
+  return body.replace(/<\/div>\s*$/i, '').trim();
+};
+
+const cleanIssueHtml = (rss: string): string => {
+  let html = extractIssueBody(rss);
+  if (!html) return '';
+
+  // The newsletter opens with its own <h1> ("The Tuesday Letter: … Edition").
+  // We already show the post title in the kicker, so drop the leading heading.
+  html = html.replace(/^\s*<h1[^>]*>[\s\S]*?<\/h1>/i, '');
+
+  // Defer offscreen images so the full issue doesn't block first paint.
+  html = html.replace(/<img\b/gi, '<img loading="lazy" decoding="async"');
+
+  return html.trim();
+};
+
+// Pulls the most recent published issue as ready-to-render HTML for the
+// ungated "This Week" section. Runs at build time.
+export async function getLatestIssue(): Promise<LedgerIssue | null> {
+  if (!PUBLICATION_ID || !API_KEY) {
+    console.warn('Missing Beehiiv env vars.');
+    return null;
+  }
+
+  try {
+    const params = new URLSearchParams({
+      limit: '1',
+      status: 'confirmed',
+      order_by: 'publish_date',
+      direction: 'desc',
+      platform: 'both',
+      hidden_from_feed: 'false',
+    });
+    params.append('expand', 'free_rss_content');
+
+    const res = await fetch(
+      `https://api.beehiiv.com/v2/publications/${PUBLICATION_ID}/posts?${params}`,
+      {
+        headers: {
+          Authorization: `Bearer ${API_KEY}`,
+          Accept: 'application/json',
+        },
+      }
+    );
+
+    if (!res.ok) {
+      console.error('Beehiiv latest issue fetch failed:', res.status, await res.text());
+      return null;
+    }
+
+    const json = await res.json();
+    const post = (json.data ?? [])[0];
+    if (!post) return null;
+
+    const html = cleanIssueHtml(post.content?.free?.rss || '');
+    if (!html) return null;
+
+    return {
+      title: post.title ?? '',
+      subtitle: (post.subtitle || post.preview_text || '').trim(),
+      url: post.web_url ?? '#',
+      html,
+      date: new Date((post.publish_date ?? 0) * 1000).toLocaleDateString('en-US', {
+        month: 'short',
+        day: 'numeric',
+        year: 'numeric',
+      }),
+    };
+  } catch (err) {
+    console.error('Beehiiv latest issue fetch error:', err);
+    return null;
   }
 }

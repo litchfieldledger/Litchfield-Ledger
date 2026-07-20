@@ -1,46 +1,37 @@
 ---
-import type { LedgerPost } from '../lib/beehiiv';
+import type { LedgerIssue } from '../lib/beehiiv';
 
 interface Props {
-  post?: LedgerPost;
+  issue?: LedgerIssue | null;
 }
 
-const { post } = Astro.props;
-const preview = post?.preview || post?.excerpt;
+const { issue } = Astro.props;
 ---
 
-<section class:list={['latest-issue', !post && 'latest-issue-empty']} aria-labelledby="latest-issue-title" data-beehiiv-latest-preview>
-  <div class="latest-issue-inner">
-    <div class="latest-issue-content">
+{issue && (
+  <section class="latest-issue" aria-labelledby="latest-issue-title" data-beehiiv-latest-preview>
+    <div class="latest-issue-inner">
       <div class="latest-issue-kicker">
         <span>This Week</span>
-        {post?.date && <span>{post.date}</span>}
+        {issue.date && <span>{issue.date}</span>}
       </div>
-      {post ? (
-        <>
-          <a href={post.url} class="latest-issue-title" id="latest-issue-title" data-track-click="outbound_post_click" data-track-location="latest_issue">{post.title}</a>
-          {post.excerpt && post.excerpt !== preview && (
-            <p class="latest-issue-deck">{post.excerpt}</p>
-          )}
-          {preview && (
-            <div class="latest-issue-preview">
-              <p>{preview}</p>
-            </div>
-          )}
-        </>
-      ) : (
-        <>
-          <span class="latest-issue-title" id="latest-issue-title">Latest Issue</span>
-          <div class="latest-issue-preview"></div>
-        </>
-      )}
+      <a
+        href={issue.url}
+        class="latest-issue-title"
+        id="latest-issue-title"
+        data-track-click="outbound_post_click"
+        data-track-location="latest_issue"
+      >{issue.title}</a>
+      {issue.subtitle && <p class="latest-issue-deck">{issue.subtitle}</p>}
+      <div class="newsletter-body" set:html={issue.html} />
     </div>
-    <div class="latest-issue-gate" data-track-signup-view="latest_issue">
-      <h3>Your week is waiting. Join The Litchfield Ledger.</h3>
+
+    <div class="latest-issue-cta" data-track-signup-view="latest_issue">
+      <h3>Get this in your inbox every Tuesday.</h3>
       <div class="beehiiv-wrap latest-issue-signup" data-track-signup="latest_issue">
         <script is:inline src="https://subscribe-forms.beehiiv.com/v3/loader.js" data-beehiiv-form="48c597c3-c9e3-4c7a-b09b-db8627e0a48e"></script>
       </div>
-      <p>Free, every Tuesday.</p>
+      <p>Free, every Tuesday. Unsubscribe anytime.</p>
     </div>
-  </div>
-</section>
+  </section>
+)}

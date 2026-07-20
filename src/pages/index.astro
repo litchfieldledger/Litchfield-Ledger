@@ -4,11 +4,11 @@ import SiteFooter from '../components/SiteFooter.astro';
 import LatestIssuePreview from '../components/LatestIssuePreview.astro';
 import Analytics from '../components/Analytics.astro';
 import ConversionTracking from '../components/ConversionTracking.astro';
-import { getLedgerPosts, getLedgerStats } from '../lib/beehiiv';
+import { getLedgerPosts, getLedgerStats, getLatestIssue } from '../lib/beehiiv';
 import '../styles/home.css';
 
 const posts = await getLedgerPosts();
-const latestPost = posts[0];
+const latestIssue = await getLatestIssue();
 
 const stats = await getLedgerStats();
 const numberFmt = new Intl.NumberFormat('en-US');
@@ -105,7 +105,7 @@ const numberFmt = new Intl.NumberFormat('en-US');
 
 <script is:inline src="/beehiiv-feed.js"></script>
 
-<LatestIssuePreview post={latestPost} />
+<LatestIssuePreview issue={latestIssue} />
 
 <SiteFooter showInstagram={true} />
 
