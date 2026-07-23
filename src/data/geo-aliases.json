@@ -1,0 +1,20 @@
+{
+  "_comment": "Curated rewrites for venue strings OpenStreetMap can't resolve by name. Key = the exact geocode query from the data; value = a street address or town the geocoder CAN find. Precise street where known; town-center otherwise (still lands the pin in the right town). Extend this as new unresolved venues show up in the geocoder's ✗ misses.",
+  "Gordon Hall, Music Mountain, Falls Village, CT": "Music Mountain, Canaan, CT",
+  "Gordon Hall, Music Mountain, CT": "Music Mountain, Canaan, CT",
+  "Music Shed, CT": "Music Mountain, Canaan, CT",
+  "Kent Welcome Center, 3 Railroad St, Kent, CT": "3 Railroad Street, Kent, CT",
+  "Stissing Center for Arts and Culture, CT": "2950 Church Street, Pine Plains, NY",
+  "Millerton Methodist Church, CT": "6 Dutchess Avenue, Millerton, NY",
+  "Litchfield Community Center, CT": "421 Bantam Road, Litchfield, CT",
+  "Sharon Playhouse, CT": "49 Amenia Road, Sharon, CT",
+  "Belden House & Mews, CT": "Litchfield, CT",
+  "Oneglia Auditorium, CT": "Torrington, CT",
+  "Music Mountain, CT": "Music Mountain, Canaan, CT",
+  "Millbrook Vineyards & Winery, CT": "26 Wing Road, Millbrook, NY",
+  "Basketball Court near Amenia Town Hall, CT": "Amenia, NY",
+  "Lourdes in Litchfield on Rte 118, CT": "50 Montfort Road, Litchfield, CT",
+  "1 Green Hill Rd, Washington Deport, 06794, CT": "1 Green Hill Road, Washington Depot, CT",
+  "12 Rattlesnake Road, West Cornwall, Connecticut 06796": "West Cornwall, CT",
+  "12 Rattlesnake Road, West Cornwall, CT 06796": "West Cornwall, CT"
+}

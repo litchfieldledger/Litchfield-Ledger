@@ -1,0 +1,659 @@
+---
+import { getMapEvents, CATEGORY_META } from '../lib/events';
+import type { Category } from '../lib/events';
+
+const events = await getMapEvents();
+
+// Per-category counts for the legend.
+const counts = {} as Record<Category, number>;
+(Object.keys(CATEGORY_META) as Category[]).forEach((c) => (counts[c] = 0));
+for (const e of events) counts[e.category] += 1;
+
+const generated = new Date().toLocaleDateString('en-US', {
+  month: 'long',
+  day: 'numeric',
+  year: 'numeric',
+});
+
+const submitUrl = 'https://litchfieldledger.beehiiv.com/add-your-event';
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>The Ledger Map — Litchfield County Happenings</title>
+<meta
+  name="description"
+  content="A live map of what's happening across Northwest Connecticut — music, markets, talks, and more, from The Litchfield Ledger."
+/>
+<link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link
+  href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Barlow+Condensed:wght@500;600;700&family=Libre+Baskerville:ital@0;1&display=swap"
+  rel="stylesheet"
+/>
+<link
+  rel="stylesheet"
+  href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+  integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+  crossorigin=""
+/>
+<script
+  is:inline
+  src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+  integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+  crossorigin=""
+></script>
+<style is:global>
+  :root {
+    --green: #1e3d28;
+    --green-mid: #2a5236;
+    --orange: #c85c1e;
+    --orange-dark: #a84a16;
+    --cream: #f0ebe0;
+    --cream-dark: #e4ddd0;
+    --ink: #1a2218;
+    --text-mid: #3d4f3a;
+    --text-muted: #6b7d68;
+    --panel: rgba(240, 235, 224, 0.97);
+    --shadow: 0 6px 22px rgba(26, 34, 24, 0.18);
+    --radius: 14px;
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body {
+    margin: 0;
+    height: 100%;
+    font-family: 'Libre Baskerville', Georgia, serif;
+    color: var(--ink);
+    background: var(--cream);
+  }
+
+  #map {
+    position: absolute;
+    inset: 0;
+    background: var(--cream-dark);
+    z-index: 1;
+  }
+
+  /* Warm the muted CARTO basemap toward the Ledger palette. */
+  .leaflet-tile-pane { filter: sepia(0.16) saturate(1.05) brightness(1.02) hue-rotate(-8deg); }
+
+  .leaflet-container {
+    font-family: 'Barlow Condensed', sans-serif;
+    background: var(--cream-dark);
+  }
+
+  /* ---- top bar ---- */
+  .map-topbar {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 12px 16px;
+    pointer-events: none;
+  }
+  .map-topbar > * { pointer-events: auto; }
+
+  .map-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--panel);
+    border: 1.5px solid var(--green);
+    border-radius: var(--radius);
+    padding: 8px 14px;
+    box-shadow: var(--shadow);
+    text-decoration: none;
+  }
+  .map-brand img { height: 30px; width: auto; display: block; }
+
+  .topbar-actions { display: flex; gap: 8px; }
+  .btn {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    font-size: 14px;
+    border-radius: var(--radius);
+    padding: 10px 16px;
+    border: 1.5px solid var(--green);
+    background: var(--panel);
+    color: var(--green);
+    box-shadow: var(--shadow);
+    text-decoration: none;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+  .btn-primary { background: var(--orange); border-color: var(--orange-dark); color: #fff; }
+  .btn-primary:hover { background: var(--orange-dark); }
+
+  /* ---- overlay panels ---- */
+  .panel {
+    position: absolute;
+    z-index: 1000;
+    background: var(--panel);
+    border: 1.5px solid var(--green);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 16px 18px;
+  }
+
+  .panel-header {
+    max-width: 340px;
+    top: 74px;
+    left: 16px;
+  }
+  .panel-kicker {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    font-size: 12px;
+    color: var(--orange);
+    margin: 0 0 2px;
+  }
+  .panel-title {
+    font-family: 'Playfair Display', serif;
+    font-weight: 900;
+    font-size: 30px;
+    line-height: 1;
+    margin: 0 0 8px;
+    color: var(--green);
+  }
+  .panel-sub {
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--text-mid);
+    margin: 0;
+  }
+  .panel-sub strong { color: var(--ink); }
+
+  /* date filter */
+  .date-tabs {
+    display: flex;
+    gap: 6px;
+    margin-top: 12px;
+  }
+  .date-tab {
+    flex: 1;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    font-size: 12px;
+    padding: 7px 4px;
+    text-align: center;
+    border: 1.5px solid var(--green);
+    border-radius: 9px;
+    background: transparent;
+    color: var(--green);
+    cursor: pointer;
+  }
+  .date-tab.active { background: var(--green); color: var(--cream); }
+
+  /* legend */
+  .panel-legend {
+    bottom: 22px;
+    left: 16px;
+    max-width: 300px;
+    padding-bottom: 10px;
+  }
+  .legend-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-size: 13px;
+    color: var(--green);
+    margin: 0 0 4px;
+    border-bottom: 1px solid var(--cream-dark);
+    padding-bottom: 8px;
+  }
+  .legend-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 6px 2px;
+    cursor: pointer;
+    user-select: none;
+  }
+  .legend-check {
+    width: 16px; height: 16px;
+    border: 1.6px solid var(--green);
+    border-radius: 4px;
+    display: grid;
+    place-items: center;
+    flex: none;
+    color: var(--cream);
+    font-size: 11px;
+    line-height: 1;
+  }
+  .legend-row.on .legend-check { background: var(--green); }
+  .legend-row.off { opacity: 0.5; }
+  .legend-dot {
+    width: 15px; height: 15px;
+    border-radius: 50%;
+    flex: none;
+    border: 2px solid rgba(255,255,255,0.85);
+    box-shadow: 0 1px 2px rgba(0,0,0,0.25);
+  }
+  .legend-label {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 600;
+    font-size: 16px;
+    color: var(--ink);
+    flex: 1;
+  }
+  .legend-count {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 14px;
+    color: var(--text-muted);
+  }
+  .legend-note {
+    font-size: 11px;
+    color: var(--text-muted);
+    margin: 8px 2px 0;
+    line-height: 1.4;
+  }
+
+  /* markers */
+  .evt-pin {
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    border: 2.5px solid #fff;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.35);
+    display: grid;
+    place-items: center;
+  }
+  .evt-pin.approx { border-style: dashed; }
+  .pin-badge {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 12px;
+    line-height: 1;
+    color: #fff;
+    text-shadow: 0 1px 1px rgba(0,0,0,0.4);
+  }
+
+  /* popups */
+  .leaflet-popup-content-wrapper {
+    border-radius: 12px;
+    border: 1.5px solid var(--green);
+    background: var(--cream);
+    box-shadow: var(--shadow);
+  }
+  .leaflet-popup-content { margin: 0; font-family: 'Libre Baskerville', serif; width: 272px !important; }
+  .leaflet-popup-tip { background: var(--cream); border: 1.5px solid var(--green); }
+
+  .pop-head {
+    padding: 12px 14px 10px;
+    border-bottom: 1px solid var(--cream-dark);
+    background: var(--cream);
+    position: sticky;
+    top: 0;
+  }
+  .pop-venue {
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    font-size: 17px;
+    line-height: 1.15;
+    color: var(--green);
+  }
+  .pop-venue-sub {
+    font-family: 'Barlow Condensed', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    font-size: 12px;
+    color: var(--orange);
+    font-weight: 700;
+    margin-top: 2px;
+  }
+  .pop-approx { font-size: 11px; color: var(--text-muted); font-style: italic; margin-top: 4px; }
+
+  .pop-list { max-height: 250px; overflow-y: auto; }
+  .pop-evt {
+    display: block;
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--cream-dark);
+    text-decoration: none;
+    color: inherit;
+  }
+  .pop-evt:last-child { border-bottom: none; }
+  .pop-evt-link:hover { background: rgba(200, 92, 30, 0.07); }
+
+  .pop-cat {
+    display: inline-block;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    font-size: 10px;
+    color: #fff;
+    padding: 1px 7px;
+    border-radius: 20px;
+    margin-bottom: 5px;
+  }
+  .pop-title {
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    font-size: 15px;
+    line-height: 1.2;
+    color: var(--ink);
+    margin: 0 0 4px;
+  }
+  .pop-meta {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 14px;
+    color: var(--ink);
+    margin: 1px 0;
+  }
+  .pop-meta .lbl { color: var(--text-muted); }
+  .pop-link {
+    display: inline-block;
+    margin-top: 6px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    font-size: 12px;
+    color: var(--orange-dark);
+    text-decoration: none;
+  }
+
+  .leaflet-control-zoom a {
+    color: var(--green) !important;
+    background: var(--panel) !important;
+    border-color: var(--green) !important;
+  }
+  .leaflet-bar { border: 1.5px solid var(--green) !important; box-shadow: var(--shadow) !important; }
+
+  .empty-flag {
+    position: absolute;
+    z-index: 1000;
+    bottom: 22px;
+    right: 16px;
+    max-width: 260px;
+    background: var(--green);
+    color: var(--cream);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 12px 15px;
+    font-size: 12px;
+    line-height: 1.5;
+  }
+  .empty-flag strong { color: #fff; }
+
+  @media (max-width: 720px) {
+    .panel-header { max-width: none; left: 10px; right: 10px; top: 68px; }
+    .panel-title { font-size: 24px; }
+    .panel-legend {
+      left: 10px; right: 10px;
+      max-width: none;
+      max-height: 40vh;
+      overflow-y: auto;
+    }
+    .map-brand img { height: 24px; }
+    .btn { padding: 8px 11px; font-size: 12px; }
+    .empty-flag { display: none; }
+  }
+</style>
+</head>
+<body>
+  <div id="map"></div>
+
+  <div class="map-topbar">
+    <a class="map-brand" href="/">
+      <img src="/images/orange-logo.png" alt="The Litchfield Ledger" />
+    </a>
+    <div class="topbar-actions">
+      <a class="btn" href="/">Home</a>
+      <a class="btn btn-primary" href={submitUrl} target="_blank" rel="noopener">Submit an event ↗</a>
+    </div>
+  </div>
+
+  <section class="panel panel-header">
+    <p class="panel-kicker">The Ledger Map</p>
+    <h1 class="panel-title">Happenings across the Hills</h1>
+    <p class="panel-sub">
+      Music, markets, talks & more across Northwest Connecticut.
+      <strong id="visible-count">{events.length}</strong> upcoming events · updated {generated}.
+    </p>
+    <div class="date-tabs" id="date-tabs">
+      <button class="date-tab active" data-range="all">All upcoming</button>
+      <button class="date-tab" data-range="week">This week</button>
+      <button class="date-tab" data-range="weekend">This weekend</button>
+    </div>
+  </section>
+
+  <section class="panel panel-legend">
+    <p class="legend-title">On the map</p>
+    <div id="legend"></div>
+    <p class="legend-note">
+      Dashed pins are placed at the town center (no exact address yet).
+    </p>
+  </section>
+
+  <script
+    is:inline
+    define:vars={{ events, categoryMeta: CATEGORY_META, counts }}
+  >
+    (function () {
+      function init() {
+        if (typeof L === 'undefined') {
+          return void setTimeout(init, 60);
+        }
+
+        var LITCHFIELD_CENTER = [41.75, -73.25];
+        var map = L.map('map', { zoomControl: true, scrollWheelZoom: true }).setView(
+          LITCHFIELD_CENTER,
+          11
+        );
+
+        L.tileLayer(
+          'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',
+          {
+            attribution:
+              '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>',
+            subdomains: 'abcd',
+            maxZoom: 19,
+          }
+        ).addTo(map);
+
+        // Group events by location so one venue = one pin (with a count badge),
+        // instead of stacking or fanning dozens of markers on the same spot.
+        var byCoord = {};
+        events.forEach(function (e) {
+          var k = e.lat.toFixed(5) + ',' + e.lng.toFixed(5);
+          if (!byCoord[k]) byCoord[k] = { lat: e.lat, lng: e.lng, events: [] };
+          byCoord[k].events.push(e);
+        });
+        var locations = Object.keys(byCoord).map(function (k) { return byCoord[k]; });
+
+        function fmtDate(iso) {
+          var d = new Date(iso + 'T12:00:00');
+          return d.toLocaleDateString('en-US', {
+            weekday: 'short',
+            month: 'short',
+            day: 'numeric',
+          });
+        }
+
+        function esc(s) {
+          return (s || '').replace(/[&<>"]/g, function (c) {
+            return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c];
+          });
+        }
+
+        // Which category "owns" a pin's color: the most common at that location.
+        function dominantCategory(evs) {
+          var tally = {};
+          evs.forEach(function (e) { tally[e.category] = (tally[e.category] || 0) + 1; });
+          return Object.keys(tally).sort(function (a, b) { return tally[b] - tally[a]; })[0];
+        }
+
+        function eventRow(e) {
+          var meta = categoryMeta[e.category];
+          var whenTime = e.time ? ' · ' + esc(e.time) : '';
+          var inner =
+            '<span class="pop-cat" style="background:' + meta.color + '">' + esc(meta.label) + '</span>' +
+            '<div class="pop-title">' + esc(e.name) + '</div>' +
+            '<div class="pop-meta"><span class="lbl">When:</span> ' + fmtDate(e.date) + whenTime + '</div>';
+          if (e.url) {
+            return '<a class="pop-evt pop-evt-link" href="' + esc(e.url) + '" target="_blank" rel="noopener">' + inner + '<span class="pop-link">Event details ↗</span></a>';
+          }
+          return '<div class="pop-evt">' + inner + '</div>';
+        }
+
+        function popupHtml(loc, evs) {
+          var head = evs[0];
+          var where = head.venue || head.town || '';
+          var approx = evs.every(function (e) { return e.precise; })
+            ? ''
+            : '<div class="pop-approx">Approximate location — ' + esc(head.town || 'town center') + '</div>';
+          var header =
+            '<div class="pop-venue">' + esc(where || 'This location') + '</div>' +
+            '<div class="pop-venue-sub">' + evs.length + (evs.length === 1 ? ' event' : ' events') + '</div>' +
+            approx;
+          var body = evs
+            .slice()
+            .sort(function (a, b) { return a.date < b.date ? -1 : a.date > b.date ? 1 : 0; })
+            .map(eventRow)
+            .join('');
+          return '<div class="pop-head">' + header + '</div><div class="pop-list">' + body + '</div>';
+        }
+
+        var markers = [];
+        locations.forEach(function (loc) {
+          var cat = dominantCategory(loc.events);
+          var meta = categoryMeta[cat];
+          var allPrecise = loc.events.every(function (e) { return e.precise; });
+          var m = L.marker([loc.lat, loc.lng]);
+          m._loc = loc;
+          m._cat = cat;
+          m._precise = allPrecise;
+          m._color = meta.color;
+          markers.push(m);
+        });
+
+        var layer = L.layerGroup().addTo(map);
+
+        function renderMarker(m, visibleEvents) {
+          var badge = visibleEvents.length > 1
+            ? '<span class="pin-badge">' + visibleEvents.length + '</span>'
+            : '';
+          var icon = L.divIcon({
+            className: '',
+            html:
+              '<div class="evt-pin ' + (m._precise ? '' : 'approx') + '" style="background:' + m._color + '">' + badge + '</div>',
+            iconSize: [22, 22],
+            iconAnchor: [11, 11],
+            popupAnchor: [0, -11],
+          });
+          m.setIcon(icon);
+          m.bindPopup(popupHtml(m._loc, visibleEvents), {
+            maxWidth: 300,
+            maxHeight: 300,
+            autoPanPaddingTopLeft: L.point(20, 96),
+            autoPanPaddingBottomRight: L.point(20, 40),
+          });
+        }
+
+        // ---- filters ----
+        var activeCats = {};
+        Object.keys(categoryMeta).forEach(function (c) { activeCats[c] = true; });
+        var activeRange = 'all';
+
+        function startOfToday() {
+          var d = new Date();
+          d.setHours(0, 0, 0, 0);
+          return d;
+        }
+        function inRange(e) {
+          if (activeRange === 'all') return true;
+          var today = startOfToday();
+          var d = new Date(e.date + 'T12:00:00');
+          var day = today.getDay(); // 0 Sun..6 Sat
+          if (activeRange === 'week') {
+            var end = new Date(today);
+            end.setDate(today.getDate() + (7 - day)); // through end of this week (next Sun)
+            return d >= today && d <= end;
+          }
+          if (activeRange === 'weekend') {
+            var fri = new Date(today);
+            fri.setDate(today.getDate() + ((5 - day + 7) % 7)); // upcoming/this Friday
+            var sun = new Date(fri);
+            sun.setDate(fri.getDate() + 2);
+            return d >= fri && d <= sun;
+          }
+          return true;
+        }
+
+        function apply() {
+          var n = 0;
+          markers.forEach(function (m) {
+            var vis = m._loc.events.filter(function (e) {
+              return activeCats[e.category] && inRange(e);
+            });
+            if (vis.length) {
+              renderMarker(m, vis);
+              if (!layer.hasLayer(m)) layer.addLayer(m);
+              n += vis.length;
+            } else if (layer.hasLayer(m)) {
+              layer.removeLayer(m);
+            }
+          });
+          document.getElementById('visible-count').textContent = n;
+        }
+
+        // legend
+        var legend = document.getElementById('legend');
+        Object.keys(categoryMeta).forEach(function (cat) {
+          var meta = categoryMeta[cat];
+          var row = document.createElement('div');
+          row.className = 'legend-row on';
+          row.innerHTML =
+            '<span class="legend-check">✓</span>' +
+            '<span class="legend-dot" style="background:' + meta.color + '"></span>' +
+            '<span class="legend-label">' + meta.label + '</span>' +
+            '<span class="legend-count">' + (counts[cat] || 0) + '</span>';
+          row.addEventListener('click', function () {
+            activeCats[cat] = !activeCats[cat];
+            row.classList.toggle('on', activeCats[cat]);
+            row.classList.toggle('off', !activeCats[cat]);
+            row.querySelector('.legend-check').textContent = activeCats[cat] ? '✓' : '';
+            apply();
+          });
+          legend.appendChild(row);
+        });
+
+        // date tabs
+        var tabs = document.getElementById('date-tabs');
+        tabs.addEventListener('click', function (ev) {
+          var btn = ev.target.closest('.date-tab');
+          if (!btn) return;
+          activeRange = btn.getAttribute('data-range');
+          [].forEach.call(tabs.children, function (b) { b.classList.remove('active'); });
+          btn.classList.add('active');
+          apply();
+        });
+
+        apply();
+      }
+
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+      } else {
+        init();
+      }
+    })();
+  </script>
+</body>
+</html>
