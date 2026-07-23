@@ -445,6 +445,7 @@ const submitUrl = 'https://litchfieldledger.beehiiv.com/add-your-event';
     .legend-row { padding: 8px 2px; }
 
     .empty-flag { display: none; }
+    .leaflet-control-zoom { display: none; }
   }
 </style>
 </head>
@@ -494,10 +495,13 @@ const submitUrl = 'https://litchfieldledger.beehiiv.com/add-your-event';
         }
 
         var LITCHFIELD_CENTER = [41.75, -73.25];
-        var map = L.map('map', { zoomControl: true, scrollWheelZoom: true }).setView(
+        var map = L.map('map', { zoomControl: false, scrollWheelZoom: true }).setView(
           LITCHFIELD_CENTER,
           11
         );
+        // Zoom buttons live bottom-right so they never collide with the brand
+        // logo / header panel (top-left). Hidden on mobile — pinch-to-zoom there.
+        L.control.zoom({ position: 'bottomright' }).addTo(map);
 
         L.tileLayer(
           'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',
