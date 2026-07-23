@@ -1,0 +1,56 @@
+name: Refresh map data
+
+# Keeps the events map's geocode cache current. Each week it pulls the latest
+# "Include" events from the Event Tracker Airtable and geocodes any venue that
+# isn't cached yet, then commits the updated cache — which triggers a Netlify
+# rebuild so brand-new venues get pins without anyone running the geocoder by
+# hand.
+#
+# Only commits when the geocode cache actually GAINS a venue. Ordinary weeks
+# (events at already-known venues) are handled by the scraper's own build hook,
+# so this workflow stays quiet and doesn't cause a second deploy.
+#
+# INERT until AIRTABLE_API_KEY (read access to the Event Tracker base) is added
+# as a repo secret — without it the refresh step no-ops and nothing is committed.
+on:
+  schedule:
+    # Wednesdays 13:15 UTC — a comfortable buffer after the scraper's AI-tiers +
+    # ranker run (12:00 UTC in the ledger-events repo), so it sees fresh events.
+    - cron: "15 13 * * 3"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: refresh-map-data
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      # Scripts use only Node built-ins + fetch, so no npm install is needed.
+      - name: Refresh seed + geocode new venues
+        env:
+          AIRTABLE_API_KEY: ${{ secrets.AIRTABLE_API_KEY }}
+        run: node scripts/refresh-map-data.mjs
+
+      - name: Commit if the geocode cache gained a venue
+        run: |
+          if git diff --quiet -- src/data/geocache.json; then
+            echo "No new venues — nothing to commit (scraper build hook handles the rebuild)."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          # Commit the refreshed snapshot alongside the cache so both stay in sync.
+          git add src/data/geocache.json src/data/events-seed.json
+          git commit -m "Auto: geocode new map venues + refresh snapshot"
+          git push
