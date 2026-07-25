@@ -542,15 +542,46 @@ const submitUrl = 'https://litchfieldledger.beehiiv.com/add-your-event';
           return Object.keys(tally).sort(function (a, b) { return tally[b] - tally[a]; })[0];
         }
 
-        function eventRow(e) {
-          var meta = categoryMeta[e.category];
-          var whenTime = e.time ? ' · ' + esc(e.time) : '';
+        // Collapse repeated occurrences of the same event (e.g. a weekly market,
+        // a recurring yoga class) into one entry that lists all its dates.
+        function groupEvents(evs) {
+          var byName = {}, order = [];
+          evs.forEach(function (e) {
+            var k = (e.name || '').trim().toLowerCase();
+            if (!byName[k]) {
+              byName[k] = { name: e.name, category: e.category, url: e.url, dates: [] };
+              order.push(k);
+            }
+            if (!byName[k].url && e.url) byName[k].url = e.url;
+            byName[k].dates.push({ date: e.date, time: e.time });
+          });
+          return order.map(function (k) {
+            var g = byName[k];
+            g.dates.sort(function (a, b) { return a.date < b.date ? -1 : a.date > b.date ? 1 : 0; });
+            return g;
+          });
+        }
+
+        function whenLabel(dates) {
+          if (dates.length === 1) {
+            return fmtDate(dates[0].date) + (dates[0].time ? ' · ' + esc(dates[0].time) : '');
+          }
+          // Multiple dates: list up to 4, note the rest, append a shared time.
+          var sameTime = dates.every(function (d) { return d.time === dates[0].time; });
+          var labels = dates.map(function (d) { return fmtDate(d.date); });
+          var more = labels.length > 4 ? ' +' + (labels.length - 4) + ' more' : '';
+          return labels.slice(0, 4).join(', ') +
+            (sameTime && dates[0].time ? ' · ' + esc(dates[0].time) : '') + more;
+        }
+
+        function eventRow(g) {
+          var meta = categoryMeta[g.category];
           var inner =
             '<span class="pop-cat" style="background:' + meta.color + '">' + esc(meta.label) + '</span>' +
-            '<div class="pop-title">' + esc(e.name) + '</div>' +
-            '<div class="pop-meta"><span class="lbl">When:</span> ' + fmtDate(e.date) + whenTime + '</div>';
-          if (e.url) {
-            return '<a class="pop-evt pop-evt-link" href="' + esc(e.url) + '" target="_blank" rel="noopener">' + inner + '<span class="pop-link">Event details ↗</span></a>';
+            '<div class="pop-title">' + esc(g.name) + '</div>' +
+            '<div class="pop-meta"><span class="lbl">When:</span> ' + whenLabel(g.dates) + '</div>';
+          if (g.url) {
+            return '<a class="pop-evt pop-evt-link" href="' + esc(g.url) + '" target="_blank" rel="noopener">' + inner + '<span class="pop-link">Event details ↗</span></a>';
           }
           return '<div class="pop-evt">' + inner + '</div>';
         }
@@ -561,16 +592,22 @@ const submitUrl = 'https://litchfieldledger.beehiiv.com/add-your-event';
           var approx = evs.every(function (e) { return e.precise; })
             ? ''
             : '<div class="pop-approx">Approximate location — ' + esc(head.town || 'town center') + '</div>';
+          var groups = groupEvents(evs).sort(function (a, b) {
+            return a.dates[0].date < b.dates[0].date ? -1 : a.dates[0].date > b.dates[0].date ? 1 : 0;
+          });
           var header =
             '<div class="pop-venue">' + esc(where || 'This location') + '</div>' +
-            '<div class="pop-venue-sub">' + evs.length + (evs.length === 1 ? ' event' : ' events') + '</div>' +
+            '<div class="pop-venue-sub">' + groups.length + (groups.length === 1 ? ' event' : ' events') + '</div>' +
             approx;
-          var body = evs
-            .slice()
-            .sort(function (a, b) { return a.date < b.date ? -1 : a.date > b.date ? 1 : 0; })
-            .map(eventRow)
-            .join('');
+          var body = groups.map(eventRow).join('');
           return '<div class="pop-head">' + header + '</div><div class="pop-list">' + body + '</div>';
+        }
+
+        // Distinct-event count at a location (recurring dates count once).
+        function distinctCount(evs) {
+          var s = {};
+          evs.forEach(function (e) { s[(e.name || '').trim().toLowerCase()] = 1; });
+          return Object.keys(s).length;
         }
 
         var markers = [];
@@ -589,9 +626,8 @@ const submitUrl = 'https://litchfieldledger.beehiiv.com/add-your-event';
         var layer = L.layerGroup().addTo(map);
 
         function renderMarker(m, visibleEvents) {
-          var badge = visibleEvents.length > 1
-            ? '<span class="pin-badge">' + visibleEvents.length + '</span>'
-            : '';
+          var n = distinctCount(visibleEvents);
+          var badge = n > 1 ? '<span class="pin-badge">' + n + '</span>' : '';
           var icon = L.divIcon({
             className: '',
             html:
