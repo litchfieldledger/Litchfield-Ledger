@@ -6,11 +6,23 @@
     "display": "1, Green Hill Road, Washington Depot, Washington, Northwest Hills Planning Region, Connecticut, 06793, United States",
     "aliasedTo": "1 Green Hill Road, Washington Depot, CT"
   },
+  "1 Green Hill Rd, Washington Depot, CT": {
+    "lat": 41.639478,
+    "lng": -73.318165,
+    "precision": "precise",
+    "display": "1, Green Hill Road, Washington Depot, Washington, Northwest Hills Planning Region, Connecticut, 06793, United States"
+  },
   "1 Green Hill Rd, Washington Depot, CT 06794": {
     "lat": 41.639478,
     "lng": -73.318165,
     "precision": "precise",
     "display": "1, Green Hill Road, Washington Depot, Washington, Northwest Hills Planning Region, Connecticut, 06793, United States"
+  },
+  "10 Upper Main Street, Sharon CT": {
+    "lat": 41.877708,
+    "lng": -73.476393,
+    "precision": "approx",
+    "display": "Hotchkiss Library of Sharon, 10, Upper Main Street, Sharon, Northwest Hills Planning Region, Connecticut, 06069, United States"
   },
   "11 East Shore Road, New Preston, CT 06777": {
     "lat": 41.676321,
@@ -32,6 +44,30 @@
     "display": "West Cornwall, Cornwall, Northwest Hills Planning Region, Connecticut, United States",
     "aliasedTo": "West Cornwall, CT"
   },
+  "122 South Pomperaug Ave. Woodbury, Connecticut": {
+    "lat": 41.524993,
+    "lng": -73.204918,
+    "precision": "precise",
+    "display": "122, South Pomperaug Avenue, Pomeraug, Woodbury, Naugatuck Valley Planning Region, Connecticut, 06798, United States"
+  },
+  "124 Christian Street, New Preston, CT 06777": {
+    "lat": 41.685266,
+    "lng": -73.326817,
+    "precision": "precise",
+    "display": "124, Christian Street, New Preston, Washington, Northwest Hills Planning Region, Connecticut, 06777, United States"
+  },
+  "128 Cream Hill West Cornwall, CT 06796": {
+    "lat": 41.883449,
+    "lng": -73.325619,
+    "precision": "precise",
+    "display": "128, Cream Hill Road, West Cornwall, Cornwall, Northwest Hills Planning Region, Connecticut, 06796, United States"
+  },
+  "2 Bryan Hall Plaza Washington Depot, CT 06794": {
+    "lat": 41.639728,
+    "lng": -73.320209,
+    "precision": "precise",
+    "display": "2, Bryan Hall Plaza, Washington Depot, Washington, Northwest Hills Planning Region, Connecticut, 06794, United States"
+  },
   "2 Sarah Sanford Road East, Bridgewater CT": {
     "lat": 41.526325,
     "lng": -73.360887,
@@ -50,6 +86,12 @@
     "precision": "precise",
     "display": "21, Higbie Road, East Morris, Morris, Northwest Hills Planning Region, Connecticut, 06763, United States"
   },
+  "21 Higbie Road, Morris, CT 06763": {
+    "lat": 41.686933,
+    "lng": -73.182618,
+    "precision": "precise",
+    "display": "21, Higbie Road, East Morris, Morris, Northwest Hills Planning Region, Connecticut, 06763, United States"
+  },
   "22 Kirby Rd, Washington, CT 06793": {
     "lat": 41.629623,
     "lng": -73.312112,
@@ -62,6 +104,7 @@
     "precision": "approx",
     "display": "Pine Street, Cornwall, Northwest Hills Planning Region, Connecticut, 06753, United States"
   },
+  "25 Hopkins Road, New Preston Connecticut 06777": null,
   "25 Kent Rd S, Cornwall Bridge, CT": {
     "lat": 41.817107,
     "lng": -73.370651,
@@ -73,6 +116,12 @@
     "lng": -73.233502,
     "precision": "precise",
     "display": "273, Bantam Lake Road, Lakeside, Bantam, Morris, Northwest Hills Planning Region, Connecticut, 06763, United States"
+  },
+  "292 Bee Brook Rd, New Preston, CT 06777": {
+    "lat": 41.673368,
+    "lng": -73.324974,
+    "precision": "precise",
+    "display": "292, Bee Brook Road, New Preston, Washington, Northwest Hills Planning Region, Connecticut, 06777, United States"
   },
   "3 Main Street, Wassaic, NY 12592": {
     "lat": 41.804213,
@@ -86,6 +135,18 @@
     "precision": "approx",
     "display": "The Cornwall Library, 30, Pine Street, Cornwall, Northwest Hills Planning Region, Connecticut, 06796, United States"
   },
+  "300 Nettleton Hollow Road, Washington CT, 06793": {
+    "lat": 41.61752,
+    "lng": -73.270513,
+    "precision": "precise",
+    "display": "300, Nettleton Hollow Road, Washington, Northwest Hills Planning Region, Connecticut, 06793, United States"
+  },
+  "397 Nettleton Hollow Rd, Washington, CT 06793": {
+    "lat": 41.609019,
+    "lng": -73.265586,
+    "precision": "precise",
+    "display": "397, Nettleton Hollow Road, Washington, Northwest Hills Planning Region, Connecticut, 06793, United States"
+  },
   "40 Angevine Rd. Warren CT": {
     "lat": 41.725946,
     "lng": -73.325911,
@@ -97,6 +158,12 @@
     "lng": -73.361421,
     "precision": "precise",
     "display": "413, Sharon-Goshen Turnpike, West Cornwall, Cornwall, Northwest Hills Planning Region, Connecticut, 06796, United States"
+  },
+  "5 Church Hill Rd, Woodbury, CT": {
+    "lat": 41.600081,
+    "lng": -73.206683,
+    "precision": "precise",
+    "display": "5, Church Hill Road, Woodbury, Naugatuck Valley Planning Region, Connecticut, 06798, United States"
   },
   "5 Cream Hill Road, West Cornwall, CT 06796": {
     "lat": 41.876747,
@@ -117,6 +184,12 @@
     "display": "5, Wykeham Road, Washington Depot, Washington, Northwest Hills Planning Region, Connecticut, 06793, United States"
   },
   "5 Wykeham Road, Washington CT": {
+    "lat": 41.630879,
+    "lng": -73.311262,
+    "precision": "precise",
+    "display": "5, Wykeham Road, Washington Depot, Washington, Northwest Hills Planning Region, Connecticut, 06793, United States"
+  },
+  "5 Wykeham Road, Washington CT, 06794": {
     "lat": 41.630879,
     "lng": -73.311262,
     "precision": "precise",
@@ -152,11 +225,29 @@
     "precision": "approx",
     "display": "Litchfield Historical Society - Noyes Memorial Building, 7, South Street, Litchfield Historic District, Litchfield, Connecticut, 06759, United States"
   },
+  "738 Main Street South, Woodbury, CT 06798": {
+    "lat": 41.526266,
+    "lng": -73.203389,
+    "precision": "precise",
+    "display": "738, Main Street South, North Woodbury, Woodbury, Naugatuck Valley Planning Region, Connecticut, 06798, United States"
+  },
+  "82 South Street, Litchfield, CT": {
+    "lat": 41.743947,
+    "lng": -73.18852,
+    "precision": "precise",
+    "display": "82, South Street, Litchfield Historic District, Litchfield, Connecticut, 06759, United States"
+  },
   "9 Maple Street, Kent CT 06757": {
     "lat": 41.724495,
     "lng": -73.476282,
     "precision": "approx",
     "display": "Gifford's, 9, Maple Street, Kent, Northwest Hills Planning Region, Connecticut, 06757, United States"
+  },
+  "9 Thomaston Road, Morris, CT 06763": {
+    "lat": 41.688373,
+    "lng": -73.179035,
+    "precision": "precise",
+    "display": "9, Thomaston Road, East Morris, Morris, Northwest Hills Planning Region, Connecticut, 06763, United States"
   },
   "Academy Street, CT": {
     "lat": 41.675517,
@@ -190,11 +281,37 @@
     "display": "Litchfield, Northwest Hills Planning Region, Connecticut, United States",
     "aliasedTo": "Litchfield, CT"
   },
+  "Bridgewater, CT": {
+    "lat": 41.535095,
+    "lng": -73.366231,
+    "precision": "approx",
+    "display": "Bridgewater, Western Connecticut Planning Region, Connecticut, 06752, United States"
+  },
+  "Children's Department, CT": null,
+  "Cornwall Market, CT": {
+    "lat": 41.871433,
+    "lng": -73.361903,
+    "precision": "approx",
+    "display": "The Local, A Cornwall Collective Market, Sharon-Goshen Turnpike, West Cornwall, Cornwall, Northwest Hills Planning Region, Connecticut, 06796, United States"
+  },
   "Cornwall, CT": {
     "lat": 41.843706,
     "lng": -73.329285,
     "precision": "approx",
     "display": "Cornwall, Northwest Hills Planning Region, Connecticut, United States"
+  },
+  "Dutchess County Fairgrounds, CT": null,
+  "East Haddam, Connecticut": {
+    "lat": 41.452858,
+    "lng": -72.461333,
+    "precision": "approx",
+    "display": "East Haddam, Lower Connecticut River Valley Planning Region, Connecticut, United States"
+  },
+  "East Shore Road, Morris, CT": {
+    "lat": 41.698804,
+    "lng": -73.217767,
+    "precision": "precise",
+    "display": "East Shore Road, Morris, Northwest Hills Planning Region, Connecticut, 06763, United States"
   },
   "Falls Village, CT": {
     "lat": 41.954899,
@@ -240,6 +357,7 @@
     "precision": "approx",
     "display": "House of Books, 10, North Main Street, Kent, Northwest Hills Planning Region, Connecticut, 06757, United States"
   },
+  "Judy Black Memorial Park and Gardens, CT": null,
   "Kent Welcome Center, 3 Railroad St, Kent, CT": {
     "lat": 41.726704,
     "lng": -73.474805,
@@ -247,6 +365,13 @@
     "display": "3, Railroad Street, Kent, Northwest Hills Planning Region, Connecticut, 06757, United States",
     "aliasedTo": "3 Railroad Street, Kent, CT"
   },
+  "Levitt Pavilion, CT": {
+    "lat": 41.138428,
+    "lng": -73.361505,
+    "precision": "approx",
+    "display": "The Levitt Pavilion for the Performing Arts, 40, Jesup Road, Westport, Western Connecticut Planning Region, Connecticut, 06880, United States"
+  },
+  "Library Gallery Space, CT": null,
   "Litchfield Community Center, CT": {
     "lat": 41.739416,
     "lng": -73.215273,
@@ -279,6 +404,12 @@
     "display": "Montfort Road, Litchfield, Northwest Hills Planning Region, Connecticut, 06759, United States",
     "aliasedTo": "50 Montfort Road, Litchfield, CT"
   },
+  "Main Library, CT": {
+    "lat": 41.671474,
+    "lng": -72.866068,
+    "precision": "approx",
+    "display": "East Main St and Plainville Center Library, East Main Street, Plainville, Capitol Planning Region, Connecticut, 06062, United States"
+  },
   "Main Street South, Woodbury, CT": {
     "lat": 41.523151,
     "lng": -73.202335,
@@ -304,6 +435,13 @@
     "lng": -73.314472,
     "precision": "approx",
     "display": "Mohawk Mountain, 46, Great Hollow Road, Cornwall, Northwest Hills Planning Region, Connecticut, 06753, United States"
+  },
+  "Music Mountain, CT": {
+    "lat": 41.921805,
+    "lng": -73.354837,
+    "precision": "precise",
+    "display": "Music Mountain Road, Canaan, Northwest Hills Planning Region, Connecticut, 06031, United States",
+    "aliasedTo": "Music Mountain, Canaan, CT"
   },
   "Music Shed, CT": {
     "lat": 41.921805,
@@ -343,12 +481,20 @@
     "precision": "approx",
     "display": "Pine Street, Cornwall, Northwest Hills Planning Region, Connecticut, 06753, United States"
   },
+  "Plantsville, CT": {
+    "lat": 41.583216,
+    "lng": -72.890563,
+    "precision": "approx",
+    "display": "Plantsville, Southington, Capitol Planning Region, Connecticut, 06479, United States"
+  },
+  "Powder Ridge Mountain, CT": null,
   "Salisbury, CT": {
     "lat": 41.983426,
     "lng": -73.421232,
     "precision": "approx",
     "display": "Salisbury, Northwest Hills Planning Region, Connecticut, United States"
   },
+  "School St and Judson Ave., Woodbury, CT": null,
   "Sharon Playhouse, CT": {
     "lat": 41.876013,
     "lng": -73.478892,
@@ -356,6 +502,7 @@
     "display": "49, Amenia Road, Sharon Valley, Sharon, Northwest Hills Planning Region, Connecticut, 06069, United States",
     "aliasedTo": "49 Amenia Road, Sharon, CT"
   },
+  "Steep Rock Preserve, 2 Tunnel Rd, CT": null,
   "Stissing Center for Arts and Culture, CT": {
     "lat": 41.979635,
     "lng": -73.657121,
@@ -363,10 +510,24 @@
     "display": "The Stissing Center, 2950, Church Street, Town of Pine Plains, Dutchess County, New York, 12567, United States",
     "aliasedTo": "2950 Church Street, Pine Plains, NY"
   },
+  "Studio Hill Gallery, CT": {
+    "lat": 41.533641,
+    "lng": -73.205682,
+    "precision": "approx",
+    "display": "Studio Hill Gallery and Design Shop, Main Street South, North Woodbury, Woodbury, Naugatuck Valley Planning Region, Connecticut, 06798, United States"
+  },
+  "The Moviehouse, CT": null,
+  "Washington Depot, CT": {
+    "lat": 41.640491,
+    "lng": -73.319015,
+    "precision": "approx",
+    "display": "Washington Depot, Washington, Northwest Hills Planning Region, Connecticut, 06794, United States"
+  },
   "Washington, CT": {
     "lat": 41.630564,
     "lng": -73.311271,
     "precision": "approx",
     "display": "Washington, Northwest Hills Planning Region, Connecticut, United States"
-  }
+  },
+  "http://flandersnaturecenter.org/, CT": null
 }
