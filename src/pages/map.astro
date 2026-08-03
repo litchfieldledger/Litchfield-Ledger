@@ -207,6 +207,9 @@ const submitUrl = 'https://litchfieldledger.beehiiv.com/add-your-event';
     padding-bottom: 10px;
   }
   .legend-title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     font-family: 'Barlow Condensed', sans-serif;
     font-weight: 700;
     text-transform: uppercase;
@@ -218,10 +221,15 @@ const submitUrl = 'https://litchfieldledger.beehiiv.com/add-your-event';
     padding-bottom: 8px;
   }
   .legend-row {
+    width: 100%;
     display: flex;
     align-items: center;
     gap: 10px;
     padding: 6px 2px;
+    border: 0;
+    background: transparent;
+    color: inherit;
+    text-align: left;
     cursor: pointer;
     user-select: none;
   }
@@ -389,8 +397,16 @@ const submitUrl = 'https://litchfieldledger.beehiiv.com/add-your-event';
   }
   .empty-flag strong { color: #fff; }
 
-  /* legend collapse (chevron hidden on desktop; panel always expanded there) */
-  .legend-chevron { display: none; }
+  /* legend collapse control is only needed in the mobile bottom sheet. */
+  .legend-toggle {
+    display: none;
+    border: 0;
+    padding: 2px 4px;
+    background: transparent;
+    color: var(--green);
+    cursor: pointer;
+  }
+  .legend-chevron { display: inline-block; transition: transform 0.2s; font-size: 15px; }
 
   @media (max-width: 760px) {
     /* Top bar: keep it tight so it doesn't crowd the header panel. */
@@ -426,12 +442,8 @@ const submitUrl = 'https://litchfieldledger.beehiiv.com/add-your-event';
       margin-bottom: 0;
       border-bottom: none;
       padding: 2px 0;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
     }
-    .legend-chevron { display: inline; transition: transform 0.2s; font-size: 15px; }
+    .legend-toggle { display: inline-block; }
     .panel-legend:not(.collapsed) .legend-title {
       border-bottom: 1px solid var(--cream-dark);
       padding-bottom: 8px;
@@ -442,7 +454,12 @@ const submitUrl = 'https://litchfieldledger.beehiiv.com/add-your-event';
     .panel-legend.collapsed .legend-note { display: none; }
     .legend-row { padding: 8px 2px; }
 
-    .empty-flag { display: none; }
+    .empty-flag {
+      left: 8px;
+      right: 8px;
+      bottom: 70px;
+      max-width: none;
+    }
     .leaflet-control-zoom { display: none; }
   }
 </style>
@@ -466,28 +483,48 @@ const submitUrl = 'https://litchfieldledger.beehiiv.com/add-your-event';
       <span class="panel-lead">Music, markets, talks &amp; more across Northwest Connecticut. </span>
       <strong id="visible-count">{events.length}</strong> upcoming events · updated {generated}.
     </p>
-    <div class="date-tabs" id="date-tabs">
-      <button class="date-tab active" data-range="all">All upcoming</button>
-      <button class="date-tab" data-range="week">This week</button>
-      <button class="date-tab" data-range="weekend">This weekend</button>
+    <div class="date-tabs" id="date-tabs" role="group" aria-label="Event date range">
+      <button class="date-tab active" data-range="all" aria-pressed="true">All upcoming</button>
+      <button class="date-tab" data-range="week" aria-pressed="false">This week</button>
+      <button class="date-tab" data-range="weekend" aria-pressed="false">This weekend</button>
     </div>
   </section>
 
   <section class="panel panel-legend">
-    <p class="legend-title" id="legend-toggle">On the map<span class="legend-chevron">▾</span></p>
+    <p class="legend-title">
+      <span>On the map</span>
+      <button
+        class="legend-toggle"
+        id="legend-toggle"
+        type="button"
+        aria-label="Toggle map categories"
+        aria-controls="legend"
+        aria-expanded="true"
+      ><span class="legend-chevron" aria-hidden="true">▾</span></button>
+    </p>
     <div id="legend"></div>
     <p class="legend-note">
       Dashed pins are placed at the town center (no exact address yet).
     </p>
   </section>
+  <div class="empty-flag" id="map-error" role="status" hidden>
+    <strong>The map couldn’t load.</strong> Please refresh the page to try again.
+  </div>
 
   <script
     is:inline
     define:vars={{ events, categoryMeta: CATEGORY_META, counts }}
   >
     (function () {
+      var initAttempts = 0;
+
       function init() {
         if (typeof L === 'undefined') {
+          initAttempts += 1;
+          if (initAttempts >= 100) {
+            document.getElementById('map-error').hidden = false;
+            return;
+          }
           return void setTimeout(init, 60);
         }
 
@@ -535,6 +572,16 @@ const submitUrl = 'https://litchfieldledger.beehiiv.com/add-your-event';
           });
         }
 
+        function safeEventUrl(value) {
+          if (!/^https?:\/\//i.test(value || '')) return '';
+          try {
+            var url = new URL(value);
+            return url.protocol === 'http:' || url.protocol === 'https:' ? url.href : '';
+          } catch (_) {
+            return '';
+          }
+        }
+
         // Which category "owns" a pin's color: the most common at that location.
         function dominantCategory(evs) {
           var tally = {};
@@ -576,12 +623,13 @@ const submitUrl = 'https://litchfieldledger.beehiiv.com/add-your-event';
 
         function eventRow(g) {
           var meta = categoryMeta[g.category];
+          var url = safeEventUrl(g.url);
           var inner =
             '<span class="pop-cat" style="background:' + meta.color + '">' + esc(meta.label) + '</span>' +
             '<div class="pop-title">' + esc(g.name) + '</div>' +
             '<div class="pop-meta"><span class="lbl">When:</span> ' + whenLabel(g.dates) + '</div>';
-          if (g.url) {
-            return '<a class="pop-evt pop-evt-link" href="' + esc(g.url) + '" target="_blank" rel="noopener">' + inner + '<span class="pop-link">Event details ↗</span></a>';
+          if (url) {
+            return '<a class="pop-evt pop-evt-link" href="' + esc(url) + '" target="_blank" rel="noopener">' + inner + '<span class="pop-link">Event details ↗</span></a>';
           }
           return '<div class="pop-evt">' + inner + '</div>';
         }
@@ -679,12 +727,13 @@ const submitUrl = 'https://litchfieldledger.beehiiv.com/add-your-event';
           var day = today.getDay(); // 0 Sun..6 Sat
           if (activeRange === 'week') {
             var end = new Date(today);
-            end.setDate(today.getDate() + (7 - day)); // through end of this week (next Sun)
+            end.setDate(today.getDate() + ((7 - day) % 7)); // through this Sunday
             return d >= today && d <= end;
           }
           if (activeRange === 'weekend') {
             var fri = new Date(today);
-            fri.setDate(today.getDate() + ((5 - day + 7) % 7)); // upcoming/this Friday
+            var daysToFriday = day === 6 ? -1 : day === 0 ? -2 : 5 - day;
+            fri.setDate(today.getDate() + daysToFriday); // current weekend on Fri–Sun
             var sun = new Date(fri);
             sun.setDate(fri.getDate() + 2);
             return d >= fri && d <= sun;
@@ -714,8 +763,10 @@ const submitUrl = 'https://litchfieldledger.beehiiv.com/add-your-event';
         var legend = document.getElementById('legend');
         Object.keys(categoryMeta).forEach(function (cat) {
           var meta = categoryMeta[cat];
-          var row = document.createElement('div');
+          var row = document.createElement('button');
+          row.type = 'button';
           row.className = 'legend-row on';
+          row.setAttribute('aria-pressed', 'true');
           row.innerHTML =
             '<span class="legend-check">✓</span>' +
             '<span class="legend-dot" style="background:' + meta.color + '"></span>' +
@@ -725,6 +776,7 @@ const submitUrl = 'https://litchfieldledger.beehiiv.com/add-your-event';
             activeCats[cat] = !activeCats[cat];
             row.classList.toggle('on', activeCats[cat]);
             row.classList.toggle('off', !activeCats[cat]);
+            row.setAttribute('aria-pressed', String(activeCats[cat]));
             row.querySelector('.legend-check').textContent = activeCats[cat] ? '✓' : '';
             apply();
           });
@@ -736,10 +788,15 @@ const submitUrl = 'https://litchfieldledger.beehiiv.com/add-your-event';
         var legendToggle = document.getElementById('legend-toggle');
         legendToggle.addEventListener('click', function () {
           legendPanel.classList.toggle('collapsed');
+          legendToggle.setAttribute(
+            'aria-expanded',
+            String(!legendPanel.classList.contains('collapsed'))
+          );
           setTimeout(function () { map.invalidateSize(); }, 210);
         });
         if (window.matchMedia && window.matchMedia('(max-width: 760px)').matches) {
           legendPanel.classList.add('collapsed');
+          legendToggle.setAttribute('aria-expanded', 'false');
         }
 
         // date tabs
@@ -748,8 +805,12 @@ const submitUrl = 'https://litchfieldledger.beehiiv.com/add-your-event';
           var btn = ev.target.closest('.date-tab');
           if (!btn) return;
           activeRange = btn.getAttribute('data-range');
-          [].forEach.call(tabs.children, function (b) { b.classList.remove('active'); });
+          [].forEach.call(tabs.children, function (b) {
+            b.classList.remove('active');
+            b.setAttribute('aria-pressed', 'false');
+          });
           btn.classList.add('active');
+          btn.setAttribute('aria-pressed', 'true');
           apply();
         });
 
