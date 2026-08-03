@@ -610,6 +610,23 @@ const submitUrl = 'https://litchfieldledger.beehiiv.com/add-your-event';
           return Object.keys(s).length;
         }
 
+        function labelMarker(m, visibleEvents) {
+          var el = m.getElement();
+          if (!el) return;
+
+          var groups = groupEvents(visibleEvents);
+          var head = visibleEvents[0];
+          var where = head.venue || head.town || 'this location';
+          var names = groups.slice(0, 3).map(function (g) { return g.name; }).join(', ');
+          var more = groups.length > 3 ? ', and ' + (groups.length - 3) + ' more' : '';
+          var label =
+            groups.length + (groups.length === 1 ? ' event' : ' events') +
+            ' at ' + where + ': ' + names + more;
+
+          el.setAttribute('aria-label', label);
+          el.setAttribute('title', label);
+        }
+
         var markers = [];
         locations.forEach(function (loc) {
           var cat = dominantCategory(loc.events);
@@ -684,6 +701,7 @@ const submitUrl = 'https://litchfieldledger.beehiiv.com/add-your-event';
             if (vis.length) {
               renderMarker(m, vis);
               if (!layer.hasLayer(m)) layer.addLayer(m);
+              labelMarker(m, vis);
               n += vis.length;
             } else if (layer.hasLayer(m)) {
               layer.removeLayer(m);

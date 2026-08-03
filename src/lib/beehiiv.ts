@@ -308,13 +308,17 @@ export async function getLatestIssue(): Promise<LedgerIssue | null> {
     const post = (json.data ?? [])[0];
     if (!post) return null;
 
-    const html = cleanIssueHtml(post.content?.free?.rss || '');
+    const webUrl = post.web_url ?? 'https://litchfieldledger.com/';
+    const html = cleanIssueHtml(post.content?.free?.rss || '').replace(
+      /\{\{live_url\}\}/gi,
+      encodeURIComponent(webUrl)
+    );
     if (!html) return null;
 
     return {
       title: post.title ?? '',
       subtitle: (post.subtitle || post.preview_text || '').trim(),
-      url: post.web_url ?? '#',
+      url: webUrl,
       html,
       date: new Date((post.publish_date ?? 0) * 1000).toLocaleDateString('en-US', {
         month: 'short',
