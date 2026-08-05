@@ -30,6 +30,12 @@
     "precision": "precise",
     "display": "11, East Shore Road, New Preston, Washington, Northwest Hills Planning Region, Connecticut, 06777, United States"
   },
+  "11 School Street, Washington, CT 06793": {
+    "lat": 41.638015,
+    "lng": -73.3195,
+    "precision": "precise",
+    "display": "11, School Street, Washington Depot, Washington, Northwest Hills Planning Region, Connecticut, 06793, United States"
+  },
   "12 Rattlesnake Road, West Cornwall, CT 06796": {
     "lat": 41.863355,
     "lng": -73.362566,
@@ -50,6 +56,12 @@
     "precision": "precise",
     "display": "122, South Pomperaug Avenue, Pomeraug, Woodbury, Naugatuck Valley Planning Region, Connecticut, 06798, United States"
   },
+  "124 Christian St, New Preston, CT": {
+    "lat": 41.685266,
+    "lng": -73.326817,
+    "precision": "precise",
+    "display": "124, Christian Street, New Preston, Washington, Northwest Hills Planning Region, Connecticut, 06777, United States"
+  },
   "124 Christian Street, New Preston, CT 06777": {
     "lat": 41.685266,
     "lng": -73.326817,
@@ -67,6 +79,12 @@
     "lng": -73.320209,
     "precision": "precise",
     "display": "2, Bryan Hall Plaza, Washington Depot, Washington, Northwest Hills Planning Region, Connecticut, 06794, United States"
+  },
+  "2 Green Hill Road Washington Depot, CT": {
+    "lat": 41.64083,
+    "lng": -73.318472,
+    "precision": "precise",
+    "display": "2, Green Hill Road, Washington Depot, Washington, Northwest Hills Planning Region, Connecticut, 06794, United States"
   },
   "2 Sarah Sanford Road East, Bridgewater CT": {
     "lat": 41.526325,
@@ -141,11 +159,23 @@
     "precision": "precise",
     "display": "300, Nettleton Hollow Road, Washington, Northwest Hills Planning Region, Connecticut, 06793, United States"
   },
+  "38 Curtis Rd, Washington, CT 06793": {
+    "lat": 41.610529,
+    "lng": -73.322735,
+    "precision": "approx",
+    "display": "Institute for American Indian Studies Research and Education Library, 38, Curtis Road, Washington, Northwest Hills Planning Region, Connecticut, 06793, United States"
+  },
   "397 Nettleton Hollow Rd, Washington, CT 06793": {
     "lat": 41.609019,
     "lng": -73.265586,
     "precision": "precise",
     "display": "397, Nettleton Hollow Road, Washington, Northwest Hills Planning Region, Connecticut, 06793, United States"
+  },
+  "4 Green Hill Rd, Washington Depot, CT 06794": {
+    "lat": 41.640621,
+    "lng": -73.318174,
+    "precision": "precise",
+    "display": "4, Green Hill Road, Washington Depot, Washington, Northwest Hills Planning Region, Connecticut, 06794, United States"
   },
   "40 Angevine Rd. Warren CT": {
     "lat": 41.725946,
@@ -158,6 +188,12 @@
     "lng": -73.361421,
     "precision": "precise",
     "display": "413, Sharon-Goshen Turnpike, West Cornwall, Cornwall, Northwest Hills Planning Region, Connecticut, 06796, United States"
+  },
+  "43 Hollow Road, Woodbury, CT, 06798": {
+    "lat": 41.537027,
+    "lng": -73.211483,
+    "precision": "precise",
+    "display": "43, Hollow Road, Woodbury, Naugatuck Valley Planning Region, Connecticut, 06798, United States"
   },
   "5 Church Hill Rd, Woodbury, CT": {
     "lat": 41.600081,
@@ -212,6 +248,12 @@
     "lng": -73.225204,
     "precision": "precise",
     "display": "55, Duck Pond Road, Litchfield, Connecticut, 06759, United States"
+  },
+  "6 Kirby Road, Washington CT 06793": {
+    "lat": 41.629873,
+    "lng": -73.312111,
+    "precision": "precise",
+    "display": "6, Kirby Road, Washington Depot, Washington, Northwest Hills Planning Region, Connecticut, 06793, United States"
   },
   "7 Pine Street, Cornwall, CT 06753": {
     "lat": 41.845694,
@@ -319,6 +361,7 @@
     "precision": "approx",
     "display": "Falls Village, Canaan, Northwest Hills Planning Region, Connecticut, 06031, United States"
   },
+  "Four Brothers Drive-In, CT": null,
   "Furnace Brook Road, Cornwall Bridge, CT 06754": {
     "lat": 41.818632,
     "lng": -73.369341,
@@ -345,6 +388,12 @@
     "precision": "approx",
     "display": "Goshen, Northwest Hills Planning Region, Connecticut, 06756, United States"
   },
+  "Great Mountain Forest, CT": {
+    "lat": 41.94955,
+    "lng": -73.245276,
+    "precision": "approx",
+    "display": "Great Mountain Forest, Norfolk, Northwest Hills Planning Region, Connecticut, United States"
+  },
   "Harwinton Fairgrounds, CT": {
     "lat": 41.764278,
     "lng": -73.044064,
@@ -365,6 +414,18 @@
     "display": "3, Railroad Street, Kent, Northwest Hills Planning Region, Connecticut, 06757, United States",
     "aliasedTo": "3 Railroad Street, Kent, CT"
   },
+  "Kent, CT": {
+    "lat": 41.724689,
+    "lng": -73.476921,
+    "precision": "approx",
+    "display": "Kent, Northwest Hills Planning Region, Connecticut, United States"
+  },
+  "Kent, Connecticut": {
+    "lat": 41.724689,
+    "lng": -73.476921,
+    "precision": "approx",
+    "display": "Kent, Northwest Hills Planning Region, Connecticut, United States"
+  },
   "Levitt Pavilion, CT": {
     "lat": 41.138428,
     "lng": -73.361505,
@@ -372,6 +433,12 @@
     "display": "The Levitt Pavilion for the Performing Arts, 40, Jesup Road, Westport, Western Connecticut Planning Region, Connecticut, 06880, United States"
   },
   "Library Gallery Space, CT": null,
+  "Lime Rock Park, CT": {
+    "lat": 41.928414,
+    "lng": -73.382622,
+    "precision": "approx",
+    "display": "Lime Rock Park, 60, White Hollow Road, Lime Rock Historic District, Lime Rock, Salisbury, Northwest Hills Planning Region, Connecticut, 06039, United States"
+  },
   "Litchfield Community Center, CT": {
     "lat": 41.739416,
     "lng": -73.215273,
@@ -450,6 +517,7 @@
     "display": "Music Mountain Road, Canaan, Northwest Hills Planning Region, Connecticut, 06031, United States",
     "aliasedTo": "Music Mountain, Canaan, CT"
   },
+  "Nancy Marine Studio Theatre, CT": null,
   "New England Brewing Company, CT": {
     "lat": 41.339485,
     "lng": -72.979646,
@@ -516,6 +584,18 @@
     "precision": "approx",
     "display": "Studio Hill Gallery and Design Shop, Main Street South, North Woodbury, Woodbury, Naugatuck Valley Planning Region, Connecticut, 06798, United States"
   },
+  "The Grotto, CT": {
+    "lat": 45.426452,
+    "lng": -122.707635,
+    "precision": "precise",
+    "display": "The Grotto, Mountain Park, Lake Oswego, Clackamas County, Oregon, 97035, United States"
+  },
+  "The Gunn, CT": {
+    "lat": 41.6293,
+    "lng": -73.3097,
+    "precision": "approx",
+    "display": "The Frederick Gunn School, Woodbury Road, Horse Heaven, Washington Depot, Washington, Northwest Hills Planning Region, Connecticut, 06793, United States"
+  },
   "The Moviehouse, CT": null,
   "Washington Depot, CT": {
     "lat": 41.640491,
@@ -529,5 +609,7 @@
     "precision": "approx",
     "display": "Washington, Northwest Hills Planning Region, Connecticut, United States"
   },
+  "White Memorial – A.B. Ceder Room, CT": null,
+  "Wisdom House Retreat and Conference Center, CT": null,
   "http://flandersnaturecenter.org/, CT": null
 }
