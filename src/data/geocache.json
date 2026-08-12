@@ -123,6 +123,12 @@
     "display": "Pine Street, Cornwall, Northwest Hills Planning Region, Connecticut, 06753, United States"
   },
   "25 Hopkins Road, New Preston Connecticut 06777": null,
+  "25 Hopkins Road, Warren, CT 06777": {
+    "lat": 41.70485,
+    "lng": -73.353647,
+    "precision": "precise",
+    "display": "25, Hopkins Road, Warren, Northwest Hills Planning Region, Connecticut, 06777, United States"
+  },
   "25 Kent Rd S, Cornwall Bridge, CT": {
     "lat": 41.817107,
     "lng": -73.370651,
@@ -219,6 +225,12 @@
     "precision": "precise",
     "display": "5, Wykeham Road, Washington Depot, Washington, Northwest Hills Planning Region, Connecticut, 06793, United States"
   },
+  "5 Wykeham Road, CT": {
+    "lat": 41.630879,
+    "lng": -73.311262,
+    "precision": "precise",
+    "display": "5, Wykeham Road, Washington Depot, Washington, Northwest Hills Planning Region, Connecticut, 06793, United States"
+  },
   "5 Wykeham Road, Washington CT": {
     "lat": 41.630879,
     "lng": -73.311262,
@@ -261,6 +273,7 @@
     "precision": "approx",
     "display": "Cornwall Historical Society, 7, Pine Street, Cornwall, Northwest Hills Planning Region, Connecticut, 06754, United States"
   },
+  "7 Railroad Square, West Cornwall, Connecticut 06796": null,
   "7 South Street, Litchfield CT": {
     "lat": 41.746656,
     "lng": -73.188484,
@@ -323,6 +336,12 @@
     "display": "Litchfield, Northwest Hills Planning Region, Connecticut, United States",
     "aliasedTo": "Litchfield, CT"
   },
+  "Belden House, CT": {
+    "lat": 41.117721,
+    "lng": -73.417192,
+    "precision": "precise",
+    "display": "Norwalk Court House, 17, Belden Avenue, East Norwalk, Norwalk, Western Connecticut Planning Region, Connecticut, 06850, United States"
+  },
   "Bridgewater, CT": {
     "lat": 41.535095,
     "lng": -73.366231,
@@ -337,6 +356,12 @@
     "display": "The Local, A Cornwall Collective Market, Sharon-Goshen Turnpike, West Cornwall, Cornwall, Northwest Hills Planning Region, Connecticut, 06796, United States"
   },
   "Cornwall, CT": {
+    "lat": 41.843706,
+    "lng": -73.329285,
+    "precision": "approx",
+    "display": "Cornwall, Northwest Hills Planning Region, Connecticut, United States"
+  },
+  "Cornwall, Connecticut": {
     "lat": 41.843706,
     "lng": -73.329285,
     "precision": "approx",
@@ -524,6 +549,7 @@
     "precision": "approx",
     "display": "New England Brewing Company, Amity Road, Woodbridge, South Central Connecticut Planning Region, Connecticut, 06524, United States"
   },
+  "New Milford and Bridgewater, CT": null,
   "New Milford, CT": {
     "lat": 41.577099,
     "lng": -73.41058,
@@ -536,6 +562,12 @@
     "precision": "approx",
     "display": "Norfolk, Northwest Hills Planning Region, Connecticut, 06058, United States"
   },
+  "OWL, CT": {
+    "lat": 41.676835,
+    "lng": -73.355417,
+    "precision": "approx",
+    "display": "The Owl, East Shore Road, New Preston, Washington, Northwest Hills Planning Region, Connecticut, 06777, United States"
+  },
   "Oneglia Auditorium, CT": {
     "lat": 41.800652,
     "lng": -73.121221,
@@ -543,6 +575,7 @@
     "display": "Torrington, Northwest Hills Planning Region, Connecticut, 06790, United States",
     "aliasedTo": "Torrington, CT"
   },
+  "Pine Street, Cornwall Village, CT 06753": null,
   "Pine Street, Cornwall, CT 06753": {
     "lat": 41.841,
     "lng": -73.33053,
@@ -584,6 +617,8 @@
     "precision": "approx",
     "display": "Studio Hill Gallery and Design Shop, Main Street South, North Woodbury, Woodbury, Naugatuck Valley Planning Region, Connecticut, 06798, United States"
   },
+  "Tapping Reeve Meadow, CT": null,
+  "The Good Gallery, CT": null,
   "The Grotto, CT": {
     "lat": 45.426452,
     "lng": -122.707635,
@@ -597,6 +632,7 @@
     "display": "The Frederick Gunn School, Woodbury Road, Horse Heaven, Washington Depot, Washington, Northwest Hills Planning Region, Connecticut, 06793, United States"
   },
   "The Moviehouse, CT": null,
+  "TheatreWorks New Milford, CT": null,
   "Washington Depot, CT": {
     "lat": 41.640491,
     "lng": -73.319015,
@@ -611,5 +647,11 @@
   },
   "White Memorial – A.B. Ceder Room, CT": null,
   "Wisdom House Retreat and Conference Center, CT": null,
+  "Wisdom House, CT": {
+    "lat": 41.7584,
+    "lng": -73.15126,
+    "precision": "approx",
+    "display": "Wisdom House Retreat & Conference Center, 229, East Litchfield Lane, Litchfield, Northwest Hills Planning Region, Connecticut, 06759, United States"
+  },
   "http://flandersnaturecenter.org/, CT": null
 }
