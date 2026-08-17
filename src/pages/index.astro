@@ -50,12 +50,6 @@ const numberFmt = new Intl.NumberFormat('en-US');
     {stats && stats.activeSubscribers > 0 && (
       <p class="hero-stats">
         <span class="hero-stats-count">{numberFmt.format(stats.activeSubscribers)}</span> locals reading
-        {stats.joinedThisWeek > 0 && (
-          <>
-            <span class="hero-stats-sep">·</span>
-            <span class="hero-stats-new"><span class="hero-stats-dot"></span>+{numberFmt.format(stats.joinedThisWeek)}</span> joined this week
-          </>
-        )}
       </p>
     )}
   </div>
