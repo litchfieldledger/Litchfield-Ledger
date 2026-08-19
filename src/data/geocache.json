@@ -86,6 +86,12 @@
     "precision": "precise",
     "display": "2, Green Hill Road, Washington Depot, Washington, Northwest Hills Planning Region, Connecticut, 06794, United States"
   },
+  "2 Green Hill Road Washington Depot, CT 06793": {
+    "lat": 41.639523,
+    "lng": -73.317954,
+    "precision": "precise",
+    "display": "2, Green Hill Road, Washington Depot, Washington, Northwest Hills Planning Region, Connecticut, 06793, United States"
+  },
   "2 Sarah Sanford Road East, Bridgewater CT": {
     "lat": 41.526325,
     "lng": -73.360887,
@@ -237,6 +243,12 @@
     "precision": "precise",
     "display": "5, Wykeham Road, Washington Depot, Washington, Northwest Hills Planning Region, Connecticut, 06793, United States"
   },
+  "5 Wykeham Road, Washington CT 06793": {
+    "lat": 41.630879,
+    "lng": -73.311262,
+    "precision": "precise",
+    "display": "5, Wykeham Road, Washington Depot, Washington, Northwest Hills Planning Region, Connecticut, 06793, United States"
+  },
   "5 Wykeham Road, Washington CT, 06794": {
     "lat": 41.630879,
     "lng": -73.311262,
@@ -260,6 +272,18 @@
     "lng": -73.225204,
     "precision": "precise",
     "display": "55, Duck Pond Road, Litchfield, Connecticut, 06759, United States"
+  },
+  "550 Goshen Rd, Litchfield, CT 06759": {
+    "lat": 41.78438,
+    "lng": -73.207414,
+    "precision": "precise",
+    "display": "550, Goshen Road, Litchfield, Connecticut, 06759, United States"
+  },
+  "59 East Shore Road, CT": {
+    "lat": 41.682767,
+    "lng": -73.352636,
+    "precision": "precise",
+    "display": "59, East Shore Road, New Preston, Washington, Northwest Hills Planning Region, Connecticut, 06777, United States"
   },
   "6 Kirby Road, Washington CT 06793": {
     "lat": 41.629873,
@@ -285,6 +309,12 @@
     "lng": -73.203389,
     "precision": "precise",
     "display": "738, Main Street South, North Woodbury, Woodbury, Naugatuck Valley Planning Region, Connecticut, 06798, United States"
+  },
+  "8 Bolton Hill Road, Cornwall, CT 06753": {
+    "lat": 41.844526,
+    "lng": -73.331025,
+    "precision": "precise",
+    "display": "8, Bolton Hill Road, Cornwall, Northwest Hills Planning Region, Connecticut, 06754, United States"
   },
   "82 South Street, Litchfield, CT": {
     "lat": 41.743947,
@@ -349,6 +379,7 @@
     "display": "Bridgewater, Western Connecticut Planning Region, Connecticut, 06752, United States"
   },
   "Children's Department, CT": null,
+  "Cornwall Garden Club, CT": null,
   "Cornwall Market, CT": {
     "lat": 41.871433,
     "lng": -73.361903,
@@ -366,6 +397,12 @@
     "lng": -73.329285,
     "precision": "approx",
     "display": "Cornwall, Northwest Hills Planning Region, Connecticut, United States"
+  },
+  "David M. Hunt Library, CT": {
+    "lat": 41.956162,
+    "lng": -73.361265,
+    "precision": "approx",
+    "display": "David M. Hunt Library, 63, Main Street, Falls Village Historic District, Falls Village, Canaan, Northwest Hills Planning Region, Connecticut, 06031, United States"
   },
   "Dutchess County Fairgrounds, CT": null,
   "East Haddam, Connecticut": {
@@ -418,6 +455,12 @@
     "lng": -73.245276,
     "precision": "approx",
     "display": "Great Mountain Forest, Norfolk, Northwest Hills Planning Region, Connecticut, United States"
+  },
+  "Gunn Memorial Library, CT": {
+    "lat": 41.630585,
+    "lng": -73.311022,
+    "precision": "approx",
+    "display": "Gunn Memorial Library & Museum, Wykeham Road, Washington Depot, Washington, Northwest Hills Planning Region, Connecticut, 06793, United States"
   },
   "Harwinton Fairgrounds, CT": {
     "lat": 41.764278,
@@ -507,6 +550,12 @@
     "lng": -73.202335,
     "precision": "approx",
     "display": "Main Street South, Pomeraug, Woodbury, Naugatuck Valley Planning Region, Connecticut, 06798, United States"
+  },
+  "Main Street, CT": {
+    "lat": 41.669185,
+    "lng": -72.943165,
+    "precision": "precise",
+    "display": "Main Street, Main Street Historic District, Bristol, Naugatuck Valley Planning Region, Connecticut, 06010, United States"
   },
   "Millbrook Vineyards & Winery, CT": {
     "lat": 41.839733,
@@ -631,6 +680,8 @@
     "precision": "approx",
     "display": "The Frederick Gunn School, Woodbury Road, Horse Heaven, Washington Depot, Washington, Northwest Hills Planning Region, Connecticut, 06793, United States"
   },
+  "The Judy Black Memorial Park and Gardens, CT": null,
+  "The Litchfield Community Center, CT": null,
   "The Moviehouse, CT": null,
   "TheatreWorks New Milford, CT": null,
   "Washington Depot, CT": {
@@ -645,6 +696,7 @@
     "precision": "approx",
     "display": "Washington, Northwest Hills Planning Region, Connecticut, United States"
   },
+  "Wassaic Project, CT": null,
   "White Memorial – A.B. Ceder Room, CT": null,
   "Wisdom House Retreat and Conference Center, CT": null,
   "Wisdom House, CT": {
