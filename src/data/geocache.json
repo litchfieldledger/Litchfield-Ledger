@@ -36,6 +36,12 @@
     "precision": "precise",
     "display": "11, School Street, Washington Depot, Washington, Northwest Hills Planning Region, Connecticut, 06793, United States"
   },
+  "12 Main Street, New Milford, CT": {
+    "lat": 41.577979,
+    "lng": -73.410485,
+    "precision": "approx",
+    "display": "Villiage Centre For The Arts, 12, Main Street, New Milford, Western Connecticut Planning Region, Connecticut, 06776, United States"
+  },
   "12 Rattlesnake Road, West Cornwall, CT 06796": {
     "lat": 41.863355,
     "lng": -73.362566,
@@ -73,6 +79,12 @@
     "lng": -73.325619,
     "precision": "precise",
     "display": "128, Cream Hill Road, West Cornwall, Cornwall, Northwest Hills Planning Region, Connecticut, 06796, United States"
+  },
+  "160 South Street, Litchfield, CT 06759": {
+    "lat": 41.741336,
+    "lng": -73.187869,
+    "precision": "approx",
+    "display": "Oliver Wolcott Library, 160, South Street, Litchfield Historic District, Litchfield, Connecticut, 06759, United States"
   },
   "2 Bryan Hall Plaza Washington Depot, CT 06794": {
     "lat": 41.639728,
@@ -141,6 +153,12 @@
     "precision": "approx",
     "display": "Cornwall Country Market, 25, Kent Road South, Cornwall Bridge, Cornwall, Northwest Hills Planning Region, Connecticut, 06754, United States"
   },
+  "25 Pine Street, Cornwall, CT 06753": {
+    "lat": 41.843679,
+    "lng": -73.329943,
+    "precision": "precise",
+    "display": "25, Pine Street, Cornwall, Northwest Hills Planning Region, Connecticut, 06753, United States"
+  },
   "273 Bantam Lake Rd, CT": {
     "lat": 41.701115,
     "lng": -73.233502,
@@ -183,6 +201,7 @@
     "precision": "precise",
     "display": "397, Nettleton Hollow Road, Washington, Northwest Hills Planning Region, Connecticut, 06793, United States"
   },
+  "4 Bryan Memorial Plaza, Washington Depot, CT 06794": null,
   "4 Green Hill Rd, Washington Depot, CT 06794": {
     "lat": 41.640621,
     "lng": -73.318174,
@@ -201,6 +220,12 @@
     "precision": "precise",
     "display": "413, Sharon-Goshen Turnpike, West Cornwall, Cornwall, Northwest Hills Planning Region, Connecticut, 06796, United States"
   },
+  "421 Bantam Road, Litchfield CT": {
+    "lat": 41.739416,
+    "lng": -73.215273,
+    "precision": "precise",
+    "display": "421, Bantam Road, Grappaville, Litchfield, Connecticut, 06759, United States"
+  },
   "43 Hollow Road, Woodbury, CT, 06798": {
     "lat": 41.537027,
     "lng": -73.211483,
@@ -208,6 +233,12 @@
     "display": "43, Hollow Road, Woodbury, Naugatuck Valley Planning Region, Connecticut, 06798, United States"
   },
   "5 Church Hill Rd, Woodbury, CT": {
+    "lat": 41.600081,
+    "lng": -73.206683,
+    "precision": "precise",
+    "display": "5, Church Hill Road, Woodbury, Naugatuck Valley Planning Region, Connecticut, 06798, United States"
+  },
+  "5 Church Hill Road, Woodbury, CT": {
     "lat": 41.600081,
     "lng": -73.206683,
     "precision": "precise",
@@ -334,6 +365,12 @@
     "precision": "precise",
     "display": "9, Thomaston Road, East Morris, Morris, Northwest Hills Planning Region, Connecticut, 06763, United States"
   },
+  "AMP, CT": {
+    "lat": 41.426102,
+    "lng": -74.440674,
+    "precision": "approx",
+    "display": "Birch Court, Amp Rentals Inc, City of Middletown, Orange County, New York, 10940, United States"
+  },
   "Academy Street, CT": {
     "lat": 41.675517,
     "lng": -72.900275,
@@ -380,6 +417,12 @@
   },
   "Children's Department, CT": null,
   "Cornwall Garden Club, CT": null,
+  "Cornwall Library, CT": {
+    "lat": 41.842847,
+    "lng": -73.329713,
+    "precision": "approx",
+    "display": "The Cornwall Library, 30, Pine Street, Cornwall, Northwest Hills Planning Region, Connecticut, 06796, United States"
+  },
   "Cornwall Market, CT": {
     "lat": 41.871433,
     "lng": -73.361903,
@@ -422,6 +465,12 @@
     "lng": -73.364364,
     "precision": "approx",
     "display": "Falls Village, Canaan, Northwest Hills Planning Region, Connecticut, 06031, United States"
+  },
+  "Flanders, CT": {
+    "lat": 41.74065,
+    "lng": -73.455123,
+    "precision": "approx",
+    "display": "Flanders, Kent, Northwest Hills Planning Region, Connecticut, 06757, United States"
   },
   "Four Brothers Drive-In, CT": null,
   "Furnace Brook Road, Cornwall Bridge, CT 06754": {
@@ -474,6 +523,7 @@
     "precision": "approx",
     "display": "House of Books, 10, North Main Street, Kent, Northwest Hills Planning Region, Connecticut, 06757, United States"
   },
+  "Johnson Farm Preserve, 37 West Mountain Rd, CT": null,
   "Judy Black Memorial Park and Gardens, CT": null,
   "Kent Welcome Center, 3 Railroad St, Kent, CT": {
     "lat": 41.726704,
@@ -645,6 +695,7 @@
     "display": "Salisbury, Northwest Hills Planning Region, Connecticut, United States"
   },
   "School St and Judson Ave., Woodbury, CT": null,
+  "Sharon CT and Millerton NY": null,
   "Sharon Playhouse, CT": {
     "lat": 41.876013,
     "lng": -73.478892,
@@ -680,10 +731,12 @@
     "precision": "approx",
     "display": "The Frederick Gunn School, Woodbury Road, Horse Heaven, Washington Depot, Washington, Northwest Hills Planning Region, Connecticut, 06793, United States"
   },
+  "The Hickory Stick Bookshop, CT": null,
   "The Judy Black Memorial Park and Gardens, CT": null,
   "The Litchfield Community Center, CT": null,
   "The Moviehouse, CT": null,
   "TheatreWorks New Milford, CT": null,
+  "Tremaine Gallery at Hotchkiss, CT": null,
   "Washington Depot, CT": {
     "lat": 41.640491,
     "lng": -73.319015,

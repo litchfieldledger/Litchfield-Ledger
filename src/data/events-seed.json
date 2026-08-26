@@ -1,77 +1,12 @@
 {
-  "generatedAt": "2026-08-19T13:59:00.731Z",
+  "generatedAt": "2026-08-26T14:05:04.862Z",
   "source": "Event Tracker · AI Decision = Include · future-dated",
-  "count": 223,
+  "count": 224,
   "events": [
     {
-      "id": "recdjdYSwzTBtlBw5",
-      "name": "Dig Into 3 D Printin: Design a Button",
-      "date": "2026-08-20",
-      "time": "10:00 AM",
-      "endTime": "11:30 AM",
-      "address": "5 Wykeham Rd, Washington, CT 06793",
-      "venue": "Gunn Memorial Library",
-      "url": "https://gunnlibrary.org/calendar/dig-into-3d-printing-design-a-button/",
-      "source": "",
-      "category": "community",
-      "geo": "5 Wykeham Rd, Washington, CT 06793"
-    },
-    {
-      "id": "recj7BV6C8XzDtQgC",
-      "name": "Exploring Your Birth Chart",
-      "date": "2026-08-20",
-      "time": "5:30 PM",
-      "endTime": "",
-      "address": "",
-      "venue": "David M. Hunt Library",
-      "url": "https://litchfieldmagazine.com/events/exploring-your-birth-chart/",
-      "source": "Litchfield Magazine",
-      "category": "community",
-      "geo": "David M. Hunt Library, CT"
-    },
-    {
-      "id": "rec1iByj4QXDIV11K",
-      "name": "Joanne Shaw Taylor",
-      "date": "2026-08-20",
-      "time": "8:00 PM",
-      "endTime": "",
-      "address": "Norfolk, CT",
-      "venue": "Infinity Music Hall Norfolk",
-      "url": "https://www.infinityhall.com/Events/joanne-shaw-taylor-8-20-2026/",
-      "source": "Infinity Hall",
-      "category": "community",
-      "geo": "Norfolk, CT"
-    },
-    {
-      "id": "rec31ZrAuY7e0Ipkc",
-      "name": "Kent Falls Brewing - Wooded Streams Fall Lager Release",
-      "date": "2026-08-20",
-      "time": "2:00 PM",
-      "endTime": "7:00 PM",
-      "address": "Kent, Connecticut",
-      "venue": "Kent Falls Brewing - Kent",
-      "url": "https://www.instagram.com/p/Db3RdeVue4f/",
-      "source": "Kent Brewing",
-      "category": "community",
-      "geo": "Kent, Connecticut"
-    },
-    {
-      "id": "recWS81BvI21j2j1L",
-      "name": "RIP DUNES",
-      "date": "2026-08-20",
-      "time": "6:00 PM",
-      "endTime": "",
-      "address": "Cornwall, Connecticut",
-      "venue": "Cornwall Market",
-      "url": "https://www.instagram.com/p/DbevsnAkaUB/",
-      "source": "Cornwall Market",
-      "category": "community",
-      "geo": "Cornwall, Connecticut"
-    },
-    {
       "id": "rech1vfmGANWLhhYS",
-      "name": "South Farms: Social Line-Up",
-      "date": "2026-08-20",
+      "name": "Every Thursday South Farms: Social Line-Up",
+      "date": "2026-08-27",
       "time": "5:00 PM",
       "endTime": "8:00 PM",
       "address": "21 Higbie Road, Morris, CT 06763",
@@ -80,682 +15,6 @@
       "source": "Belden House",
       "category": "community",
       "geo": "21 Higbie Road, Morris, CT 06763"
-    },
-    {
-      "id": "recz1Y6BOA1s5ukCE",
-      "name": "Weed & Wine Thursdays at Judea Garden",
-      "date": "2026-08-20",
-      "time": "5:30 PM",
-      "endTime": "7:00 PM",
-      "address": "124 Christian Street, New Preston, CT 06777",
-      "venue": "Judea Garden",
-      "url": "https://explorewashingtonct.com/events/weed-wine-thursdays-at-judea-garden/",
-      "source": "Calendar",
-      "category": "outdoors",
-      "geo": "124 Christian Street, New Preston, CT 06777"
-    },
-    {
-      "id": "recq1elWgpfwg1mPj",
-      "name": "Weed & Wine Thursdays at Judea Garden, Weekly through August 20, 2026",
-      "date": "2026-08-20",
-      "time": "5:30 PM",
-      "endTime": "7:00 PM",
-      "address": "124 Christian Street, New Preston, CT 06777",
-      "venue": "Judea Garden",
-      "url": "https://steeprockassoc.org/event/weed-wine-thursdays-aug-20/",
-      "source": "Steep Rock Association",
-      "category": "outdoors",
-      "geo": "124 Christian Street, New Preston, CT 06777"
-    },
-    {
-      "id": "recJ3JPg6N0ZAH6wy",
-      "name": "Anchor Management - Yacht Rock Party at Woodbury Brewing Company",
-      "date": "2026-08-21",
-      "time": "8:30 PM",
-      "endTime": "",
-      "address": "Main Street South, Woodbury, CT",
-      "venue": "Woodbury Brewing Company",
-      "url": "https://www.viewcy.com/event/anchormanagementaugwbc",
-      "source": "Woodbury Brewing",
-      "category": "community",
-      "geo": "Main Street South, Woodbury, CT"
-    },
-    {
-      "id": "reckJdut5rfcIVeSh",
-      "name": "Author Peni Clark - Kiki Finds Her Way",
-      "date": "2026-08-21",
-      "time": "1:00 PM",
-      "endTime": "3:00 PM",
-      "address": "Litchfield, Connecticut",
-      "venue": "Litchfield Community Center",
-      "url": "https://www.instagram.com/p/DcERGH9DDZY/",
-      "source": "Litchfield Community Center",
-      "category": "talk",
-      "geo": "Litchfield, Connecticut"
-    },
-    {
-      "id": "recniARtK45ya9QuB",
-      "name": "Author Peni Clark - Kiki Finds Her Way",
-      "date": "2026-08-21",
-      "time": "1:00 PM",
-      "endTime": "3:00 PM",
-      "address": "",
-      "venue": "Litchfield Community Center",
-      "url": "https://www.instagram.com/p/DbW4mq9jBNx/",
-      "source": "Litchfield Community Center",
-      "category": "talk",
-      "geo": "Litchfield Community Center, CT"
-    },
-    {
-      "id": "recG3Jp09PJJcGsoK",
-      "name": "Author Peni Clark - Kiki Finds Her Way Book Event",
-      "date": "2026-08-21",
-      "time": "1:00 PM",
-      "endTime": "3:00 PM",
-      "address": "Litchfield, Connecticut",
-      "venue": "Litchfield Community Center",
-      "url": "https://www.instagram.com/p/DbW4mq9jBNx/",
-      "source": "Litchfield Community Center",
-      "category": "talk",
-      "geo": "Litchfield, Connecticut"
-    },
-    {
-      "id": "recFFXmZ1EZSDyvlR",
-      "name": "Bantam Community Farmers Market",
-      "date": "2026-08-21",
-      "time": "3:00 PM",
-      "endTime": "6:00 PM",
-      "address": "273 Bantam Lake Rd",
-      "venue": "Alain White Field",
-      "url": "",
-      "source": "",
-      "category": "market",
-      "geo": "273 Bantam Lake Rd, CT"
-    },
-    {
-      "id": "recj1uHGSxm7MuyBU",
-      "name": "Boondocks Film Society – “Say Anything”",
-      "date": "2026-08-21",
-      "time": "6:30 PM",
-      "endTime": "10:00 PM",
-      "address": "21 Higbie Rd, Morris, CT 06763",
-      "venue": "South Farms",
-      "url": "https://boondocksfilmsociety.myshopify.com/products/say-anything?utm_source=copyToPasteBoard&#038;utm_medium=product-links&#038;utm_content=web",
-      "source": "South Farms",
-      "category": "art",
-      "geo": "21 Higbie Rd, Morris, CT 06763"
-    },
-    {
-      "id": "rec2UN6L8SaTFDyU2",
-      "name": "Changes in Latitudes - Jimmy Buffett Tribute",
-      "date": "2026-08-21",
-      "time": "8:00 PM",
-      "endTime": "",
-      "address": "Norfolk, CT",
-      "venue": "Infinity Music Hall Norfolk",
-      "url": "https://www.infinityhall.com/Events/changes-in-latitudes-jimmy-buffett-tribute-8-21-2026/",
-      "source": "Infinity Hall",
-      "category": "music",
-      "geo": "Norfolk, CT"
-    },
-    {
-      "id": "rec72I39XDB4WtLQY",
-      "name": "Dig Into 3D Printing: Design a Button",
-      "date": "2026-08-21",
-      "time": "10:00 AM",
-      "endTime": "11:30 AM",
-      "address": "5 Wykeham Road, Washington, CT 06793",
-      "venue": "Gunn Memorial Library",
-      "url": "https://gunnlibrary.org/calendar/dig-into-3d-printing-design-a-button/",
-      "source": "Gunn Memorial",
-      "category": "community",
-      "geo": "5 Wykeham Road, Washington, CT 06793"
-    },
-    {
-      "id": "recKNBRSxtezyme56",
-      "name": "Fieldwork Launch Party",
-      "date": "2026-08-21",
-      "time": "5:30 PM",
-      "endTime": "",
-      "address": "",
-      "venue": "Cornwall Market",
-      "url": "https://www.instagram.com/p/Da0yF8KIKbx/",
-      "source": "Cornwall Market",
-      "category": "community",
-      "geo": "Cornwall Market, CT"
-    },
-    {
-      "id": "reccSKXOq6l7xRH0L",
-      "name": "Kent CT Farmers Market",
-      "date": "2026-08-21",
-      "time": "3:00 PM–6:00 PM",
-      "endTime": "",
-      "address": "Kent Welcome Center, 3 Railroad St, Kent, CT",
-      "venue": "Kent CT Farmers Market",
-      "url": "https://www.instagram.com/kentctfarmersmarket/",
-      "source": "",
-      "category": "market",
-      "geo": "Kent Welcome Center, 3 Railroad St, Kent, CT"
-    },
-    {
-      "id": "rec555q8sNYw9hwFZ",
-      "name": "Outdoor Movie Night",
-      "date": "2026-08-21",
-      "time": "",
-      "endTime": "",
-      "address": "",
-      "venue": "The Judy Black Memorial Park and Gardens",
-      "url": "https://litchfieldmagazine.com/events/outdoor-movie-night-8/",
-      "source": "Litchfield Magazine",
-      "category": "art",
-      "geo": "The Judy Black Memorial Park and Gardens, CT"
-    },
-    {
-      "id": "recqjJ8qF6Re1Op95",
-      "name": "Outdoor Movie Night",
-      "date": "2026-08-21",
-      "time": "7:00 PM",
-      "endTime": "9:00 PM",
-      "address": "1 Green Hill Rd, Washington Depot, CT",
-      "venue": "Judy Black Memorial Park and Gardens",
-      "url": "https://explorewashingtonct.com/events/outdoor-movie-night-6/",
-      "source": "Calendar",
-      "category": "art",
-      "geo": "1 Green Hill Rd, Washington Depot, CT"
-    },
-    {
-      "id": "rec0KsikPkLJYePKg",
-      "name": "Outdoor Teen Night",
-      "date": "2026-08-21",
-      "time": "6:00 PM",
-      "endTime": "9:00 PM",
-      "address": "",
-      "venue": "The Litchfield Community Center",
-      "url": "https://www.instagram.com/p/DcMuv8xDi7s/",
-      "source": "Litchfield Community Center",
-      "category": "community",
-      "geo": "The Litchfield Community Center, CT"
-    },
-    {
-      "id": "recdIBPneVsyCW2fA",
-      "name": "Peni Clark - Kiki Finds Her Way Book Celebration",
-      "date": "2026-08-21",
-      "time": "1:00 PM",
-      "endTime": "3:00 PM",
-      "address": "Litchfield, CT",
-      "venue": "Litchfield Community Center",
-      "url": "https://www.instagram.com/p/DbozTrZD7nE/",
-      "source": "Litchfield Community Center",
-      "category": "talk",
-      "geo": "Litchfield, CT"
-    },
-    {
-      "id": "rec6cB03kJTl4TKvX",
-      "name": "Summer Beach Party 2026",
-      "date": "2026-08-21",
-      "time": "5:30 PM",
-      "endTime": "7:30 PM",
-      "address": "59 East Shore Road",
-      "venue": "Washington Town Beach",
-      "url": "https://explorewashingtonct.com/events/summer-beach-party-2026/",
-      "source": "Calendar",
-      "category": "community",
-      "geo": "59 East Shore Road, CT"
-    },
-    {
-      "id": "recBVY8E2sW7lziPI",
-      "name": "Washington Friends of Music Summer Festival",
-      "date": "2026-08-21",
-      "time": "5:30 PM",
-      "endTime": "7:00 PM",
-      "address": "6 Kirby Road, Washington CT 06793",
-      "venue": "First Congregational Church",
-      "url": "https://explorewashingtonct.com/events/washington-friends-of-music-summer-festival-2026/",
-      "source": "Calendar",
-      "category": "music",
-      "geo": "6 Kirby Road, Washington CT 06793"
-    },
-    {
-      "id": "rec5eH3Sd7P5T8ATI",
-      "name": "Wine Tastings at Spring Hill Vineyards",
-      "date": "2026-08-21",
-      "time": "12:00 PM",
-      "endTime": "6:00 PM",
-      "address": "292 Bee Brook Rd, New Preston, CT 06777",
-      "venue": "Spring Hill Vineyards",
-      "url": "https://explorewashingtonct.com/events/wine-tastings-at-spring-hill-vineyards-2026/",
-      "source": "Calendar",
-      "category": "community",
-      "geo": "292 Bee Brook Rd, New Preston, CT 06777"
-    },
-    {
-      "id": "recAAiEDoj9GFbuhT",
-      "name": "Zombie Prom | Launchpad Company",
-      "date": "2026-08-21",
-      "time": "7:00 PM",
-      "endTime": "",
-      "address": "",
-      "venue": "Sharon Playhouse",
-      "url": "https://www.visitmillertonny.com/event-details-registration/zombie-prom-launchpad-company-2026-08-21-19-00",
-      "source": "Millerton",
-      "category": "community",
-      "geo": "Sharon Playhouse, CT"
-    },
-    {
-      "id": "reca6MEAvQUxlGdg5",
-      "name": "Zombie Prom at the Playhouse",
-      "date": "2026-08-21",
-      "time": "",
-      "endTime": "",
-      "address": "",
-      "venue": "Sharon Playhouse",
-      "url": "https://litchfieldmagazine.com/events/zombie-prom-at-the-playhouse/",
-      "source": "Litchfield Magazine",
-      "category": "community",
-      "geo": "Sharon Playhouse, CT"
-    },
-    {
-      "id": "recafP2CbgmGkgfBb",
-      "name": "Acorn at the Woodbury Brewing Company",
-      "date": "2026-08-22",
-      "time": "8:30 PM",
-      "endTime": "",
-      "address": "Main Street South, Woodbury, CT",
-      "venue": "Woodbury Brewing Company",
-      "url": "https://www.viewcy.com/event/acornwbc",
-      "source": "Woodbury Brewing",
-      "category": "community",
-      "geo": "Main Street South, Woodbury, CT"
-    },
-    {
-      "id": "recPKVnhAURBvC84G",
-      "name": "Art Class: Paint Summer in Pastes with Collette Hurst – Library",
-      "date": "2026-08-22",
-      "time": "10:00 AM",
-      "endTime": "11:30 AM",
-      "address": "30 Pine St, Cornwall, CT 06753",
-      "venue": "The Cornwall Library",
-      "url": "https://cornwallct.org/event/art-class-paint-summer-in-pastes-with-collette-hurst-library/2026-08-22/",
-      "source": "Calender",
-      "category": "art",
-      "geo": "30 Pine St, Cornwall, CT 06753"
-    },
-    {
-      "id": "recFslqZ6FnMdCSYH",
-      "name": "Cornwall COOP Farmers Market – Cornwall Village",
-      "date": "2026-08-22",
-      "time": "9:00 AM",
-      "endTime": "12:00 PM",
-      "address": "Pine Street, Cornwall, CT 06753",
-      "venue": "Cornwall Village Green",
-      "url": "https://cornwallct.org/event/cornwall-coop-farmers-market-cornwall-village/2026-08-22/",
-      "source": "Calender",
-      "category": "market",
-      "geo": "Pine Street, Cornwall, CT 06753"
-    },
-    {
-      "id": "recXLj2zxHAmL8UZ4",
-      "name": "Gunn Memorial Library Stairwell Gallery: “Small Works\" by Eileen Mooney",
-      "date": "2026-08-22",
-      "time": "9:30am",
-      "endTime": "5:00pm",
-      "address": "5 Wykeham Road, Washington CT 06793",
-      "venue": "Gunn Memorial Library",
-      "url": "https://gunnlibrary.org/stairwell-gallery/",
-      "source": "",
-      "category": "art",
-      "geo": "5 Wykeham Road, Washington CT 06793"
-    },
-    {
-      "id": "rec7WE4I7DYXKWgQz",
-      "name": "Kitchen Ceili Concert: Dance & Contra Dance",
-      "date": "2026-08-22",
-      "time": "4:00 PM",
-      "endTime": "5:30 PM",
-      "address": "1 Green Hill Rd, Washington Depot, CT 06794",
-      "venue": "The Judy Black Memorial Park & Gardens",
-      "url": "https://gunnlibrary.org/calendar/kitchen-ceili-concert-contra-dance/",
-      "source": "",
-      "category": "music",
-      "geo": "1 Green Hill Rd, Washington Depot, CT 06794"
-    },
-    {
-      "id": "recytdKsIuTLFoSfV",
-      "name": "Kitchen Ceili:  Concert & Contra Dance",
-      "date": "2026-08-22",
-      "time": "4:00 PM",
-      "endTime": "5:30 PM",
-      "address": "1 Green Hill Rd, Washington Deport, 06794",
-      "venue": "The Judy Black Memorial Park &#038; Gardens",
-      "url": "https://gunnlibrary.org/calendar/kitchen-ceili-concert-contra-dance/",
-      "source": "Gunn Memorial",
-      "category": "music",
-      "geo": "1 Green Hill Rd, Washington Deport, 06794, CT"
-    },
-    {
-      "id": "recZikhNXMD9JRwJa",
-      "name": "Kitchen Céilí: Concert & Contra Dance",
-      "date": "2026-08-22",
-      "time": "4:00 PM",
-      "endTime": "5:30 PM",
-      "address": "1 Green Hill Rd, Washington Depot, CT",
-      "venue": "Judy Black Memorial Park and Gardens",
-      "url": "https://explorewashingtonct.com/events/kitchen-ceili-concert-contra-dance/",
-      "source": "Calendar",
-      "category": "music",
-      "geo": "1 Green Hill Rd, Washington Depot, CT"
-    },
-    {
-      "id": "recZEj4cYQOSB9JY8",
-      "name": "Live Music at Hopkins Vineyard",
-      "date": "2026-08-22",
-      "time": "2:00 PM",
-      "endTime": "5:00 PM",
-      "address": "25 Hopkins Road, New Preston Connecticut 06777",
-      "venue": "Hopkins Vineyard",
-      "url": "https://explorewashingtonct.com/events/live-music-at-hopkins-vineyard-2026/",
-      "source": "Calendar",
-      "category": "music",
-      "geo": "25 Hopkins Road, New Preston Connecticut 06777"
-    },
-    {
-      "id": "rec3yh9zEI5tRaZgh",
-      "name": "Live Music at the Vineyard",
-      "date": "2026-08-22",
-      "time": "2:00 PM",
-      "endTime": "5:00 PM",
-      "address": "25 Hopkins Road, Warren, CT 06777",
-      "venue": "Hopkins Vineyard",
-      "url": "https://www.hopkinsvineyard.com/event/live-music-at-the-vineyard-34/",
-      "source": "Hopkins VInyard",
-      "category": "music",
-      "geo": "25 Hopkins Road, Warren, CT 06777"
-    },
-    {
-      "id": "recSsAq2wnZEYocr9",
-      "name": "Millerton Farmer's Market",
-      "date": "2026-08-22",
-      "time": "10:00 AM",
-      "endTime": "",
-      "address": "",
-      "venue": "Millerton Methodist Church",
-      "url": "https://www.visitmillertonny.com/event-details-registration/millerton-farmers-market-2026-08-22-10-00",
-      "source": "Millerton",
-      "category": "market",
-      "geo": "Millerton Methodist Church, CT"
-    },
-    {
-      "id": "recvjoxhwBOFTOSNe",
-      "name": "Music Mountain: Silent Film & Live Music — The General",
-      "date": "2026-08-22",
-      "time": "7:00 PM",
-      "endTime": "",
-      "address": "Gordon Hall, Music Mountain, Falls Village, CT",
-      "venue": "Gordon Hall, Music Mountain",
-      "url": "",
-      "source": "",
-      "category": "music",
-      "geo": "Gordon Hall, Music Mountain, Falls Village, CT"
-    },
-    {
-      "id": "recGNmL2aS83U8Hjc",
-      "name": "Northwest Vocal Showcase 20th Anniversary",
-      "date": "2026-08-22",
-      "time": "7:00 PM",
-      "endTime": "",
-      "address": "",
-      "venue": "Oneglia Auditorium",
-      "url": "https://www.warnertheatre.org/events/northwest-vocal-showcase/",
-      "source": "Warner Theatre",
-      "category": "community",
-      "geo": "Oneglia Auditorium, CT"
-    },
-    {
-      "id": "recEgY6Khe8JZ4laF",
-      "name": "Saturday Family Films: Little Amélie or the Character of Rain",
-      "date": "2026-08-22",
-      "time": "",
-      "endTime": "",
-      "address": "Bantam, CT",
-      "venue": "Bantam Cinema & Arts Center",
-      "url": "https://bantamcinema.org",
-      "source": "",
-      "category": "community",
-      "geo": "Bantam, CT"
-    },
-    {
-      "id": "recGqOLium7GnJgAD",
-      "name": "SILENT FILM & LIVE MUSIC WITH DONALD SOSIN & JOANNA SEATON",
-      "date": "2026-08-22",
-      "time": "7:00 PM",
-      "endTime": "",
-      "address": "Falls Village, CT",
-      "venue": "Gordon Hall, Music Mountain",
-      "url": "https://musicmountain.org/show-details/silent-film-live-music-with-donald-sosin-joanna-seaton",
-      "source": "Music Mountain",
-      "category": "music",
-      "geo": "Falls Village, CT"
-    },
-    {
-      "id": "recmFB4AXZbVNhD33",
-      "name": "Small Works by Eileen Mooney",
-      "date": "2026-08-22",
-      "time": "",
-      "endTime": "",
-      "address": "",
-      "venue": "Gunn Memorial Library",
-      "url": "https://litchfieldmagazine.com/events/small-works-by-eileen-mooney/",
-      "source": "Litchfield Magazine",
-      "category": "community",
-      "geo": "Gunn Memorial Library, CT"
-    },
-    {
-      "id": "recpMzfc8cYU5vahm",
-      "name": "Super Summer Fun: A Family Camp Experience",
-      "date": "2026-08-22",
-      "time": "1:00 PM",
-      "endTime": "4:00 PM",
-      "address": "38 Curtis Rd, Washington, CT 06793",
-      "venue": "Institute for American Indian Studies",
-      "url": "https://explorewashingtonct.com/our-events/community-calendar/",
-      "source": "Calendar",
-      "category": "community",
-      "geo": "38 Curtis Rd, Washington, CT 06793"
-    },
-    {
-      "id": "reczLsoDgamCbdDZb",
-      "name": "Tour with Kenyon Clark",
-      "date": "2026-08-22",
-      "time": "1:00 PM",
-      "endTime": "2:00 PM",
-      "address": "5 Wykeham Road, Washington, CT 06793",
-      "venue": "Gunn Museum",
-      "url": "https://gunnlibrary.org/calendar/tour-with-kenyon-clark-4-2-2-2-2-2/2026-08-22/",
-      "source": "Gunn Memorial",
-      "category": "community",
-      "geo": "5 Wykeham Road, Washington, CT 06793"
-    },
-    {
-      "id": "recT4UxkbZuQxgGgm",
-      "name": "Washington Farmers Market",
-      "date": "2026-08-22",
-      "time": "9:30 AM",
-      "endTime": "12:30 PM",
-      "address": "1 Green Hill Rd, Washington Depot, CT",
-      "venue": "Judy Black Memorial Park and Gardens",
-      "url": "https://explorewashingtonct.com/events/washington-farmers-market/",
-      "source": "Calendar",
-      "category": "market",
-      "geo": "1 Green Hill Rd, Washington Depot, CT"
-    },
-    {
-      "id": "recvOVGbQsg6pgCaD",
-      "name": "Weekend Food Trucks at Millbrook Winery",
-      "date": "2026-08-22",
-      "time": "12:00 PM",
-      "endTime": "",
-      "address": "",
-      "venue": "Millbrook Vineyards & Winery",
-      "url": "https://www.visitmillertonny.com/event-details-registration/weekend-food-trucks-at-millbrook-winery-2026-08-22-12-00",
-      "source": "Millerton",
-      "category": "community",
-      "geo": "Millbrook Vineyards & Winery, CT"
-    },
-    {
-      "id": "recRuQ9Muo2LDSkS3",
-      "name": "West Cornwall Farm Market – Wish House",
-      "date": "2026-08-22",
-      "time": "10:00 AM",
-      "endTime": "1:00 PM",
-      "address": "413 Sharon Goshen Turnpike, West Cornwall, CT 06796",
-      "venue": "The Wish House",
-      "url": "https://cornwallct.org/event/west-cornwall-farm-market-wish-house-2026/2026-08-22/",
-      "source": "Calender",
-      "category": "market",
-      "geo": "413 Sharon Goshen Turnpike, West Cornwall, CT 06796"
-    },
-    {
-      "id": "recByNcEaZCvwozB4",
-      "name": "Windborne",
-      "date": "2026-08-22",
-      "time": "",
-      "endTime": "",
-      "address": "",
-      "venue": "Stissing Center for Arts and Culture",
-      "url": "https://www.visitmillertonny.com/event-details-registration/windborne",
-      "source": "Millerton",
-      "category": "community",
-      "geo": "Stissing Center for Arts and Culture, CT"
-    },
-    {
-      "id": "recR9IseEcRHcVtew",
-      "name": "Goat Yoga",
-      "date": "2026-08-23",
-      "time": "6:00 PM",
-      "endTime": "",
-      "address": "5 Church Hill Rd, Woodbury, CT",
-      "venue": "North Barn",
-      "url": "https://app.etapestry.com/cart/FlandersNatureCenter/default/category.php?ref=405.0.200906843",
-      "source": "Flanders Nature Center & Land Trust",
-      "category": "community",
-      "geo": "5 Church Hill Rd, Woodbury, CT"
-    },
-    {
-      "id": "recLaU42rC1eVzFMI",
-      "name": "Lysander Piano Trio",
-      "date": "2026-08-23",
-      "time": "3:00 PM",
-      "endTime": "",
-      "address": "Falls Village, CT",
-      "venue": "Gordon Hall, Music Mountain",
-      "url": "https://musicmountain.org/show-details/lysander-piano-trio-1774878188",
-      "source": "Music Mountain",
-      "category": "music",
-      "geo": "Falls Village, CT"
-    },
-    {
-      "id": "recwnDLp7YpZvTTWs",
-      "name": "Music Mountain Talk: Schoenberg’s World",
-      "date": "2026-08-23",
-      "time": "2:00 PM",
-      "endTime": "",
-      "address": "Gordon Hall, Music Mountain, Falls Village, CT",
-      "venue": "Gordon Hall, Music Mountain",
-      "url": "",
-      "source": "",
-      "category": "music",
-      "geo": "Gordon Hall, Music Mountain, Falls Village, CT"
-    },
-    {
-      "id": "recneJuDF2HKkGKte",
-      "name": "Music Mountain: Lysander Piano Trio",
-      "date": "2026-08-23",
-      "time": "3:00 PM",
-      "endTime": "",
-      "address": "Gordon Hall, Music Mountain, Falls Village, CT",
-      "venue": "Gordon Hall, Music Mountain",
-      "url": "",
-      "source": "",
-      "category": "music",
-      "geo": "Gordon Hall, Music Mountain, Falls Village, CT"
-    },
-    {
-      "id": "reck1HlMA5RNe3chq",
-      "name": "Sunday Market at Wassaic Commons",
-      "date": "2026-08-23",
-      "time": "10:00 AM–2:00 PM",
-      "endTime": "",
-      "address": "3 Main Street, Wassaic, NY 12592",
-      "venue": "Wassaic Commons",
-      "url": "https://www.wassaiccommons.com/",
-      "source": "",
-      "category": "market",
-      "geo": "3 Main Street, Wassaic, NY 12592"
-    },
-    {
-      "id": "recocLAS2tQlUfUPf",
-      "name": "Wassaic Commons Farmers Market",
-      "date": "2026-08-23",
-      "time": "10:00 AM",
-      "endTime": "2:00 PM",
-      "address": "3 Main Street, Wassaic, NY 12592",
-      "venue": "Wassaic Commons Farmers Market",
-      "url": "https://www.instagram.com/p/DZf9J2oKlOc/",
-      "source": "Wassaic Commons",
-      "category": "market",
-      "geo": "3 Main Street, Wassaic, NY 12592"
-    },
-    {
-      "id": "recsoLnpj3Qm3Mr1a",
-      "name": "“Bridges Across the Housatonic” Gallery Open Hours",
-      "date": "2026-08-24",
-      "time": "3:00 PM",
-      "endTime": "5:00 PM",
-      "address": "7 Railroad Square, West Cornwall, Connecticut 06796",
-      "venue": "Cornwall Conservation Trust",
-      "url": "https://cornwallct.org/event/bridges-across-the-housatonic-gallery-open-hours/2026-08-24/",
-      "source": "Calender",
-      "category": "art",
-      "geo": "7 Railroad Square, West Cornwall, Connecticut 06796"
-    },
-    {
-      "id": "recKc6sOz0AD6ca8z",
-      "name": "Dutchess County Fair",
-      "date": "2026-08-25",
-      "time": "10:00 AM",
-      "endTime": "",
-      "address": "",
-      "venue": "Dutchess County Fairgrounds",
-      "url": "https://www.visitmillertonny.com/event-details-registration/dutchess-county-fair-2026-08-25-10-00",
-      "source": "Millerton",
-      "category": "community",
-      "geo": "Dutchess County Fairgrounds, CT"
-    },
-    {
-      "id": "reckJqaqHYqDxLjhb",
-      "name": "Movie Trivia Night",
-      "date": "2026-08-25",
-      "time": "7:00 PM",
-      "endTime": "",
-      "address": "",
-      "venue": "The Moviehouse",
-      "url": "https://www.visitmillertonny.com/event-details-registration/movie-trivia-night-2026-08-25-19-00",
-      "source": "Millerton",
-      "category": "art",
-      "geo": "The Moviehouse, CT"
-    },
-    {
-      "id": "recwpL5unFtzqGzV0",
-      "name": "Jake Shimabukuro",
-      "date": "2026-08-26",
-      "time": "8:00 PM",
-      "endTime": "",
-      "address": "Norfolk, CT",
-      "venue": "Infinity Music Hall Norfolk",
-      "url": "https://www.infinityhall.com/Events/jake-shimabukuro-8-26-2026/",
-      "source": "Infinity Hall",
-      "category": "community",
-      "geo": "Norfolk, CT"
     },
     {
       "id": "recku2P1xHuLQ2HrG",
@@ -795,6 +54,58 @@
       "source": "Library",
       "category": "community",
       "geo": "Library Gallery Space, CT"
+    },
+    {
+      "id": "rec1AwZgLfmbuzOgU",
+      "name": "RIP DUNES",
+      "date": "2026-08-27",
+      "time": "6:00 PM",
+      "endTime": "",
+      "address": "Cornwall, Connecticut",
+      "venue": "Cornwall Market",
+      "url": "https://www.instagram.com/p/DbevsnAkaUB/",
+      "source": "Cornwall Market",
+      "category": "community",
+      "geo": "Cornwall, Connecticut"
+    },
+    {
+      "id": "recz1Y6BOA1s5ukCE",
+      "name": "Weed & Wine Thursdays at Judea Garden",
+      "date": "2026-08-27",
+      "time": "5:30 PM",
+      "endTime": "7:00 PM",
+      "address": "124 Christian Street, New Preston, CT 06777",
+      "venue": "Judea Garden",
+      "url": "https://explorewashingtonct.com/events/weed-wine-thursdays-at-judea-garden/",
+      "source": "Calendar",
+      "category": "outdoors",
+      "geo": "124 Christian Street, New Preston, CT 06777"
+    },
+    {
+      "id": "recMbNlhmTFl5502m",
+      "name": "Weed & Wine Thursdays at Judea Garden, Weekly",
+      "date": "2026-08-27",
+      "time": "5:30 PM",
+      "endTime": "7:00 PM",
+      "address": "124 Christian Street, New Preston, CT 06777",
+      "venue": "Judea Garden",
+      "url": "https://steeprockassoc.org/event/weed-wine-thursdays-2026-2/2026-08-27/",
+      "source": "Steep Rock Association",
+      "category": "outdoors",
+      "geo": "124 Christian Street, New Preston, CT 06777"
+    },
+    {
+      "id": "rech30yOuS2MDQbQL",
+      "name": "Wooded Streams Fall Lager Release - Kent Location",
+      "date": "2026-08-27",
+      "time": "2:00 PM",
+      "endTime": "7:00 PM",
+      "address": "Kent, Connecticut",
+      "venue": "Kent Falls Brewing",
+      "url": "https://www.instagram.com/p/Db3RdeVue4f/",
+      "source": "Kent Brewing",
+      "category": "community",
+      "geo": "Kent, Connecticut"
     },
     {
       "id": "recX6zAa4yNklnte0",
@@ -862,6 +173,19 @@
       "geo": "Kent Welcome Center, 3 Railroad St, Kent, CT"
     },
     {
+      "id": "recd87aytvoP0DVNq",
+      "name": "Piano Series – Paula Bradley",
+      "date": "2026-08-28",
+      "time": "5:00 PM",
+      "endTime": "7:00 PM",
+      "address": "",
+      "venue": "AMP",
+      "url": "https://litchfieldmagazine.com/events/piano-series-paula-bradley/",
+      "source": "Litchfield Magazine",
+      "category": "community",
+      "geo": "AMP, CT"
+    },
+    {
       "id": "reczUjzMFp9eo2Mzl",
       "name": "The Rakes at the Woodbury Brewing Company",
       "date": "2026-08-28",
@@ -873,6 +197,45 @@
       "source": "Woodbury Brewing",
       "category": "community",
       "geo": "Main Street South, Woodbury, CT"
+    },
+    {
+      "id": "recBVY8E2sW7lziPI",
+      "name": "Washington Friends of Music Summer Festival",
+      "date": "2026-08-28",
+      "time": "5:30 PM",
+      "endTime": "7:00 PM",
+      "address": "6 Kirby Road, Washington CT 06793",
+      "venue": "First Congregational Church",
+      "url": "https://explorewashingtonct.com/events/washington-friends-of-music-summer-festival-2026/",
+      "source": "Calendar",
+      "category": "music",
+      "geo": "6 Kirby Road, Washington CT 06793"
+    },
+    {
+      "id": "rec5eH3Sd7P5T8ATI",
+      "name": "Wine Tastings at Spring Hill Vineyards",
+      "date": "2026-08-28",
+      "time": "12:00 PM",
+      "endTime": "6:00 PM",
+      "address": "292 Bee Brook Rd, New Preston, CT 06777",
+      "venue": "Spring Hill Vineyards",
+      "url": "https://explorewashingtonct.com/events/wine-tastings-at-spring-hill-vineyards-2026/",
+      "source": "Calendar",
+      "category": "community",
+      "geo": "292 Bee Brook Rd, New Preston, CT 06777"
+    },
+    {
+      "id": "recG5m5wqSsPeAdJz",
+      "name": "Wooded Streams and New Beer Release - Kent",
+      "date": "2026-08-28",
+      "time": "2:00 PM",
+      "endTime": "7:00 PM",
+      "address": "Kent, Connecticut",
+      "venue": "Kent Falls Brewing",
+      "url": "https://www.instagram.com/p/DcBt177OlTF/",
+      "source": "Kent Brewing",
+      "category": "community",
+      "geo": "Kent, Connecticut"
     },
     {
       "id": "recqEXVHWFg084bDs",
@@ -901,8 +264,21 @@
       "geo": "24-26 Pine Street, Cornwall, CT 06753"
     },
     {
+      "id": "recSsnU3chVaDH5ah",
+      "name": "Barn Talk: Designing Fall Containers: Bold Texture and Seasonal Color",
+      "date": "2026-08-29",
+      "time": "10:00 AM",
+      "endTime": "11:30 AM",
+      "address": "300 Nettleton Hollow Road, Washington CT, 06793",
+      "venue": "Hollister House Garden",
+      "url": "https://explorewashingtonct.com/events/barn-talk-designing-fall-containers-bold-texture-and-seasonal-color/",
+      "source": "Calendar",
+      "category": "talk",
+      "geo": "300 Nettleton Hollow Road, Washington CT, 06793"
+    },
+    {
       "id": "rec0p0fIOhooRfzcV",
-      "name": "BILL CHARLAP TRIO",
+      "name": "Bill Charlap Trio",
       "date": "2026-08-29",
       "time": "7:00 PM",
       "endTime": "",
@@ -979,6 +355,32 @@
       "geo": "12 Rattlesnake Road, West Cornwall, CT 06796"
     },
     {
+      "id": "receYnmur5QJehPuy",
+      "name": "Jane Coats Eckert & Jonas Stirner to Speak About Robert Rauschenberg",
+      "date": "2026-08-29",
+      "time": "5:00 PM",
+      "endTime": "6:00 PM",
+      "address": "4 Bryan Memorial Plaza, Washington Depot, CT 06794",
+      "venue": "Washington Art Association & Gallery",
+      "url": "https://explorewashingtonct.com/our-events/community-calendar/",
+      "source": "Calendar",
+      "category": "community",
+      "geo": "4 Bryan Memorial Plaza, Washington Depot, CT 06794"
+    },
+    {
+      "id": "recQ9hCAAPV63eNBK",
+      "name": "Kurt Andersen – The Breakup",
+      "date": "2026-08-29",
+      "time": "5:00 PM",
+      "endTime": "",
+      "address": "",
+      "venue": "Cornwall Library",
+      "url": "https://litchfieldmagazine.com/events/kurt-andersen-the-breakup/",
+      "source": "Litchfield Magazine",
+      "category": "community",
+      "geo": "Cornwall Library, CT"
+    },
+    {
       "id": "recTJtrCs24LUEAHW",
       "name": "Leora Armstrong Art Show Opening Reception",
       "date": "2026-08-29",
@@ -990,6 +392,32 @@
       "source": "Calendar",
       "category": "art",
       "geo": "1 Green Hill Rd, Washington Depot, CT"
+    },
+    {
+      "id": "recZEj4cYQOSB9JY8",
+      "name": "Live Music at Hopkins Vineyard",
+      "date": "2026-08-29",
+      "time": "2:00 PM",
+      "endTime": "5:00 PM",
+      "address": "25 Hopkins Road, New Preston Connecticut 06777",
+      "venue": "Hopkins Vineyard",
+      "url": "https://explorewashingtonct.com/events/live-music-at-hopkins-vineyard-2026/",
+      "source": "Calendar",
+      "category": "music",
+      "geo": "25 Hopkins Road, New Preston Connecticut 06777"
+    },
+    {
+      "id": "recisrr0vc4OtgZhW",
+      "name": "Millerton Farmer's Market",
+      "date": "2026-08-29",
+      "time": "10:00 AM",
+      "endTime": "",
+      "address": "",
+      "venue": "Millerton Methodist Church",
+      "url": "https://www.visitmillertonny.com/event-details-registration/millerton-farmers-market-2026-08-29-10-00",
+      "source": "Millerton",
+      "category": "market",
+      "geo": "Millerton Methodist Church, CT"
     },
     {
       "id": "recFxGpF10iRMZXN4",
@@ -1057,6 +485,32 @@
       "geo": "5 Wykeham Road, Washington, CT 06793"
     },
     {
+      "id": "recT4UxkbZuQxgGgm",
+      "name": "Washington Farmers Market",
+      "date": "2026-08-29",
+      "time": "9:30 AM",
+      "endTime": "12:30 PM",
+      "address": "1 Green Hill Rd, Washington Depot, CT",
+      "venue": "Judy Black Memorial Park and Gardens",
+      "url": "https://explorewashingtonct.com/events/washington-farmers-market/",
+      "source": "Calendar",
+      "category": "market",
+      "geo": "1 Green Hill Rd, Washington Depot, CT"
+    },
+    {
+      "id": "reckWhItHx0ti9pFO",
+      "name": "Weekend Food Trucks at Millbrook Winery",
+      "date": "2026-08-29",
+      "time": "12:00 PM",
+      "endTime": "",
+      "address": "",
+      "venue": "Millbrook Vineyards & Winery",
+      "url": "https://www.visitmillertonny.com/event-details-registration/weekend-food-trucks-at-millbrook-winery-2026-08-29-12-00",
+      "source": "Millerton",
+      "category": "community",
+      "geo": "Millbrook Vineyards & Winery, CT"
+    },
+    {
       "id": "recAko90I7PRe5Kho",
       "name": "West Cornwall Farm Market – Wish House",
       "date": "2026-08-29",
@@ -1109,6 +563,19 @@
       "geo": "http://flandersnaturecenter.org/, CT"
     },
     {
+      "id": "recYJ29GlbmgWarky",
+      "name": "Flanders Summer Soirée",
+      "date": "2026-08-30",
+      "time": "",
+      "endTime": "",
+      "address": "",
+      "venue": "Flanders",
+      "url": "https://litchfieldmagazine.com/events/flanders-summer-soiree-2/",
+      "source": "Litchfield Magazine",
+      "category": "community",
+      "geo": "Flanders, CT"
+    },
+    {
       "id": "reck7YynbM0mnbQne",
       "name": "Flanders Summer Soirée – Gather. Celebrate. Support Flanders",
       "date": "2026-08-30",
@@ -1120,6 +587,19 @@
       "source": "Flanders Nature Center & Land Trust",
       "category": "community",
       "geo": "5 Church Hill Rd, Woodbury, CT"
+    },
+    {
+      "id": "recHX0O8D8ibXF0In",
+      "name": "Harry Moses Talk & Book Signing",
+      "date": "2026-08-30",
+      "time": "",
+      "endTime": "",
+      "address": "",
+      "venue": "The Hickory Stick Bookshop",
+      "url": "https://litchfieldmagazine.com/events/harry-moses-talk-book-signing/",
+      "source": "Litchfield Magazine",
+      "category": "talk",
+      "geo": "The Hickory Stick Bookshop, CT"
     },
     {
       "id": "recIjR4YPvZDovzE0",
@@ -1148,6 +628,19 @@
       "geo": "Gordon Hall, Music Mountain, Falls Village, CT"
     },
     {
+      "id": "recRZzoXRA3g0JqZa",
+      "name": "Yoga at Ripley Waterfowl Conservancy with Charym",
+      "date": "2026-08-30",
+      "time": "9:00 AM",
+      "endTime": "",
+      "address": "55 Duck Pond Road, Litchfield CT 06759",
+      "venue": "Ripley Waterfowl Conservancy",
+      "url": "https://beldenhouse.com/culture/yoga-at-ripley-with-charym-2026/",
+      "source": "Belden House",
+      "category": "community",
+      "geo": "55 Duck Pond Road, Litchfield CT 06759"
+    },
+    {
       "id": "rec0xHAd3lrvMXPAV",
       "name": "“Bridges Across the Housatonic” Gallery Open Hours",
       "date": "2026-08-31",
@@ -1159,6 +652,19 @@
       "source": "Calender",
       "category": "art",
       "geo": "7 Railroad Square, West Cornwall, Connecticut 06796"
+    },
+    {
+      "id": "recoySMtDCprrYbEM",
+      "name": "\"Field Notes\" Art Show",
+      "date": "2026-09-02",
+      "time": "",
+      "endTime": "",
+      "address": "",
+      "venue": "Tremaine Gallery at Hotchkiss",
+      "url": "https://litchfieldmagazine.com/events/field-notes-art-show/",
+      "source": "Litchfield Magazine",
+      "category": "art",
+      "geo": "Tremaine Gallery at Hotchkiss, CT"
     },
     {
       "id": "rec3nmQYRE0I9D3fd",
@@ -1198,6 +704,19 @@
       "source": "Library",
       "category": "music",
       "geo": "Library Gallery Space, CT"
+    },
+    {
+      "id": "recYedSWZHjW9IgzE",
+      "name": "New England Modernism with Jake Gorst",
+      "date": "2026-09-02",
+      "time": "6:30 PM",
+      "endTime": "7:30 PM",
+      "address": "160 South Street, Litchfield, CT 06759",
+      "venue": "Oliver Wolcott Library",
+      "url": "https://beldenhouse.com/culture/new-england-modernism-with-jake-gorst-september-2026/",
+      "source": "Belden House",
+      "category": "community",
+      "geo": "160 South Street, Litchfield, CT 06759"
     },
     {
       "id": "rechnv8Omnb41M3UR",
@@ -1265,6 +784,19 @@
       "geo": "Litchfield, Connecticut"
     },
     {
+      "id": "recTsMLDuqRvYEV3f",
+      "name": "Gilmore Girl Event",
+      "date": "2026-09-04",
+      "time": "11:00AM",
+      "endTime": "6:00PM",
+      "address": "12 Main Street, New Milford, CT",
+      "venue": "Village Center for the Arts",
+      "url": "https://www.villagecenterarts.org/eventscalendar",
+      "source": "",
+      "category": "community",
+      "geo": "12 Main Street, New Milford, CT"
+    },
+    {
       "id": "recOO2dqPrTOXCwSw",
       "name": "Historic Festival 44 at Lime Rock Park",
       "date": "2026-09-04",
@@ -1328,6 +860,19 @@
       "source": "Music Mountain",
       "category": "music",
       "geo": "Falls Village, CT"
+    },
+    {
+      "id": "recSfOPwLg3nvDhWI",
+      "name": "Clay Play",
+      "date": "2026-09-05",
+      "time": "1:00PM",
+      "endTime": "3:00PM",
+      "address": "12 Main Street, New Milford, CT",
+      "venue": "Village Center for the Arts",
+      "url": "https://www.villagecenterarts.org/eventscalendar",
+      "source": "",
+      "category": "art",
+      "geo": "12 Main Street, New Milford, CT"
     },
     {
       "id": "recRhLRJNfGSmyLRp",
@@ -1421,17 +966,30 @@
       "geo": "Cornwall Garden Club, CT"
     },
     {
+      "id": "recVJUMrRkjpysJgU",
+      "name": "The Hunt II",
+      "date": "2026-09-05",
+      "time": "11:00 AM",
+      "endTime": "6:00 PM",
+      "address": "25 Hopkins Road, Warren, CT 06777",
+      "venue": "Hopkins Vineyard",
+      "url": "https://www.hopkinsvineyard.com/event/the-hunt-ii/",
+      "source": "Hopkins VInyard",
+      "category": "community",
+      "geo": "25 Hopkins Road, Warren, CT 06777"
+    },
+    {
       "id": "recqg9iltlxPYDgJP",
       "name": "The Voice of Art's Fine Art Festival 2026",
       "date": "2026-09-05",
       "time": "10:00 AM",
       "endTime": "",
-      "address": "",
+      "address": "Sharon CT and Millerton NY",
       "venue": "Main Street",
       "url": "https://www.visitmillertonny.com/event-details-registration/the-voice-of-arts-fine-art-festival-2026-2026-09-05-10-00",
       "source": "Millerton",
       "category": "art",
-      "geo": "Main Street, CT"
+      "geo": "Sharon CT and Millerton NY"
     },
     {
       "id": "recdn7g7CdArmcfza",
@@ -1460,6 +1018,19 @@
       "geo": "413 Sharon Goshen Turnpike, West Cornwall, CT 06796"
     },
     {
+      "id": "recan5baPN6xPvfzz",
+      "name": "Free Bluegrass Concert",
+      "date": "2026-09-06",
+      "time": "5:30 PM",
+      "endTime": "6:45 PM",
+      "address": "1 Green Hill Rd, Washington Depot, CT",
+      "venue": "Judy Black Memorial Park and Gardens",
+      "url": "https://explorewashingtonct.com/events/free-bluegrass-concert/",
+      "source": "Calendar",
+      "category": "music",
+      "geo": "1 Green Hill Rd, Washington Depot, CT"
+    },
+    {
       "id": "recuC95JIXVFXrlDb",
       "name": "Music Mountain: Penderecki String Quartet & Victoria Schwartzman",
       "date": "2026-09-06",
@@ -1484,6 +1055,19 @@
       "source": "Music Mountain",
       "category": "music",
       "geo": "Falls Village, CT"
+    },
+    {
+      "id": "recAVahoPjdMLxcAT",
+      "name": "Live Music at the Vineyard",
+      "date": "2026-09-07",
+      "time": "1:00 PM",
+      "endTime": "4:00 PM",
+      "address": "25 Hopkins Road, Warren, CT 06777",
+      "venue": "Hopkins Vineyard",
+      "url": "https://www.hopkinsvineyard.com/event/live-music-at-the-vineyard-8/",
+      "source": "Hopkins VInyard",
+      "category": "music",
+      "geo": "25 Hopkins Road, Warren, CT 06777"
     },
     {
       "id": "reccDFAzPv3UuhvgN",
@@ -1564,6 +1148,19 @@
       "geo": "Litchfield, Connecticut"
     },
     {
+      "id": "reczmZRX8ykqM4oP9",
+      "name": "Live, Learn, & Lunch: Katharine Hepburn: From Hartford to Hollywood",
+      "date": "2026-09-09",
+      "time": "12:00 PM",
+      "endTime": "1:30 PM",
+      "address": "Litchfield, Connecticut",
+      "venue": "Litchfield Community Center",
+      "url": "https://www.instagram.com/p/DceOyeOCDbq/",
+      "source": "Litchfield Community Center",
+      "category": "community",
+      "geo": "Litchfield, Connecticut"
+    },
+    {
       "id": "recgCbRGiNodqSRBz",
       "name": "Make a Whimsical Mushroom Jar",
       "date": "2026-09-09",
@@ -1585,6 +1182,19 @@
       "address": "Litchfield, Connecticut",
       "venue": "Litchfield Community Center",
       "url": "https://www.instagram.com/p/DbWdHwnAee_/",
+      "source": "Litchfield Community Center",
+      "category": "art",
+      "geo": "Litchfield, Connecticut"
+    },
+    {
+      "id": "recQRAi4IKIOzNR6x",
+      "name": "Pixel Perfect: Chuck Close & Photorealist Painting",
+      "date": "2026-09-09",
+      "time": "3:00 PM",
+      "endTime": "",
+      "address": "Litchfield, Connecticut",
+      "venue": "Litchfield Community Center",
+      "url": "https://www.instagram.com/p/DcXCu0ngU9h/",
       "source": "Litchfield Community Center",
       "category": "art",
       "geo": "Litchfield, Connecticut"
@@ -1640,6 +1250,19 @@
       "source": "Library",
       "category": "community",
       "geo": "Library Gallery Space, CT"
+    },
+    {
+      "id": "recTpDpBLgx7VahbG",
+      "name": "Weed & Wine Thursdays at Judea Garden, Weekly",
+      "date": "2026-09-10",
+      "time": "5:30 PM",
+      "endTime": "7:00 PM",
+      "address": "124 Christian Street, New Preston, CT 06777",
+      "venue": "Judea Garden",
+      "url": "https://steeprockassoc.org/event/weed-wine-thursdays-2026-2/2026-09-10/",
+      "source": "Steep Rock Association",
+      "category": "outdoors",
+      "geo": "124 Christian Street, New Preston, CT 06777"
     },
     {
       "id": "rectY2U0aLVBw5g6B",
@@ -1785,6 +1408,19 @@
       "geo": "5 Wykeham Road, Washington, CT 06793"
     },
     {
+      "id": "recRLEDwsr1R1DqFb",
+      "name": "Visit the Green Tent at the Cornwall Ag fair",
+      "date": "2026-09-12",
+      "time": "10:00 AM",
+      "endTime": "4:00 PM",
+      "address": "25 Pine Street, Cornwall, CT 06753",
+      "venue": "Cornwall Village Green",
+      "url": "https://cornwallconservationtrust.org/event/visit-the-green-tent-at-the-cornwall-ag-fair-2/",
+      "source": "Cornwall Conservation Trust",
+      "category": "community",
+      "geo": "25 Pine Street, Cornwall, CT 06753"
+    },
+    {
       "id": "rec5BXoInODUC3psf",
       "name": "West Cornwall Farm Market – Wish House",
       "date": "2026-09-12",
@@ -1798,8 +1434,21 @@
       "geo": "413 Sharon Goshen Turnpike, West Cornwall, CT 06796"
     },
     {
+      "id": "rec43r0YpIi9BUnmU",
+      "name": "Women, Wine, & Wheel",
+      "date": "2026-09-12",
+      "time": "6:30PM",
+      "endTime": "9:30PM",
+      "address": "12 Main Street, New Milford, CT",
+      "venue": "Village Center for the Arts",
+      "url": "https://www.villagecenterarts.org/eventscalendar",
+      "source": "",
+      "category": "community",
+      "geo": "12 Main Street, New Milford, CT"
+    },
+    {
       "id": "recnDqrvOHlmOzTaH",
-      "name": "97th SEASON FINALE BENEFIT CONCERT - Juilliard String Quartet",
+      "name": "97th Season Finale Benefit Concert - Juilliard String Quartet",
       "date": "2026-09-13",
       "time": "3:00 PM",
       "endTime": "",
@@ -1809,6 +1458,19 @@
       "source": "Music Mountain",
       "category": "music",
       "geo": "Falls Village, CT"
+    },
+    {
+      "id": "recba5dNFfvgEmyuH",
+      "name": "Book Signing",
+      "date": "2026-09-13",
+      "time": "1:00 PM",
+      "endTime": "4:00 PM",
+      "address": "25 Hopkins Road, Warren, CT 06777",
+      "venue": "Hopkins Vineyard",
+      "url": "https://www.hopkinsvineyard.com/event/book-signing/",
+      "source": "Hopkins VInyard",
+      "category": "talk",
+      "geo": "25 Hopkins Road, Warren, CT 06777"
     },
     {
       "id": "recCibqt4amwPAx8E",
@@ -1928,6 +1590,19 @@
       "geo": "Library Gallery Space, CT"
     },
     {
+      "id": "recbmRwqvmoRxKbo7",
+      "name": "September Family Dinner",
+      "date": "2026-09-16",
+      "time": "5:00 PM",
+      "endTime": "7:00 PM",
+      "address": "Litchfield, Connecticut",
+      "venue": "Litchfield Community Center",
+      "url": "https://www.instagram.com/p/DcV3MIplPLR/",
+      "source": "Litchfield Community Center",
+      "category": "community",
+      "geo": "Litchfield, Connecticut"
+    },
+    {
       "id": "recpJQopiHuRv9jUN",
       "name": "When An Idea Becomes A Law: with CT State Representative Karen Reddington-Hughes",
       "date": "2026-09-16",
@@ -1947,11 +1622,24 @@
       "time": "",
       "endTime": "",
       "address": "",
-      "venue": "Wisdom House",
+      "venue": "Wisdom House Retreat and Conference Center",
       "url": "https://www.wisdomhouse.org/program-calendar/gallery-maida",
       "source": "Wisdom House",
       "category": "art",
-      "geo": "Wisdom House, CT"
+      "geo": "Wisdom House Retreat and Conference Center, CT"
+    },
+    {
+      "id": "recyUQbLwZ3qdhYwy",
+      "name": "Weed & Wine Thursdays at Judea Garden, Weekly",
+      "date": "2026-09-17",
+      "time": "5:30 PM",
+      "endTime": "7:00 PM",
+      "address": "124 Christian Street, New Preston, CT 06777",
+      "venue": "Judea Garden",
+      "url": "https://steeprockassoc.org/event/weed-wine-thursdays-2026-2/2026-09-17/",
+      "source": "Steep Rock Association",
+      "category": "outdoors",
+      "geo": "124 Christian Street, New Preston, CT 06777"
     },
     {
       "id": "rec3tFkY4pgyKN9BV",
@@ -1965,6 +1653,19 @@
       "source": "",
       "category": "market",
       "geo": "273 Bantam Lake Rd, CT"
+    },
+    {
+      "id": "recTyfpuysAv6marR",
+      "name": "House of Hamill",
+      "date": "2026-09-18",
+      "time": "",
+      "endTime": "",
+      "address": "",
+      "venue": "Stissing Center for Arts and Culture",
+      "url": "https://www.visitmillertonny.com/event-details-registration/house-of-hamill",
+      "source": "Millerton",
+      "category": "community",
+      "geo": "Stissing Center for Arts and Culture, CT"
     },
     {
       "id": "recaBjc2x1hvX0EEH",
@@ -2020,7 +1721,7 @@
     },
     {
       "id": "recVlizmQut7vU7E6",
-      "name": "a Studio Affair",
+      "name": "A Studio Affair",
       "date": "2026-09-19",
       "time": "6:30 PM",
       "endTime": "10:00 PM",
@@ -2084,12 +1785,25 @@
       "geo": "12 Rattlesnake Road, West Cornwall, CT 06796"
     },
     {
+      "id": "recw4v0rczi2a2JSI",
+      "name": "Live Music at the Vineyard",
+      "date": "2026-09-19",
+      "time": "2:00 PM",
+      "endTime": "5:00 PM",
+      "address": "25 Hopkins Road, Warren, CT 06777",
+      "venue": "Hopkins Vineyard",
+      "url": "https://www.hopkinsvineyard.com/event/live-music-at-the-vineyard-5/",
+      "source": "Hopkins VInyard",
+      "category": "music",
+      "geo": "25 Hopkins Road, Warren, CT 06777"
+    },
+    {
       "id": "recP4muK4YSeQXK6T",
       "name": "Manville Kettle Hike",
       "date": "2026-09-19",
       "time": "10:00 AM",
       "endTime": "",
-      "address": "School St and Judson Ave., Woodbury, CT",
+      "address": "School St and Judson Ave., Woodbury",
       "venue": "Manville Kettle",
       "url": "https://flandersnaturecenter.org/program-events/",
       "source": "Flanders Nature Center & Land Trust",
@@ -2188,6 +1902,19 @@
       "geo": "413 Sharon Goshen Turnpike, West Cornwall, CT 06796"
     },
     {
+      "id": "recNX4ecQkXx06NCe",
+      "name": "Live Music at the Vineyard",
+      "date": "2026-09-20",
+      "time": "2:00 PM",
+      "endTime": "5:00 PM",
+      "address": "25 Hopkins Road, Warren, CT 06777",
+      "venue": "Hopkins Vineyard",
+      "url": "https://www.hopkinsvineyard.com/event/live-music-at-the-vineyard-38/",
+      "source": "Hopkins VInyard",
+      "category": "music",
+      "geo": "25 Hopkins Road, Warren, CT 06777"
+    },
+    {
       "id": "reciWx5oPx7iP7K2G",
       "name": "Writers in the Wild Author Series: Sy Montgomery",
       "date": "2026-09-20",
@@ -2199,6 +1926,19 @@
       "source": "Litchfield Community Center",
       "category": "talk",
       "geo": "Litchfield, Connecticut"
+    },
+    {
+      "id": "recMwIwwlGuVSVh1m",
+      "name": "Writers in the Wild: Author Series",
+      "date": "2026-09-20",
+      "time": "3:00 PM",
+      "endTime": "5:00 PM",
+      "address": "421 Bantam Road, Litchfield CT",
+      "venue": "Litchfield Community Center",
+      "url": "https://www.ripleyconservancy.org/events",
+      "source": "",
+      "category": "talk",
+      "geo": "421 Bantam Road, Litchfield CT"
     },
     {
       "id": "recKHbIM8xIvEeX62",
@@ -2214,6 +1954,19 @@
       "geo": "397 Nettleton Hollow Rd, Washington, CT 06793"
     },
     {
+      "id": "reckc9FloJ8aLgk2E",
+      "name": "Adult Trip to the Big E",
+      "date": "2026-09-23",
+      "time": "9:30 AM",
+      "endTime": "4:30 PM",
+      "address": "Litchfield, Connecticut",
+      "venue": "Litchfield Community Center",
+      "url": "https://www.instagram.com/p/DceBEysDZC9/",
+      "source": "Litchfield Community Center",
+      "category": "community",
+      "geo": "Litchfield, Connecticut"
+    },
+    {
       "id": "recWaKnIQTplV3tRX",
       "name": "Fall Saunters: Hillside Farm, Wednesday, September 23, 2026",
       "date": "2026-09-23",
@@ -2227,6 +1980,19 @@
       "geo": "397 Nettleton Hollow Rd, Washington, CT 06793"
     },
     {
+      "id": "rec2etLoAxxP8KYM7",
+      "name": "Ten Best Reasons to Learn Your Ancestry & Ten Ways to Help You Do That",
+      "date": "2026-09-23",
+      "time": "6:30 PM",
+      "endTime": "7:30 PM",
+      "address": "",
+      "venue": "Library Gallery Space",
+      "url": "https://woodburylibraryct.libcal.com/event/17238072",
+      "source": "Library",
+      "category": "community",
+      "geo": "Library Gallery Space, CT"
+    },
+    {
       "id": "recfk99IxLgYXWOWQ",
       "name": "John Crist Live",
       "date": "2026-09-24",
@@ -2238,6 +2004,19 @@
       "source": "Warner Theatre",
       "category": "community",
       "geo": "Oneglia Auditorium, CT"
+    },
+    {
+      "id": "recGEZheeguurJ4EZ",
+      "name": "Medicare 2027: Major Changes, Eliminated Plans, and What You MUST Know",
+      "date": "2026-09-24",
+      "time": "6:00 PM",
+      "endTime": "7:00 PM",
+      "address": "",
+      "venue": "Library Gallery Space",
+      "url": "https://woodburylibraryct.libcal.com/event/17003092",
+      "source": "Library",
+      "category": "community",
+      "geo": "Library Gallery Space, CT"
     },
     {
       "id": "recysXQt683OvQjYf",
@@ -2318,6 +2097,19 @@
       "geo": "30 Pine St, Cornwall, CT 06753"
     },
     {
+      "id": "rec7mRfCZ969Vynel",
+      "name": "Art of Healing: Poetry as Recovery\" Poetry Reading",
+      "date": "2026-09-26",
+      "time": "10:30 AM",
+      "endTime": "12:00 PM",
+      "address": "",
+      "venue": "Library Gallery Space",
+      "url": "https://woodburylibraryct.libcal.com/event/17308783",
+      "source": "Library",
+      "category": "art",
+      "geo": "Library Gallery Space, CT"
+    },
+    {
       "id": "recwdG3317yRwj07E",
       "name": "Artist Reception: Kathy Bozzuti-Jones, “Holy in the Ordinary” – Souterrain Gallery",
       "date": "2026-09-26",
@@ -2342,6 +2134,19 @@
       "source": "Calender",
       "category": "market",
       "geo": "Pine Street, Cornwall, CT 06753"
+    },
+    {
+      "id": "rec2iXejmvm2mstx7",
+      "name": "Fundraiser: Harvest Sunset Celebration",
+      "date": "2026-09-26",
+      "time": "",
+      "endTime": "",
+      "address": "",
+      "venue": "Stissing Center for Arts and Culture",
+      "url": "https://www.visitmillertonny.com/event-details-registration/fundraiser-harvest-sunset-celebration",
+      "source": "Millerton",
+      "category": "community",
+      "geo": "Stissing Center for Arts and Culture, CT"
     },
     {
       "id": "recAXyvpmRF2ZZXjf",
@@ -2448,6 +2253,19 @@
       "geo": "3 Main Street, Wassaic, NY 12592"
     },
     {
+      "id": "recIvJ0lXU2eHuvfh",
+      "name": "The Litchfield Hills Highland Games",
+      "date": "2026-09-27",
+      "time": "",
+      "endTime": "",
+      "address": "",
+      "venue": "Lime Rock Park",
+      "url": "https://www.visitmillertonny.com/event-details-registration/the-litchfield-hills-highland-games",
+      "source": "Millerton",
+      "category": "community",
+      "geo": "Lime Rock Park, CT"
+    },
+    {
       "id": "recmovaRrgq1PwCbC",
       "name": "Literary Series with Mark Scarbrough: The American Literary Renaissance Reconsidered: Whitman and Hawthorne in Conversation with Douglass and Stoddard – Library",
       "date": "2026-09-29",
@@ -2467,11 +2285,11 @@
       "time": "",
       "endTime": "",
       "address": "",
-      "venue": "Wisdom House",
+      "venue": "Wisdom House Retreat and Conference Center",
       "url": "https://www.wisdomhouse.org/program-calendar/aging-well-2026",
       "source": "Wisdom House",
       "category": "community",
-      "geo": "Wisdom House, CT"
+      "geo": "Wisdom House Retreat and Conference Center, CT"
     },
     {
       "id": "recaizpjbxmvTDQEE",
@@ -2498,6 +2316,32 @@
       "source": "Infinity Hall",
       "category": "community",
       "geo": "Norfolk, CT"
+    },
+    {
+      "id": "recCRHFhGjk2RwJkN",
+      "name": "Weed & Wine Thursdays at Judea Garden, Weekly",
+      "date": "2026-10-01",
+      "time": "5:30 PM",
+      "endTime": "7:00 PM",
+      "address": "124 Christian Street, New Preston, CT 06777",
+      "venue": "Judea Garden",
+      "url": "https://steeprockassoc.org/event/weed-wine-thursdays-2026-2/2026-10-01/",
+      "source": "Steep Rock Association",
+      "category": "outdoors",
+      "geo": "124 Christian Street, New Preston, CT 06777"
+    },
+    {
+      "id": "recR9IseEcRHcVtew",
+      "name": "5th Annual Art Exhibition – Artist's Reception",
+      "date": "2026-10-02",
+      "time": "6:00 PM",
+      "endTime": "8:30 PM",
+      "address": "5 Church Hill Road, Woodbury",
+      "venue": "Van Vleck Gallery",
+      "url": "https://app.etapestry.com/cart/FlandersNatureCenter/default/category.php?ref=405.0.211021145",
+      "source": "Flanders Nature Center & Land Trust",
+      "category": "art",
+      "geo": "5 Church Hill Road, Woodbury, CT"
     },
     {
       "id": "recfVsmXpR16IRzQ6",
@@ -2539,6 +2383,19 @@
       "geo": "24-26 Pine Street, Cornwall, CT 06753"
     },
     {
+      "id": "recUAcCX7iRGxl8MN",
+      "name": "Haystack Book Festival",
+      "date": "2026-10-02",
+      "time": "6:00 PM",
+      "endTime": "",
+      "address": "Norfolk, CT",
+      "venue": "Infinity Music Hall Norfolk",
+      "url": "https://www.infinityhall.com/Events/haystack-book-festival-10-2-2026/",
+      "source": "Infinity Hall",
+      "category": "talk",
+      "geo": "Norfolk, CT"
+    },
+    {
       "id": "recDkcMsZzJKdOZ2v",
       "name": "Kent CT Farmers Market",
       "date": "2026-10-02",
@@ -2563,6 +2420,32 @@
       "source": "Calender",
       "category": "art",
       "geo": "Pine Street, Cornwall Village, CT 06753"
+    },
+    {
+      "id": "recKSq5ZgdR3X8k1I",
+      "name": "The Wankers: Best of Brit Pop and Beyond at the Woodbury Brewing Company",
+      "date": "2026-10-02",
+      "time": "8:00 PM",
+      "endTime": "",
+      "address": "Main Street South, Woodbury, CT",
+      "venue": "Woodbury Brewing Company",
+      "url": "https://www.viewcy.com/event/thewankerswbc",
+      "source": "Woodbury Brewing",
+      "category": "community",
+      "geo": "Main Street South, Woodbury, CT"
+    },
+    {
+      "id": "recKOoJMR3UTVrAAh",
+      "name": "5th Annual Art Exhibition",
+      "date": "2026-10-03",
+      "time": "10:00 AM",
+      "endTime": "4:00 PM",
+      "address": "5 Church Hill Road, Woodbury",
+      "venue": "Van Vleck Gallery",
+      "url": "https://flandersnaturecenter.org/program-events/",
+      "source": "Flanders Nature Center & Land Trust",
+      "category": "art",
+      "geo": "5 Church Hill Road, Woodbury, CT"
     },
     {
       "id": "recuiGuHr73jgiU14",
@@ -2695,6 +2578,19 @@
       "geo": "Atrium, CT"
     },
     {
+      "id": "recgGHD2wSoQV9Kps",
+      "name": "Live, Learn, & Lunch: Carousel Archival Stories",
+      "date": "2026-10-07",
+      "time": "12:00 PM",
+      "endTime": "1:30 PM",
+      "address": "Litchfield, Connecticut",
+      "venue": "Litchfield Community Center",
+      "url": "https://www.instagram.com/p/DceOyeOCDbq/",
+      "source": "Litchfield Community Center",
+      "category": "community",
+      "geo": "Litchfield, Connecticut"
+    },
+    {
       "id": "rec6Bn4DVugGeHlOT",
       "name": "*OKTOBERFEST* Friday Feast & Dancing Feet – 10/9",
       "date": "2026-10-09",
@@ -2812,6 +2708,19 @@
       "geo": "550 Goshen Rd, Litchfield, CT 06759"
     },
     {
+      "id": "recNy3BwsY22rgs3L",
+      "name": "Union Rail at Woodbury Brewing Company",
+      "date": "2026-10-11",
+      "time": "1:00 PM",
+      "endTime": "",
+      "address": "Main Street South, Woodbury, CT",
+      "venue": "Woodbury Brewing Company",
+      "url": "https://www.viewcy.com/event/unionrailwbc",
+      "source": "Woodbury Brewing",
+      "category": "community",
+      "geo": "Main Street South, Woodbury, CT"
+    },
+    {
       "id": "reclKTlp1PnGdzNyt",
       "name": "Literary Series with Mark Scarbrough: The American Literary Renaissance Reconsidered: Whitman and Hawthorne in Conversation with Douglass and Stoddard – Library",
       "date": "2026-10-13",
@@ -2823,6 +2732,32 @@
       "source": "Calender",
       "category": "talk",
       "geo": "30 Pine St, Cornwall, CT 06753"
+    },
+    {
+      "id": "recTrxmjT83Vq42p6",
+      "name": "Fall Saunters: Johnson Farm – Thursday, October 15, 2026",
+      "date": "2026-10-15",
+      "time": "5:00 PM",
+      "endTime": "6:30 PM",
+      "address": "",
+      "venue": "Johnson Farm Preserve, 37 West Mountain Rd",
+      "url": "https://steeprockassoc.org/event/fall-saunters-johnson-farm-thursday-october-15-2026/",
+      "source": "Steep Rock Association",
+      "category": "community",
+      "geo": "Johnson Farm Preserve, 37 West Mountain Rd, CT"
+    },
+    {
+      "id": "recNbEyS1wYKRYwlg",
+      "name": "Asleep at the Wheel",
+      "date": "2026-10-16",
+      "time": "8:00 PM",
+      "endTime": "",
+      "address": "Norfolk, CT",
+      "venue": "Infinity Music Hall Norfolk",
+      "url": "https://www.infinityhall.com/Events/asleep-at-the-wheel-10-16-2026/",
+      "source": "Infinity Hall",
+      "category": "community",
+      "geo": "Norfolk, CT"
     },
     {
       "id": "rec6FyRy4MmF0Kc1e",
@@ -2838,6 +2773,19 @@
       "geo": "273 Bantam Lake Rd, CT"
     },
     {
+      "id": "recUwFVndqN4jcimN",
+      "name": "Fire Cider",
+      "date": "2026-10-16",
+      "time": "11:30 AM",
+      "endTime": "12:30 PM",
+      "address": "Litchfield, Connecticut",
+      "venue": "Litchfield Community Center",
+      "url": "https://www.instagram.com/p/DcM9Rv6CcM5/",
+      "source": "Litchfield Community Center",
+      "category": "community",
+      "geo": "Litchfield, Connecticut"
+    },
+    {
       "id": "recXRIGxa90ctZtru",
       "name": "Kent CT Farmers Market",
       "date": "2026-10-16",
@@ -2851,6 +2799,19 @@
       "geo": "Kent Welcome Center, 3 Railroad St, Kent, CT"
     },
     {
+      "id": "recHWdTYcOURPuc9M",
+      "name": "Cornwall COOP Farmers Market – Cornwall Village",
+      "date": "2026-10-17",
+      "time": "9:00 AM",
+      "endTime": "12:00 PM",
+      "address": "Pine Street, Cornwall, CT 06753",
+      "venue": "Cornwall Village Green",
+      "url": "https://cornwallct.org/event/cornwall-coop-farmers-market-cornwall-village/2026-10-17/",
+      "source": "Calender",
+      "category": "market",
+      "geo": "Pine Street, Cornwall, CT 06753"
+    },
+    {
       "id": "recof5gWPuNe8k4rW",
       "name": "Saturday Market at Wassaic Commons",
       "date": "2026-10-17",
@@ -2862,6 +2823,58 @@
       "source": "",
       "category": "market",
       "geo": "3 Main Street, Wassaic, NY 12592"
+    },
+    {
+      "id": "receom5kssSKFn3c6",
+      "name": "Tour with Kenyon Clark",
+      "date": "2026-10-17",
+      "time": "1:00 PM",
+      "endTime": "2:00 PM",
+      "address": "5 Wykeham Road, Washington, CT 06793",
+      "venue": "Gunn Museum",
+      "url": "https://gunnlibrary.org/calendar/tour-with-kenyon-clark-4-2-2-2-2-2/2026-10-17/",
+      "source": "Gunn Memorial",
+      "category": "community",
+      "geo": "5 Wykeham Road, Washington, CT 06793"
+    },
+    {
+      "id": "recjhjrU7iiIbdTu9",
+      "name": "West Cornwall Farm Market – Wish House",
+      "date": "2026-10-17",
+      "time": "10:00 AM",
+      "endTime": "1:00 PM",
+      "address": "413 Sharon Goshen Turnpike, West Cornwall, CT 06796",
+      "venue": "The Wish House",
+      "url": "https://cornwallct.org/event/west-cornwall-farm-market-wish-house-2026/2026-10-17/",
+      "source": "Calender",
+      "category": "market",
+      "geo": "413 Sharon Goshen Turnpike, West Cornwall, CT 06796"
+    },
+    {
+      "id": "rec0OuAK2LDYvZ8D8",
+      "name": "Crafting History: Corn Husk Dolls",
+      "date": "2026-10-20",
+      "time": "2:00 PM",
+      "endTime": "3:30 PM",
+      "address": "5 Wykeham Road, Washington, CT 06793",
+      "venue": "Gunn Memorial Library",
+      "url": "https://gunnlibrary.org/calendar/crafting-history-corn-husk-dolls/",
+      "source": "Gunn Memorial",
+      "category": "talk",
+      "geo": "5 Wykeham Road, Washington, CT 06793"
+    },
+    {
+      "id": "recwz2G5IckfCQAV9",
+      "name": "Literary Series with Mark Scarbrough: The American Literary Renaissance Reconsidered: Whitman and Hawthorne in Conversation with Douglass and Stoddard – Library",
+      "date": "2026-10-20",
+      "time": "10:30 AM",
+      "endTime": "12:30 PM",
+      "address": "30 Pine St, Cornwall, CT 06753",
+      "venue": "The Cornwall Library",
+      "url": "https://cornwallct.org/event/literary-series-with-mark-scarbrough-the-american-literary-renaissance-reconsidered-whitman-and-hawthorne-in-conversation-with-douglass-and-stoddard-library/2026-10-20/",
+      "source": "Calender",
+      "category": "talk",
+      "geo": "30 Pine St, Cornwall, CT 06753"
     },
     {
       "id": "reczS9ujFYItg5qq1",
