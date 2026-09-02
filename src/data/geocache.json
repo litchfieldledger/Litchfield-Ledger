@@ -36,6 +36,18 @@
     "precision": "precise",
     "display": "11, School Street, Washington Depot, Washington, Northwest Hills Planning Region, Connecticut, 06793, United States"
   },
+  "116 Christian St New Preston, CT 06777": {
+    "lat": 41.681978,
+    "lng": -73.335353,
+    "precision": "precise",
+    "display": "116, Christian Street, New Preston, Washington, Northwest Hills Planning Region, Connecticut, 06777, United States"
+  },
+  "116 Christian St., New Preston, CT 06777": {
+    "lat": 41.681978,
+    "lng": -73.335353,
+    "precision": "precise",
+    "display": "116, Christian Street, New Preston, Washington, Northwest Hills Planning Region, Connecticut, 06777, United States"
+  },
   "12 Main Street, New Milford, CT": {
     "lat": 41.577979,
     "lng": -73.410485,
@@ -79,6 +91,12 @@
     "lng": -73.325619,
     "precision": "precise",
     "display": "128, Cream Hill Road, West Cornwall, Cornwall, Northwest Hills Planning Region, Connecticut, 06796, United States"
+  },
+  "15 West Street, Litchfield, CT 06759": {
+    "lat": 41.746547,
+    "lng": -73.189741,
+    "precision": "precise",
+    "display": "15, West Street, Litchfield Historic District, Litchfield, Connecticut, 06759, United States"
   },
   "160 South Street, Litchfield, CT 06759": {
     "lat": 41.741336,
@@ -140,6 +158,12 @@
     "precision": "approx",
     "display": "Pine Street, Cornwall, Northwest Hills Planning Region, Connecticut, 06753, United States"
   },
+  "246 Warren Turnpike Rd, Falls Village, CT 06031": {
+    "lat": 41.938169,
+    "lng": -73.361569,
+    "precision": "precise",
+    "display": "246, Warren Turnpike Road, Falls Village, Canaan, Northwest Hills Planning Region, Connecticut, 06031, United States"
+  },
   "25 Hopkins Road, New Preston Connecticut 06777": null,
   "25 Hopkins Road, Warren, CT 06777": {
     "lat": 41.70485,
@@ -189,6 +213,7 @@
     "precision": "precise",
     "display": "300, Nettleton Hollow Road, Washington, Northwest Hills Planning Region, Connecticut, 06793, United States"
   },
+  "37 West Mountain Rd. #2, Washington, CT": null,
   "38 Curtis Rd, Washington, CT 06793": {
     "lat": 41.610529,
     "lng": -73.322735,
@@ -200,6 +225,12 @@
     "lng": -73.265586,
     "precision": "precise",
     "display": "397, Nettleton Hollow Road, Washington, Northwest Hills Planning Region, Connecticut, 06793, United States"
+  },
+  "3BB South Street, Litchfield, CT 06759": {
+    "lat": 41.746941,
+    "lng": -73.189221,
+    "precision": "approx",
+    "display": "South Street, Litchfield Historic District, Litchfield, Northwest Hills Planning Region, Connecticut, 06759, United States"
   },
   "4 Bryan Memorial Plaza, Washington Depot, CT 06794": null,
   "4 Green Hill Rd, Washington Depot, CT 06794": {
@@ -310,6 +341,12 @@
     "precision": "precise",
     "display": "550, Goshen Road, Litchfield, Connecticut, 06759, United States"
   },
+  "56 S Center St, Millerton, NY 12546": {
+    "lat": 41.953229,
+    "lng": -73.510617,
+    "precision": "approx",
+    "display": "56, South Center Street, Village of Millerton, Town of North East, Dutchess County, New York, 12546, United States"
+  },
   "59 East Shore Road, CT": {
     "lat": 41.682767,
     "lng": -73.352636,
@@ -322,6 +359,18 @@
     "precision": "precise",
     "display": "6, Kirby Road, Washington Depot, Washington, Northwest Hills Planning Region, Connecticut, 06793, United States"
   },
+  "60 White Hollow Rd, Salisbury, CT 06039": {
+    "lat": 41.928414,
+    "lng": -73.382622,
+    "precision": "approx",
+    "display": "Lime Rock Park, 60, White Hollow Road, Lime Rock Historic District, Lime Rock, Salisbury, Northwest Hills Planning Region, Connecticut, 06039, United States"
+  },
+  "7 Fulling Lane, CT": {
+    "lat": 41.72467,
+    "lng": -73.475992,
+    "precision": "approx",
+    "display": "Tea and Dreams, 7, Fulling Lane, Kent, Northwest Hills Planning Region, Connecticut, 06757, United States"
+  },
   "7 Pine Street, Cornwall, CT 06753": {
     "lat": 41.845694,
     "lng": -73.329644,
@@ -330,6 +379,12 @@
   },
   "7 Railroad Square, West Cornwall, Connecticut 06796": null,
   "7 South Street, Litchfield CT": {
+    "lat": 41.746656,
+    "lng": -73.188484,
+    "precision": "approx",
+    "display": "Litchfield Historical Society - Noyes Memorial Building, 7, South Street, Litchfield Historic District, Litchfield, Connecticut, 06759, United States"
+  },
+  "7 South Street, Litchfield, CT": {
     "lat": 41.746656,
     "lng": -73.188484,
     "precision": "approx",
@@ -414,6 +469,12 @@
     "lng": -73.366231,
     "precision": "approx",
     "display": "Bridgewater, Western Connecticut Planning Region, Connecticut, 06752, United States"
+  },
+  "Canaan, CT": {
+    "lat": 41.959479,
+    "lng": -73.311757,
+    "precision": "approx",
+    "display": "Canaan, Northwest Hills Planning Region, Connecticut, 06031, United States"
   },
   "Children's Department, CT": null,
   "Cornwall Garden Club, CT": null,
@@ -607,6 +668,7 @@
     "precision": "precise",
     "display": "Main Street, Main Street Historic District, Bristol, Naugatuck Valley Planning Region, Connecticut, 06010, United States"
   },
+  "March Farm Hilltop, CT": null,
   "Millbrook Vineyards & Winery, CT": {
     "lat": 41.839733,
     "lng": -73.684665,
@@ -626,6 +688,12 @@
     "lng": -73.314472,
     "precision": "approx",
     "display": "Mohawk Mountain, 46, Great Hollow Road, Cornwall, Northwest Hills Planning Region, Connecticut, 06753, United States"
+  },
+  "Morris, CT": {
+    "lat": 41.683662,
+    "lng": -73.199665,
+    "precision": "approx",
+    "display": "Morris, Northwest Hills Planning Region, Connecticut, United States"
   },
   "Music Mountain, CT": {
     "lat": 41.921805,
@@ -704,6 +772,12 @@
     "aliasedTo": "49 Amenia Road, Sharon, CT"
   },
   "Steep Rock Preserve, 2 Tunnel Rd, CT": null,
+  "Steep Rock Preserve, CT": {
+    "lat": 41.614418,
+    "lng": -73.326861,
+    "precision": "approx",
+    "display": "Steep Rock Preserve, Washington Depot, Washington, Northwest Hills Planning Region, Connecticut, United States"
+  },
   "Stissing Center for Arts and Culture, CT": {
     "lat": 41.979635,
     "lng": -73.657121,
@@ -718,6 +792,13 @@
     "display": "Studio Hill Gallery and Design Shop, Main Street South, North Woodbury, Woodbury, Naugatuck Valley Planning Region, Connecticut, 06798, United States"
   },
   "Tapping Reeve Meadow, CT": null,
+  "The Cornwall Library, CT": {
+    "lat": 41.842847,
+    "lng": -73.329713,
+    "precision": "approx",
+    "display": "The Cornwall Library, 30, Pine Street, Cornwall, Northwest Hills Planning Region, Connecticut, 06796, United States"
+  },
+  "The David M. Hunt Library, CT": null,
   "The Good Gallery, CT": null,
   "The Grotto, CT": {
     "lat": 45.426452,
