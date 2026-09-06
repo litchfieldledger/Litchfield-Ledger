@@ -33,6 +33,10 @@ const Town = (name: string) => {
 const FALL_START = `${YEAR}-09-20`;
 const FALL_END = `${YEAR}-11-08`;
 const fallish = /\b(foliage|leaf|leaves|fall|autumn|harvest|pumpkin|apple|cider|hayride|hay ride|corn maze|fair|festival|oktoberfest|halloween)\b/i;
+// Organizers often bake the date into the name ("Fall Saunters, Tuesday,
+// September 22, 2026"); strip that so recurring events collapse to one row.
+const dateSuffix = /\s*[,–-]+\s*(?:(?:mon|tues|wednes|thurs|fri|satur|sun)day\b.*|\d{1,2}\/\d{1,2}(?:\/\d{2,4})?)\s*$/i;
+const normName = (n: string) => n.replace(dateSuffix, '').replace(/\s+/g, ' ').trim().toLowerCase();
 const seen = new Set<string>();
 const fallEvents: CalendarEvent[] = [];
 for (const d of days) {
@@ -40,8 +44,9 @@ for (const d of days) {
   if (d.date > FALL_END) break;
   for (const e of d.events) {
     if (!(e.category === 'outdoors' || fallish.test(e.name))) continue;
-    if (seen.has(e.name)) continue; // one row per recurring event
-    seen.add(e.name);
+    const key = normName(e.name);
+    if (seen.has(key)) continue; // one row per recurring event
+    seen.add(key);
     fallEvents.push(e);
     if (fallEvents.length >= 12) break;
   }
