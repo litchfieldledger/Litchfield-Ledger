@@ -1,7 +1,7 @@
 /* /guides/* — evergreen guides. Builds on home.css + article.css + visit.css. */
 
 .guide-hero-figure { margin: 26px 0 0; }
-.guide-hero-img { display: block; width: 100%; height: auto; aspect-ratio: 1300 / 868; object-fit: cover; border-radius: var(--radius); background: var(--bg-soft); }
+.guide-hero-img { display: block; width: 100%; height: auto; aspect-ratio: 3 / 2; object-fit: cover; border-radius: var(--radius); background: var(--bg-soft); }
 .guide-hero-figure figcaption { font-family: var(--sans); font-size: 11px; letter-spacing: 0.4px; color: var(--text-muted); margin-top: 8px; }
 
 /* Peak-timing table */
