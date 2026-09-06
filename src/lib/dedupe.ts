@@ -114,30 +114,32 @@ function better(candidate: DedupeRow, incumbent: DedupeRow): boolean {
 }
 
 // Collapse duplicate rows, keeping the richest copy of each, in input order.
-// `onMerge` lets the audit script see what was folded into what.
+// A row joins every group with a member it matches, and those groups are
+// merged: two Instagram rewordings may only match each other through the
+// organizer's title, which can arrive after both of them. `onMerge` lets the
+// audit script see what was folded into what.
 export function dedupeRows<T extends DedupeRow>(
   rows: T[],
   onMerge?: (kept: T, dropped: T) => void
 ): T[] {
-  const kept: T[] = [];
-  // Every row folded into each kept row. A row joins a group if it matches
-  // ANY member, not just the current best: two Instagram rewordings may only
-  // match each other through the organizer's title.
-  const members: T[][] = [];
+  const groups: T[][] = [];
   for (const row of rows) {
-    const i = members.findIndex((g) => g.some((m) => isSameEvent(m, row)));
-    if (i === -1) {
-      kept.push(row);
-      members.push([row]);
+    const hits = groups.filter((g) => g.some((m) => isSameEvent(m, row)));
+    if (hits.length === 0) {
+      groups.push([row]);
       continue;
     }
-    members[i].push(row);
-    if (better(row, kept[i])) {
-      onMerge?.(row, kept[i]);
-      kept[i] = row;
-    } else {
-      onMerge?.(kept[i], row);
+    const base = hits[0];
+    base.push(row);
+    for (const g of hits.slice(1)) {
+      base.push(...g);
+      groups.splice(groups.indexOf(g), 1);
     }
   }
-  return kept;
+  return groups.map((g) => {
+    let best = g[0];
+    for (const m of g.slice(1)) if (better(m, best)) best = m;
+    for (const m of g) if (m !== best) onMerge?.(best, m);
+    return best;
+  });
 }
