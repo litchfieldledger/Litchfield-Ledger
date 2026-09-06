@@ -228,7 +228,30 @@ ul { list-style: none; }
 /* --------------------------------------------------------------------------
    Mobile (matches the "Mobile — Homepage" mockup)
    -------------------------------------------------------------------------- */
+/* --------------------------------------------------------------------------
+   Seasonal guide card (homepage, under This Week)
+   -------------------------------------------------------------------------- */
+.season-card-wrap { margin-top: 36px; }
+.season-card { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); background: var(--bg-soft); border: 1px solid var(--rule); border-radius: var(--radius); overflow: hidden; text-decoration: none; color: inherit; transition: background 0.15s; }
+.season-card:hover { background: #f1efe8; }
+.season-card-img { min-height: 220px; }
+.season-card-img img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: center 60%; }
+.season-card-text { padding: 30px 36px; display: flex; flex-direction: column; justify-content: center; gap: 10px; }
+.season-card-eyebrow { font-family: var(--sans); font-size: 10px; font-weight: 600; letter-spacing: 1.8px; text-transform: uppercase; color: var(--olive-light); }
+.season-card-title { font-family: var(--display); font-weight: 700; font-size: 30px; line-height: 1.05; text-transform: uppercase; color: var(--ink); }
+.season-card:hover .season-card-title { color: var(--orange); }
+.season-card-desc { font-family: var(--serif); font-size: 16px; line-height: 1.55; color: var(--text-mid); max-width: 520px; }
+.season-card-link { display: inline-flex; align-items: center; gap: 8px; margin-top: 4px; font-family: var(--sans); font-size: 10px; font-weight: 600; letter-spacing: 1.8px; text-transform: uppercase; color: var(--orange); }
+.season-card-link span { font-size: 12px; letter-spacing: 0; }
+
 @media (max-width: 768px) {
+  .season-card-wrap { margin-top: 26px; }
+  .season-card { grid-template-columns: 1fr; }
+  .season-card-img { min-height: 0; aspect-ratio: 16 / 9; }
+  .season-card-text { padding: 20px 20px 22px; gap: 8px; }
+  .season-card-title { font-size: 24px; }
+  .season-card-desc { font-size: 15px; }
+
   :root { --gutter: 24px; }
   .t-desktop { display: none; }
   .t-mobile { display: inline; }

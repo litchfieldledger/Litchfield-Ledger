@@ -14,6 +14,13 @@ const events = await getUpcomingEvents({ limit: 3, days: 7 });
 const numberFmt = new Intl.NumberFormat('en-US');
 const submitUrl = 'https://litchfieldledger.beehiiv.com/add-your-event';
 
+// Seasonal guide card under This Week. Foliage runs Sept 1 through Nov 8
+// (evaluated at build time, Connecticut date), so it comes back every year.
+const nyToday = new Date().toLocaleDateString('en-CA', { timeZone: 'America/New_York' });
+const [, mm, dd] = nyToday.split('-').map(Number);
+const showFoliage = mm === 9 || mm === 10 || (mm === 11 && dd <= 8);
+const foliageYear = nyToday.slice(0, 4);
+
 const SITE = 'https://litchfieldledger.com';
 const orgJsonLd = {
   '@context': 'https://schema.org',
@@ -111,6 +118,22 @@ const siteJsonLd = {
       ))}
     </ul>
   </section>
+
+  {showFoliage && (
+    <section class="season-card-wrap" aria-label="Seasonal guide">
+      <a class="season-card" href="/guides/fall-foliage/" data-track-click="foliage_click" data-track-location="home_season_card">
+        <div class="season-card-img">
+          <img src="/images/connecticut-mountains.jpg" alt="" width="1300" height="868" loading="lazy" decoding="async">
+        </div>
+        <div class="season-card-text">
+          <p class="season-card-eyebrow">Fall {foliageYear} · The guide</p>
+          <h2 class="season-card-title">Fall Foliage in Litchfield County</h2>
+          <p class="season-card-desc">When the leaves peak town by town, the drives worth taking, the overlooks worth the climb, and where to pick apples after.</p>
+          <span class="season-card-link">Read the foliage guide <span aria-hidden="true">→</span></span>
+        </div>
+      </a>
+    </section>
+  )}
 
   <section class="section" id="journal">
     <div class="section-head journal-head">
