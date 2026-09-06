@@ -61,7 +61,7 @@ function overlap(a: Set<string>, b: Set<string>): number {
 // How much a row tells the reader; the richer duplicate is the one we keep.
 export function richness(e: DedupeRow): number {
   let s = 0;
-  if (e.url && !/instagram\.com|facebook\.com/i.test(e.url)) s += 4;
+  if (e.url && !/instagram\.com|facebook\.com/i.test(e.url)) s += 5;
   else if (e.url) s += 1;
   if (e.address) s += 2;
   if (e.venue) s += 1;
@@ -69,11 +69,20 @@ export function richness(e: DedupeRow): number {
   return s;
 }
 
+// Significant title words, minus the venue's own words: "Friday Market at
+// Wassaic Commons" and "Wassaic Commons Friday Night BYOP" must not match on
+// the venue alone.
+function titleTokens(e: DedupeRow): Set<string> {
+  const t = tokens(e.name, TITLE_STOP);
+  for (const w of tokens(e.venue, VENUE_STOP)) t.delete(w);
+  return t;
+}
+
 export function isSameEvent(a: DedupeRow, b: DedupeRow): boolean {
   if (a.date !== b.date) return false;
   if (timeToMinutes(a.time) !== timeToMinutes(b.time)) return false;
   if (a.name.trim().toLowerCase() === b.name.trim().toLowerCase()) return true;
-  if (overlap(tokens(a.name, TITLE_STOP), tokens(b.name, TITLE_STOP)) < 0.6) return false;
+  if (overlap(titleTokens(a), titleTokens(b)) < 0.6) return false;
   // Similar titles at the same minute, but clearly different places
   // (e.g. "Story Time" at two libraries): keep both.
   const va = tokens(a.venue, VENUE_STOP);
@@ -84,6 +93,14 @@ export function isSameEvent(a: DedupeRow, b: DedupeRow): boolean {
     if (ta && tb && ta !== tb) return false;
   }
   return true;
+}
+
+// Richer wins; on a tie the more specific title ("Movie Mondays ~ Pressure"
+// over "Movie Mondays"). Mirrors dedupe_events.py in the ledger-events repo.
+function better(candidate: DedupeRow, incumbent: DedupeRow): boolean {
+  const rc = richness(candidate);
+  const ri = richness(incumbent);
+  return rc > ri || (rc === ri && candidate.name.length > incumbent.name.length);
 }
 
 // Collapse duplicate rows, keeping the richest copy of each, in input order.
@@ -97,7 +114,7 @@ export function dedupeRows<T extends DedupeRow>(
     const i = kept.findIndex((k) => isSameEvent(k, row));
     if (i === -1) {
       kept.push(row);
-    } else if (richness(row) > richness(kept[i])) {
+    } else if (better(row, kept[i])) {
       onMerge?.(row, kept[i]);
       kept[i] = row;
     } else {
