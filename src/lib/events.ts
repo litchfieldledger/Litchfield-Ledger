@@ -11,6 +11,7 @@
 
 import aliases from '../data/geo-aliases.json';
 import seed from '../data/events-seed.json';
+import { dedupeRows, timeToMinutes } from './dedupe';
 
 const BASE_ID = 'apprsKJr6ge2bytOh';
 const TABLE_ID = 'tblOuZCYYHK1u41TD';
@@ -135,17 +136,6 @@ export type UpcomingEvent = {
   url: string;
 };
 
-function timeToMinutes(time: string): number {
-  const m = (time || '').match(/(\d{1,2})(?::(\d{2}))?\s*(am|pm)?/i);
-  if (!m) return 24 * 60;
-  let h = Number(m[1]);
-  const min = Number(m[2] || 0);
-  const ap = (m[3] || '').toLowerCase();
-  if (ap === 'pm' && h < 12) h += 12;
-  if (ap === 'am' && h === 12) h = 0;
-  return h * 60 + min;
-}
-
 function addDays(iso: string, days: number): string {
   const d = new Date(`${iso}T12:00:00Z`);
   d.setUTCDate(d.getUTCDate() + days);
@@ -169,6 +159,7 @@ type FutureRow = {
   endTime: string;
   address: string;
   venue: string;
+  town: string;
   url: string;
 };
 
@@ -194,21 +185,28 @@ async function loadFutureRows(today: string): Promise<FutureRow[]> {
         [FIELD.url]: e.url,
       }));
 
-  return rows
-    .map((f, i) => ({
-      id: (f.id as string) || `ev-${i}`,
-      name: (f[FIELD.name] || '').trim(),
-      date: (f[FIELD.date] || '').trim(),
-      time: (f[FIELD.time] || '').trim(),
-      endTime: (f[FIELD.endTime] || '').trim(),
-      address: (f[FIELD.address] || '').trim(),
-      venue: (f[FIELD.venue] || '').trim(),
-      url: (f[FIELD.url] || f[FIELD.listingUrl] || '').trim(),
-    }))
+  const future = rows
+    .map((f, i) => {
+      const address = (f[FIELD.address] || '').trim();
+      const venue = (f[FIELD.venue] || '').trim();
+      return {
+        id: (f.id as string) || `ev-${i}`,
+        name: (f[FIELD.name] || '').trim(),
+        date: (f[FIELD.date] || '').trim(),
+        time: (f[FIELD.time] || '').trim(),
+        endTime: (f[FIELD.endTime] || '').trim(),
+        address,
+        venue,
+        town: townFrom(address, geocodeQuery(address, venue)),
+        url: (f[FIELD.url] || f[FIELD.listingUrl] || '').trim(),
+      };
+    })
     .filter((e) => e.name && e.date && e.date >= today)
     .sort((a, b) =>
       a.date < b.date ? -1 : a.date > b.date ? 1 : timeToMinutes(a.time) - timeToMinutes(b.time)
     );
+  // The tracker holds the same listing from several sources; show it once.
+  return dedupeRows(future);
 }
 
 export type CalendarEvent = {
@@ -241,12 +239,7 @@ export async function getCalendarDays(): Promise<CalendarDay[]> {
   const rows = await loadFutureRows(today);
 
   const days = new Map<string, CalendarDay>();
-  const seen = new Set<string>();
   for (const e of rows) {
-    // The tracker can hold the same listing from two sources; show it once.
-    const key = `${e.date}|${e.time.toLowerCase()}|${e.name.toLowerCase().replace(/\s+/g, ' ')}`;
-    if (seen.has(key)) continue;
-    seen.add(key);
     if (!days.has(e.date)) {
       const d = new Date(`${e.date}T12:00:00`);
       const weekday =
@@ -264,7 +257,6 @@ export async function getCalendarDays(): Promise<CalendarDay[]> {
         events: [],
       });
     }
-    const geo = geocodeQuery(e.address, e.venue);
     days.get(e.date)!.events.push({
       id: e.id,
       name: e.name,
@@ -273,7 +265,7 @@ export async function getCalendarDays(): Promise<CalendarDay[]> {
       endTime: e.endTime,
       venue: e.venue,
       address: e.address,
-      town: townFrom(e.address, geo),
+      town: e.town,
       url: e.url,
       category: categorize(e.name),
     });
