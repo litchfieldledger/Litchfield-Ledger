@@ -1,17 +1,21 @@
 ---
-import SiteNav from '../components/SiteNav.astro';
 import SiteFooter from '../components/SiteFooter.astro';
 import LatestIssuePreview from '../components/LatestIssuePreview.astro';
 import Analytics from '../components/Analytics.astro';
 import ConversionTracking from '../components/ConversionTracking.astro';
 import { getLedgerPosts, getLedgerStats, getLatestIssue } from '../lib/beehiiv';
+import { getUpcomingEvents } from '../lib/events';
 import '../styles/home.css';
 
 const posts = await getLedgerPosts();
 const latestIssue = await getLatestIssue();
-
 const stats = await getLedgerStats();
+const events = await getUpcomingEvents({ limit: 3, days: 7 });
+
 const numberFmt = new Intl.NumberFormat('en-US');
+const submitUrl = 'https://litchfieldledger.beehiiv.com/add-your-event';
+const fontsHref =
+  'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Source+Code+Pro:wght@400;600;700&family=Source+Serif+4:ital,wght@0,400;0,700;1,400&display=swap';
 ---
 
 <!DOCTYPE html>
@@ -20,254 +24,119 @@ const numberFmt = new Intl.NumberFormat('en-US');
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>The Litchfield Ledger</title>
+<meta name="description" content="A free Tuesday newsletter full of weekly events and stories about the nature, history, and people of Litchfield County, Connecticut.">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preload" as="image" href="/images/waterfall-1400.webp" type="image/webp" fetchpriority="high">
-<link rel="preload" href="https://fonts.googleapis.com/css2?family=New+Amsterdam&family=Playfair+Display:ital,wght@0,700;0,900;1,400&family=Libre+Baskerville:ital@0;1&family=Barlow+Condensed:wght@600;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
-<noscript><link href="https://fonts.googleapis.com/css2?family=New+Amsterdam&family=Playfair+Display:ital,wght@0,700;0,900;1,400&family=Libre+Baskerville:ital@0;1&family=Barlow+Condensed:wght@600;700&display=swap" rel="stylesheet"></noscript>
+<link rel="preload" as="font" href="/fonts/Sapiens-Bold.otf" type="font/otf" crossorigin>
+<link rel="preload" as="image" href="/images/refresh/hero-river-1600.jpg" type="image/jpeg" fetchpriority="high" media="(min-width: 769px)">
+<link rel="preload" href={fontsHref} as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link href={fontsHref} rel="stylesheet"></noscript>
 <Analytics />
 <ConversionTracking />
-
 </head>
 <body>
 
-<SiteNav submitLabel="Submit Event" />
+<main class="container">
 
-<section class="hero">
-  <picture class="hero-bg">
-    <source srcset="/images/waterfall-1400.webp" type="image/webp">
-    <source srcset="/images/waterfall-1600.avif" type="image/avif">
-    <img src="/images/waterfall.jpg" alt="" width="2048" height="1365" decoding="sync" fetchpriority="high" aria-hidden="true">
-  </picture>
-  <div class="hero-content" data-track-signup-view="hero">
-    <p class="hero-eyebrow">A Northwest Connecticut Newsletter</p>
-    <h1 class="hero-title">The Litchfield Ledger</h1>
-    <p class="hero-sub">The nature, people, and happenings of our region.</p>
-    <div class="beehiiv-wrap" data-track-signup="hero">
+  <section class="hero" data-track-signup-view="hero">
+    <div class="hero-bg" aria-hidden="true">
+      <picture>
+        <source media="(max-width: 768px)" srcset="/images/refresh/hero-mobile-900.jpg">
+        <source media="(max-width: 1100px)" srcset="/images/refresh/hero-river-1000.jpg">
+        <img src="/images/refresh/hero-river-1600.jpg" alt="" width="1600" height="2133" decoding="async" fetchpriority="high">
+      </picture>
+    </div>
+    <a class="hero-corner" href={submitUrl} data-track-click="submit_event_click" data-track-location="hero">Submit event <span aria-hidden="true">→</span></a>
+    <h1 class="hero-title">
+      <span>Litchfield</span>
+      <span class="hero-title-row">Ledger <img class="hero-book" src="/images/refresh/book.svg" alt="" width="69" height="48"></span>
+    </h1>
+    <p class="hero-sub">
+      <span class="t-desktop">Nature, people, and happenings of our region.</span>
+      <span class="t-mobile">A free Tuesday newsletter full of weekly events + stories about nature, history, and people.</span>
+    </p>
+    <div class="beehiiv-wrap hero-signup" data-track-signup="hero">
       <script is:inline src="https://subscribe-forms.beehiiv.com/v3/loader.js" data-beehiiv-form="48c597c3-c9e3-4c7a-b09b-db8627e0a48e"></script>
     </div>
     {stats && stats.activeSubscribers > 0 && (
       <p class="hero-stats">
-        <span class="hero-stats-count">{numberFmt.format(stats.activeSubscribers)}</span> locals reading
+        <strong>{numberFmt.format(stats.activeSubscribers)}</strong> locals reading
+        {stats.joinedThisWeek > 0 && (
+          <span><span class="sep">•</span><span class="new">+{numberFmt.format(stats.joinedThisWeek)}</span> joined this week</span>
+        )}
       </p>
     )}
-  </div>
-</section>
+  </section>
 
-<div class="content">
-  <aside>
-    <div class="field-report" id="field-report-widget">
-      <div class="widget-header">
-        <div class="widget-header-inner">
-          <div>
-            <div class="widget-title">Field Report</div>
-            <div class="widget-date" id="fr-date">Loading...</div>
-          </div>
-          <div class="widget-live" id="fr-live"></div>
-        </div>
-      </div>
-      <div id="fr-body">
-        <div class="fr-loading">Fetching field conditions...</div>
-      </div>
+  <section class="section" id="this-week">
+    <div class="section-head">
+      <h2 class="section-title">
+        <img class="section-icon icon-calendar" src="/images/refresh/calendar.svg" alt="" width="41" height="42">
+        <span class="t-desktop">This Week</span><span class="t-mobile">Calendar</span>
+      </h2>
+      <a class="section-link" href="/events" data-track-click="events_click" data-track-location="this_week">View all events <span aria-hidden="true">→</span></a>
     </div>
-  </aside>
-
-  <main>
-    <div class="explore-header">
-      <span class="explore-title">Explore</span>
-      <div class="explore-rule"></div>
-    </div>
-    <ul class="post-list" data-beehiiv-feed>
-      {posts.length === 0 && (
-        <li class="post-item post-empty">
-          <div class="post-excerpt">New posts will appear here on the next build.</div>
-        </li>
+    <ul class="events-row">
+      {events.length === 0 && (
+        <li class="events-empty">No events on the calendar yet. <a href={submitUrl}>Submit one</a>.</li>
       )}
-      {posts.map((post) => (
-        <li class="post-item">
-          <a href={post.url} class="post-link" data-track-click="outbound_post_click" data-track-location="post_list">
-            <div class="post-meta">{post.date}</div>
-            <div class="post-title">{post.title}</div>
-            {post.excerpt && <div class="post-excerpt">{post.excerpt}</div>}
+      {events.map((ev) => (
+        <li class="event-cell">
+          <a href={ev.url || '/events'} data-track-click="event_click" data-track-location="this_week">
+            <div class="event-date">
+              <span class="event-month">{ev.month}</span>
+              <span class="event-day">{ev.day}</span>
+            </div>
+            <div class="event-info">
+              <span class="event-name">{ev.name}</span>
+              <span class="event-sub">
+                {ev.time}{ev.time && ev.place && <span class="dot">•</span>}{ev.place}
+              </span>
+            </div>
+            <span class="event-chevron" aria-hidden="true">›</span>
           </a>
         </li>
       ))}
     </ul>
-  </main>
-</div>
+  </section>
 
-<script is:inline src="/beehiiv-feed.js"></script>
+  <section class="section" id="journal">
+    <div class="section-head journal-head">
+      <h2 class="section-title">
+        <img class="section-icon icon-pencil" src="/images/refresh/pencil.svg" alt="" width="19" height="34">
+        <span class="t-desktop">Weekly Journals</span><span class="t-mobile">Weekly Journal</span>
+      </h2>
+    </div>
+    <ul class="journal-grid" data-beehiiv-feed>
+      {posts.length === 0 && (
+        <li class="journal-card post-empty">
+          <div class="journal-text"><p class="journal-meta">New posts will appear here on the next build.</p></div>
+        </li>
+      )}
+      {posts.map((post, i) => (
+        <li class="journal-card">
+          <a href={post.url} data-track-click="outbound_post_click" data-track-location="post_list">
+            <div class={`journal-thumb tone-${(i % 4) + 1}`}>
+              {post.thumbnail && <img src={post.thumbnail} alt="" width="548" height="344" loading="lazy" decoding="async">}
+            </div>
+            <div class="journal-text">
+              <h3 class="journal-title">{post.title}</h3>
+              <p class="journal-meta">{post.dateShort}<span class="dot">•</span>{post.readMinutes} min read</p>
+            </div>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </section>
 
-<LatestIssuePreview issue={latestIssue} />
+  <script is:inline src="/beehiiv-feed.js"></script>
+
+  <LatestIssuePreview issue={latestIssue} />
+
+</main>
 
 <SiteFooter showInstagram={true} />
-
-<script is:inline>
-(function () {
-  const LAT = 41.7448, LNG = -73.2354;
-
-  function doy(date) {
-    return Math.floor((date - new Date(date.getFullYear(), 0, 0)) / 86400000);
-  }
-
-  function clampPct(v) {
-    return Math.max(0, Math.min(100, Math.round(v)));
-  }
-
-  // Season-aware phenology model for Litchfield County (NW Connecticut).
-  // Returns the progression bar (title, pct, stage list, active stage) and the
-  // currently-emerging flora for the given day-of-year.
-  function season(d) {
-    // Spring — snowmelt (Mar 15, doy 74) → mountain laurel (mid-Jun, doy 166)
-    if (d <= 166) {
-      const stages = ['Mud', 'Before Bloom', 'Peak', 'Summer'];
-      const pct = clampPct(((d - 74) / (166 - 74)) * 100);
-      const stage = pct < 18 ? 'Mud' : pct < 45 ? 'Before Bloom' : pct < 72 ? 'Peak' : 'Summer';
-      let flora = 'Dormant';
-      if (d >= 150)      flora = 'Mountain laurel';
-      else if (d >= 130) flora = 'Mayapple, wild columbine';
-      else if (d >= 115) flora = 'Wild ginger, jack-in-the-pulpit';
-      else if (d >= 100) flora = 'Trout lily, coltsfoot';
-      else if (d >= 85)  flora = 'Bloodroot, spring beauty';
-      else if (d >= 74)  flora = 'Skunk cabbage, hepatica';
-      return { title: 'Spring Progression', pct, stage, stages, flora };
-    }
-    // Summer — solstice window (mid-Jun, doy 166) → autumnal equinox (Sep 22, doy 266)
-    const stages = ['Early Summer', 'High Summer', 'Late Summer', 'Goldenrod'];
-    const pct = clampPct(((d - 166) / (266 - 166)) * 100);
-    const stage = pct < 25 ? 'Early Summer' : pct < 50 ? 'High Summer' : pct < 75 ? 'Late Summer' : 'Goldenrod';
-    let flora = 'Goldenrod, New England aster';
-    if (d < 180)      flora = 'Mountain laurel, common milkweed';
-    else if (d < 195) flora = 'Ox-eye daisy, common milkweed';
-    else if (d < 210) flora = 'Black-eyed Susan, bee balm';
-    else if (d < 225) flora = "Queen Anne's lace, chicory";
-    else if (d < 240) flora = 'Joe-Pye weed, cardinal flower';
-    else if (d < 255) flora = 'Goldenrod, ironweed';
-    return { title: 'Summer Progression', pct, stage, stages, flora };
-  }
-
-  function trailCond(mm) {
-    if (mm > 25) return { l: 'Muddy',  n: 'boots req.',   cls: 'caution', dot: '#c85c1e' };
-    if (mm > 10) return { l: 'Soft',   n: 'wet in spots', cls: 'caution', dot: '#c85c1e' };
-    if (mm > 3)  return { l: 'Damp',   n: 'mostly firm',  cls: 'good',    dot: '#2a5236' };
-    return             { l: 'Good',   n: 'firm & dry',   cls: 'good',    dot: '#1e3d28' };
-  }
-
-  function moonPhase(date) {
-    const synodic = 29.530588853;
-    const ref = new Date(Date.UTC(2000, 0, 6, 18, 14));
-    const days = (date - ref) / 86400000;
-    return ((days % synodic) + synodic) % synodic / synodic;
-  }
-
-  function moonName(p) {
-    if (p < 0.03 || p > 0.97) return 'New Moon';
-    if (p < 0.22) return 'Waxing Crescent';
-    if (p < 0.28) return 'First Quarter';
-    if (p < 0.47) return 'Waxing Gibbous';
-    if (p < 0.53) return 'Full Moon';
-    if (p < 0.72) return 'Waning Gibbous';
-    if (p < 0.78) return 'Last Quarter';
-    return 'Waning Crescent';
-  }
-
-  function moonIllum(p) {
-    return Math.round((1 - Math.cos(p * 2 * Math.PI)) / 2 * 100);
-  }
-
-  function sunFmt(iso) {
-    const d = new Date(iso), h = d.getHours(), m = d.getMinutes().toString().padStart(2, '0');
-    return `${h % 12 || 12}:${m} <span class="unit">${h >= 12 ? 'PM' : 'AM'}</span>`;
-  }
-
-  function row(label, valueHTML, cls) {
-    return `<div class="field-row">
-      <span class="field-label">${label}</span>
-      <span class="field-value ${cls || ''}">${valueHTML}</span>
-    </div>`;
-  }
-
-  const now   = new Date();
-  const month = now.getMonth() + 1;
-  const d     = doy(now);
-  const ph    = season(d);
-
-  document.getElementById('fr-date').textContent =
-    now.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }) +
-    ' — Litchfield County';
-
-  Promise.allSettled([
-    fetch(`https://api.sunrise-sunset.org/json?lat=${LAT}&lng=${LNG}&formatted=0`).then(r => r.json()),
-    fetch(`https://api.open-meteo.com/v1/forecast?latitude=${LAT}&longitude=${LNG}&current=temperature_2m&daily=temperature_2m_mean,precipitation_sum&past_days=14&forecast_days=1&timezone=America%2FNew_York`).then(r => r.json()),
-  ]).then(([sunRes, weatherRes]) => {
-
-    let sunHTML = '—';
-    if (sunRes.status === 'fulfilled') {
-      const s = sunRes.value.results;
-      sunHTML = `${sunFmt(s.sunrise)} <span style="color:#ccc;margin:0 4px">/</span> ${sunFmt(s.sunset)}`;
-    }
-
-    let airTempHTML = '<span style="color:var(--text-muted)">—</span>';
-    let airClass = '';
-    if (weatherRes.status === 'fulfilled') {
-      const c = weatherRes.value.current?.temperature_2m;
-      if (typeof c === 'number') {
-        const f = Math.round(c * 9 / 5 + 32);
-        airTempHTML = `${f}°<span class="unit">F</span>`;
-        airClass = 'good';
-      }
-    }
-
-    let lakeTempHTML = '<span style="color:var(--text-muted)">—</span>';
-    let lakeClass = '';
-    if (weatherRes.status === 'fulfilled') {
-      const temps = weatherRes.value.daily?.temperature_2m_mean || [];
-      if (temps.length) {
-        const avg  = temps.filter(Boolean).reduce((a, b) => a + b, 0) / temps.filter(Boolean).length;
-        const lag  = month <= 4 ? 14 : month === 5 ? 10 : 6;
-        const temp = Math.round((avg * 9 / 5 + 32) - lag);
-        lakeTempHTML = `${temp}°<span class="unit">F — est.</span>`;
-        lakeClass = 'good';
-      }
-    }
-
-    let trailHTML = 'Unknown<span class="unit">— check locally</span>';
-    let trailClass = '';
-    if (weatherRes.status === 'fulfilled') {
-      const precip = (weatherRes.value.daily?.precipitation_sum || []).slice(-3);
-      const total  = precip.reduce((a, b) => a + (b || 0), 0);
-      const tc     = trailCond(total);
-      trailHTML = `<span style="display:inline-block;width:7px;height:7px;border-radius:50%;background:${tc.dot};margin-right:5px;vertical-align:middle;"></span>${tc.l}<span class="unit">— ${tc.n}</span>`;
-      trailClass = tc.cls;
-    }
-
-    const mp = moonPhase(now);
-    const moonHTML = `${moonName(mp)}<span class="unit">— ${moonIllum(mp)}% illum.</span>`;
-
-    document.getElementById('fr-live').textContent =
-      'Live · ' + now.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
-
-    document.getElementById('fr-body').innerHTML = `
-      ${row('Air Temperature', airTempHTML, airClass)}
-      ${row('Bantam Lake', lakeTempHTML, lakeClass)}
-      ${row('Trail Conditions', trailHTML, trailClass)}
-      ${row('Sunrise / Sunset', sunHTML)}
-      ${row('Moon Phase', moonHTML)}
-      <div class="phenology-bar">
-        <div class="pheno-label">${ph.title}</div>
-        <div class="pheno-track"><div class="pheno-fill" style="width:${ph.pct}%"></div></div>
-        <div class="pheno-stages">
-          ${ph.stages.map(s =>
-            `<span class="pheno-stage ${s === ph.stage ? 'active' : ''}">${s}</span>`
-          ).join('')}
-        </div>
-      </div>
-      ${row("What's Emerging", `<em style="font-size:13px">${ph.flora}</em>`)}
-    `;
-  });
-})();
-</script>
 
 </body>
 </html>

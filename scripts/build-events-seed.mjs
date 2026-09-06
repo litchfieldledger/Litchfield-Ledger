@@ -1,9 +1,9 @@
 // One-off/occasional builder: turn a raw Event Tracker dump into the committed
-// seed snapshot (src/data/events-seed.json) that lets the map render without
-// live Airtable credentials. In production the map fetches live (see
-// src/lib/events.ts); this seed is the offline fallback + prototype data.
+// seed snapshot (src/data/events-seed.json) that lets the /events calendar
+// render without live Airtable credentials. In production the site fetches
+// live (see src/lib/events.ts); this seed is the offline fallback.
 //
-// Usage: node scripts/build-map-seed.mjs <raw-airtable-dump.json>
+// Usage: node scripts/build-events-seed.mjs <raw-airtable-dump.json>
 //   dump = the { records: [...] } JSON from list_records_for_table.
 
 import { readFileSync, writeFileSync } from 'node:fs';

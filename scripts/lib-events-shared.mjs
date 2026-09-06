@@ -1,5 +1,5 @@
-// Shared helpers for turning raw Event Tracker rows into map-ready events.
-// Used by both the seed builder (scripts/build-map-seed.mjs) and, in spirit,
+// Shared helpers for turning raw Event Tracker rows into calendar events.
+// Used by the seed builder (scripts/build-events-seed.mjs) and, in spirit,
 // mirrors the mapping in src/lib/events.ts so the two never drift far.
 
 // Field IDs in the Event Tracker "Events" table (base apprsKJr6ge2bytOh).

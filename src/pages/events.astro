@@ -1,0 +1,156 @@
+---
+import SiteFooter from '../components/SiteFooter.astro';
+import Analytics from '../components/Analytics.astro';
+import ConversionTracking from '../components/ConversionTracking.astro';
+import { getCalendarDays, CATEGORY_META } from '../lib/events';
+import type { Category } from '../lib/events';
+import '../styles/home.css';
+import '../styles/events.css';
+
+const days = await getCalendarDays();
+const total = days.reduce((n, d) => n + d.events.length, 0);
+
+const counts = {} as Record<Category, number>;
+(Object.keys(CATEGORY_META) as Category[]).forEach((c) => (counts[c] = 0));
+for (const d of days) for (const e of d.events) counts[e.category] += 1;
+const categories = (Object.keys(CATEGORY_META) as Category[]).filter((c) => counts[c] > 0);
+
+const submitUrl = 'https://litchfieldledger.beehiiv.com/add-your-event';
+const fontsHref =
+  'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Source+Code+Pro:wght@400;600;700&family=Source+Serif+4:ital,wght@0,400;0,700;1,400&display=swap';
+
+const timeLabel = (time: string, endTime: string) => {
+  if (!time) return 'TBA';
+  return endTime ? `${time} – ${endTime}` : time;
+};
+const placeLabel = (venue: string, town: string) => {
+  if (venue && town && !venue.toLowerCase().includes(town.toLowerCase())) return `${venue} · ${town}`;
+  return venue || town;
+};
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Calendar — The Litchfield Ledger</title>
+<meta name="description" content="Every upcoming event across Litchfield County, Connecticut: live music, markets, art, talks, and the outdoors, from The Litchfield Ledger.">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" as="font" href="/fonts/Sapiens-Bold.otf" type="font/otf" crossorigin>
+<link rel="preload" href={fontsHref} as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link href={fontsHref} rel="stylesheet"></noscript>
+<Analytics />
+<ConversionTracking />
+</head>
+<body>
+
+<header class="page-bar container">
+  <a href="/" class="wordmark" aria-label="The Litchfield Ledger — home">
+    <span>THE</span><span class="wordmark-box">LITCHFIELD</span><span>LEDGER</span>
+  </a>
+  <a class="page-bar-link" href={submitUrl} data-track-click="submit_event_click" data-track-location="calendar_bar">Submit event <span aria-hidden="true">→</span></a>
+</header>
+
+<main class="container">
+
+  <section class="cal-head">
+    <h1 class="cal-title">
+      <img class="cal-title-icon" src="/images/refresh/calendar.svg" alt="" width="41" height="42">
+      Calendar
+    </h1>
+    <p class="cal-sub">
+      What's on across Litchfield County, updated every week from the Ledger's event tracker.
+      Know of one we're missing? <a href={submitUrl} data-track-click="submit_event_click" data-track-location="calendar_intro">Submit it here</a>.
+    </p>
+    {total > 0 && (
+      <div class="cal-filters" role="group" aria-label="Filter events by category">
+        <button type="button" class="cal-filter is-active" data-cat="all" aria-pressed="true">All <span class="cal-filter-count">{total}</span></button>
+        {categories.map((c) => (
+          <button type="button" class="cal-filter" data-cat={c} aria-pressed="false" style={`--cat: ${CATEGORY_META[c].color}`}>
+            {CATEGORY_META[c].label} <span class="cal-filter-count">{counts[c]}</span>
+          </button>
+        ))}
+      </div>
+    )}
+  </section>
+
+  <section class="cal-days" id="calendar" aria-live="polite">
+    {days.length === 0 && (
+      <p class="cal-empty">Nothing on the calendar yet. <a href={submitUrl}>Submit an event</a> and it'll show up here.</p>
+    )}
+    {days.map((day) => (
+      <div class="cal-day" data-date={day.date}>
+        <div class="cal-day-head">
+          <div class="event-date">
+            <span class="event-month">{day.month}</span>
+            <span class="event-day">{day.day}</span>
+          </div>
+          <div class="cal-day-text">
+            <span class="cal-day-name">{day.weekday}</span>
+            <span class="cal-day-label">{day.label}</span>
+          </div>
+        </div>
+        <ul class="cal-list">
+          {day.events.map((ev) => (
+            <li class="cal-item" data-cat={ev.category}>
+              <a href={ev.url || submitUrl} data-track-click="event_click" data-track-location="calendar" target={ev.url ? '_blank' : undefined} rel={ev.url ? 'noopener' : undefined}>
+                <span class="cal-time">{timeLabel(ev.time, ev.endTime)}</span>
+                <span class="cal-info">
+                  <span class="cal-name">{ev.name}</span>
+                  <span class="cal-place">{placeLabel(ev.venue, ev.town)}</span>
+                </span>
+                <span class="cal-cat" style={`--cat: ${CATEGORY_META[ev.category].color}`}>{CATEGORY_META[ev.category].label}</span>
+                <span class="event-chevron" aria-hidden="true">›</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    ))}
+    <p class="cal-none is-hidden" id="cal-none">No events in this category right now. <a href={submitUrl}>Know of one?</a></p>
+  </section>
+
+</main>
+
+<SiteFooter showInstagram={true} />
+
+<script is:inline>
+(function () {
+  const buttons = Array.from(document.querySelectorAll('.cal-filter'));
+  const items = Array.from(document.querySelectorAll('.cal-item'));
+  const dayBlocks = Array.from(document.querySelectorAll('.cal-day'));
+  const none = document.getElementById('cal-none');
+  if (!buttons.length) return;
+
+  function apply(cat) {
+    let visible = 0;
+    items.forEach((item) => {
+      const show = cat === 'all' || item.dataset.cat === cat;
+      item.classList.toggle('is-hidden', !show);
+      if (show) visible += 1;
+    });
+    dayBlocks.forEach((block) => {
+      const any = block.querySelector('.cal-item:not(.is-hidden)');
+      block.classList.toggle('is-hidden', !any);
+    });
+    if (none) none.classList.toggle('is-hidden', visible > 0);
+    buttons.forEach((b) => {
+      const active = b.dataset.cat === cat;
+      b.classList.toggle('is-active', active);
+      b.setAttribute('aria-pressed', active ? 'true' : 'false');
+    });
+    if (window.gtag) window.gtag('event', 'calendar_filter', { category: cat });
+  }
+
+  buttons.forEach((b) => b.addEventListener('click', () => apply(b.dataset.cat)));
+
+  const fromHash = (window.location.hash || '').replace('#', '');
+  if (fromHash && buttons.some((b) => b.dataset.cat === fromHash)) apply(fromHash);
+})();
+</script>
+
+</body>
+</html>

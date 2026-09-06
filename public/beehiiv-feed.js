@@ -5,21 +5,21 @@
   if (!feeds.length && !latestPreviews.length) return;
   if (!document.querySelector('.post-empty')) return;
 
+  const MAX_POSTS = 4;
+
   const stripHtml = (value) => {
     const div = document.createElement('div');
     div.innerHTML = value || '';
     return (div.textContent || div.innerText || '').replace(/\s+/g, ' ').trim();
   };
 
-  const formatDate = (value) => {
+  const formatDate = (value, withYear) => {
     const date = new Date(value);
-
     if (Number.isNaN(date.getTime())) return '';
-
     return date.toLocaleDateString('en-US', {
       month: 'short',
       day: 'numeric',
-      year: 'numeric',
+      year: withYear ? 'numeric' : undefined,
     });
   };
 
@@ -68,6 +68,34 @@
     return text;
   };
 
+  // Mirrors smartTitle() in src/lib/beehiiv.ts: ALL-CAPS titles → title case.
+  const SMALL_WORDS = new Set([
+    'a', 'an', 'the', 'and', 'but', 'or', 'nor', 'for', 'so', 'yet', 'at', 'by', 'in',
+    'of', 'on', 'to', 'up', 'as', 'vs', 'via', 'from', 'with', 'into', 'over', 'per',
+  ]);
+
+  const smartTitle = (title) => {
+    if (!title || /[a-z]/.test(title)) return title;
+    const parts = title.toLowerCase().split(/(\s+)/);
+    let wordIndex = 0;
+    return parts
+      .map((part, i) => {
+        if (/^\s*$/.test(part)) return part;
+        const prev = parts[i - 2] || '';
+        const startsClause = wordIndex === 0 || /[:.?!—–]$/.test(prev);
+        wordIndex += 1;
+        const bare = part.replace(/^[^a-z0-9]+|[^a-z0-9]+$/g, '');
+        if (!startsClause && SMALL_WORDS.has(bare)) return part;
+        return part.replace(/[a-z]/, (c) => c.toUpperCase());
+      })
+      .join('');
+  };
+
+  const readingMinutes = (text) => {
+    const words = text ? text.split(/\s+/).filter(Boolean).length : 0;
+    return Math.max(1, Math.round(words / 230));
+  };
+
   const escapeHtml = (value) =>
     String(value || '')
       .replace(/&/g, '&amp;')
@@ -78,17 +106,20 @@
 
   const renderPosts = (container, posts) => {
     container.innerHTML = posts
-      .map((post) => {
-        const excerpt = post.excerpt
-          ? `<div class="post-excerpt">${escapeHtml(truncateText(post.excerpt, 180))}</div>`
+      .slice(0, MAX_POSTS)
+      .map((post, i) => {
+        const image = post.image
+          ? `<img src="${escapeHtml(post.image)}" alt="" width="548" height="344" loading="lazy" decoding="async">`
           : '';
 
         return `
-          <li class="post-item">
-            <a href="${escapeHtml(post.url)}" class="post-link" data-track-click="outbound_post_click" data-track-location="post_list">
-              <div class="post-meta">${escapeHtml(post.date)}</div>
-              <div class="post-title">${escapeHtml(post.title)}</div>
-              ${excerpt}
+          <li class="journal-card">
+            <a href="${escapeHtml(post.url)}" data-track-click="outbound_post_click" data-track-location="post_list">
+              <div class="journal-thumb tone-${(i % 4) + 1}">${image}</div>
+              <div class="journal-text">
+                <h3 class="journal-title">${escapeHtml(post.title)}</h3>
+                <p class="journal-meta">${escapeHtml(post.dateShort)}<span class="dot">•</span>${post.readMinutes} min read</p>
+              </div>
             </a>
           </li>
         `;
@@ -104,7 +135,7 @@
 
     if (!kicker || !title || !preview) return;
 
-    kicker.innerHTML = `<span>This Week</span><span>${escapeHtml(post.date)}</span>`;
+    kicker.innerHTML = `<span>The Tuesday Letter</span><span>${escapeHtml(post.date)}</span>`;
 
     if (title.tagName.toLowerCase() === 'a') {
       title.href = post.url;
@@ -145,6 +176,20 @@
     item.getElementsByTagName('content:encoded')[0]?.textContent?.trim() ||
     '';
 
+  // Post image: RSS enclosure / media:* first, then the first <img> in the body.
+  const getImage = (item, contentHtml) => {
+    const enclosure = item.querySelector('enclosure');
+    if (enclosure?.getAttribute('url')) return enclosure.getAttribute('url');
+
+    const media =
+      item.getElementsByTagName('media:content')[0] ||
+      item.getElementsByTagName('media:thumbnail')[0];
+    if (media?.getAttribute('url')) return media.getAttribute('url');
+
+    const match = String(contentHtml || '').match(/<img[^>]+src=["']([^"']+)["']/i);
+    return match ? match[1] : '';
+  };
+
   const loadFeed = () => {
     fetch('/feed')
       .then((response) => {
@@ -153,23 +198,29 @@
       })
       .then((xml) => {
         const doc = new DOMParser().parseFromString(xml, 'application/xml');
-        const items = Array.from(doc.querySelectorAll('item')).slice(0, 5);
+        const items = Array.from(doc.querySelectorAll('item')).slice(0, MAX_POSTS);
 
         const posts = items
           .map((item) => {
-            const title = stripHtml(getText(item, 'title'));
+            const rawTitle = stripHtml(getText(item, 'title'));
+            const title = smartTitle(rawTitle);
             const url = getText(item, 'link');
-            const date = formatDate(getText(item, 'pubDate'));
+            const pubDate = getText(item, 'pubDate');
+            const contentHtml = getContentText(item);
+            const contentText = stripHtml(contentHtml || getText(item, 'description'));
             const excerpt = stripHtml(getText(item, 'description'));
-            const preview = truncateText(
-              cleanPreviewText(
-                stripHtml(getContentText(item) || getText(item, 'description')),
-                title
-              ),
-              1000
-            );
+            const preview = truncateText(cleanPreviewText(contentText, rawTitle), 1000);
 
-            return { title, url, date, excerpt, preview };
+            return {
+              title,
+              url,
+              date: formatDate(pubDate, true),
+              dateShort: formatDate(pubDate, false).toUpperCase(),
+              excerpt,
+              preview,
+              image: getImage(item, contentHtml),
+              readMinutes: readingMinutes(contentText),
+            };
           })
           .filter((post) => post.title && post.url);
 

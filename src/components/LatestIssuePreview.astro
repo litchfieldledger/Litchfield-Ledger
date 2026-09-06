@@ -9,10 +9,14 @@ const { issue } = Astro.props;
 ---
 
 {issue && (
-  <section class="latest-issue" aria-labelledby="latest-issue-title" data-beehiiv-latest-preview>
+  <section class="section latest-issue" id="latest-issue" aria-labelledby="latest-issue-title" data-beehiiv-latest-preview>
+    <div class="section-head">
+      <h2 class="section-title">Latest Issue</h2>
+      <a class="section-link" href={issue.url} data-track-click="outbound_post_click" data-track-location="latest_issue_head">Read on the web <span aria-hidden="true">→</span></a>
+    </div>
     <div class="latest-issue-inner">
       <div class="latest-issue-kicker">
-        <span>This Week</span>
+        <span>The Tuesday Letter</span>
         {issue.date && <span>{issue.date}</span>}
       </div>
       <a

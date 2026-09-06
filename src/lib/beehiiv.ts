@@ -1,6 +1,6 @@
 const PUBLICATION_ID = import.meta.env.BEEHIIV_PUBLICATION_ID;
 const API_KEY = import.meta.env.BEEHIIV_API_KEY;
-const POST_LIMIT = 5;
+const POST_LIMIT = 4;
 
 export type LedgerPost = {
   title: string;
@@ -8,6 +8,9 @@ export type LedgerPost = {
   preview: string;
   url: string;
   date: string;
+  dateShort: string;
+  thumbnail: string;
+  readMinutes: number;
 };
 
 export type LedgerStats = {
@@ -165,6 +168,37 @@ const contentValue = (post: any) =>
   post.content?.rss ||
   '';
 
+
+// Beehiiv titles are entered in ALL CAPS. The card layout wants title case, so
+// convert — but only when the title has no lowercase letters at all, so a
+// deliberately mixed-case title passes through untouched.
+const SMALL_WORDS = new Set([
+  'a', 'an', 'the', 'and', 'but', 'or', 'nor', 'for', 'so', 'yet', 'at', 'by', 'in',
+  'of', 'on', 'to', 'up', 'as', 'vs', 'via', 'from', 'with', 'into', 'over', 'per',
+]);
+
+export const smartTitle = (title: string): string => {
+  if (!title || /[a-z]/.test(title)) return title;
+  const parts = title.toLowerCase().split(/(\s+)/);
+  let wordIndex = 0;
+  return parts
+    .map((part, i) => {
+      if (/^\s*$/.test(part)) return part;
+      const prev = parts[i - 2] || '';
+      const startsClause = wordIndex === 0 || /[:.?!—–]$/.test(prev);
+      wordIndex += 1;
+      const bare = part.replace(/^[^a-z0-9]+|[^a-z0-9]+$/g, '');
+      if (!startsClause && SMALL_WORDS.has(bare)) return part;
+      return part.replace(/[a-z]/, (c) => c.toUpperCase());
+    })
+    .join('');
+};
+
+const readingMinutes = (text: string): number => {
+  const words = text ? text.split(/\s+/).filter(Boolean).length : 0;
+  return Math.max(1, Math.round(words / 230));
+};
+
 export async function getLedgerPosts(): Promise<LedgerPost[]> {
   if (!PUBLICATION_ID || !API_KEY) {
     console.warn('Missing Beehiiv env vars.');
@@ -201,20 +235,21 @@ export async function getLedgerPosts(): Promise<LedgerPost[]> {
     const json = await res.json();
 
     return (json.data ?? []).map((p: any) => {
-      const title = p.title ?? '';
+      const rawTitle = p.title ?? '';
       const excerpt = (p.subtitle || p.preview_text || '').trim();
-      const contentPreview = cleanPreviewText(stripHtml(contentValue(p)), title);
+      const contentText = stripHtml(contentValue(p));
+      const contentPreview = cleanPreviewText(contentText, rawTitle);
+      const published = new Date((p.publish_date ?? 0) * 1000);
 
       return {
-        title,
+        title: smartTitle(rawTitle),
         excerpt,
         preview: truncateText(contentPreview || excerpt, 1000),
         url: p.web_url ?? '#',
-        date: new Date((p.publish_date ?? 0) * 1000).toLocaleDateString('en-US', {
-          month: 'short',
-          day: 'numeric',
-          year: 'numeric',
-        }),
+        date: published.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
+        dateShort: published.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }).toUpperCase(),
+        thumbnail: p.thumbnail_url ?? '',
+        readMinutes: readingMinutes(contentText),
       };
     });
   } catch (err) {
@@ -316,7 +351,7 @@ export async function getLatestIssue(): Promise<LedgerIssue | null> {
     if (!html) return null;
 
     return {
-      title: post.title ?? '',
+      title: smartTitle(post.title ?? ''),
       subtitle: (post.subtitle || post.preview_text || '').trim(),
       url: webUrl,
       html,

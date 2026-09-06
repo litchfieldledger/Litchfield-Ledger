@@ -1,18 +1,14 @@
-// Build-time event source for the map page.
+// Build-time event source for the /events calendar and the homepage
+// "This Week" strip.
 //
 // Two modes, chosen automatically:
 //   1. LIVE  — when AIRTABLE_API_KEY is set, fetch approved/Include future
 //      events straight from the Event Tracker base. This is the "synced to the
-//      scraper + Airtable" path.
+//      scraper + Airtable" path and is what production should run.
 //   2. SEED  — otherwise, read the committed snapshot (src/data/events-seed.json)
-//      so the site still builds (and the prototype renders) without secrets.
-//
-// Either way, each event is joined to the committed geocode cache
-// (src/data/geocache.json) to attach lat/lng. Locations missing from the cache
-// are logged and skipped — run `node scripts/geocode.mjs` after a scrape to
-// fill them in, then commit the updated cache.
+//      so the site still builds without secrets. Rebuild it with
+//      `node scripts/build-events-seed.mjs <airtable-dump.json>`.
 
-import geocache from '../data/geocache.json';
 import aliases from '../data/geo-aliases.json';
 import seed from '../data/events-seed.json';
 
@@ -37,23 +33,6 @@ const FIELD = {
   listingUrl: 'Original Listing URL',
   source: 'Source Name',
 } as const;
-
-export type MapEvent = {
-  id: string;
-  name: string;
-  date: string; // YYYY-MM-DD
-  time: string;
-  endTime: string;
-  venue: string;
-  address: string;
-  town: string;
-  url: string;
-  source: string;
-  category: Category;
-  lat: number;
-  lng: number;
-  precise: boolean;
-};
 
 export type Category = 'music' | 'market' | 'art' | 'talk' | 'outdoors' | 'community';
 
@@ -88,7 +67,7 @@ function geocodeQuery(address = '', venue = ''): string {
   return `${q}, CT`;
 }
 
-// Best-effort town extraction for the popup subtitle: the last comma-part that
+// Best-effort town extraction for event subtitles: the last comma-part that
 // isn't a state/zip, else the aliased town.
 function townFrom(address: string, geo: string): string {
   const parts = (address || '').split(',').map((p) => p.trim()).filter(Boolean);
@@ -109,41 +88,6 @@ function townFrom(address: string, geo: string): string {
 }
 
 type RawFields = Record<string, string | undefined>;
-
-function toMapEvent(id: string, f: RawFields): MapEvent | null {
-  const name = (f[FIELD.name] || '').trim();
-  const date = (f[FIELD.date] || '').trim();
-  const address = (f[FIELD.address] || '').trim();
-  const venue = (f[FIELD.venue] || '').trim();
-  const geo = geocodeQuery(address, venue);
-  if (!name || !date || !geo) return null;
-
-  const hit = (geocache as Record<string, { lat: number; lng: number; precision: string } | null>)[geo];
-  if (!hit) {
-    missingGeo.add(geo);
-    return null;
-  }
-
-  return {
-    id,
-    name,
-    date,
-    time: (f[FIELD.time] || '').trim(),
-    endTime: (f[FIELD.endTime] || '').trim(),
-    venue,
-    address,
-    town: townFrom(address, geo),
-    url: (f[FIELD.url] || f[FIELD.listingUrl] || '').trim(),
-    source: (f[FIELD.source] || '').trim(),
-    category: categorize(name),
-    lat: hit.lat,
-    lng: hit.lng,
-    precise: hit.precision === 'precise',
-  };
-}
-
-const missingGeo = new Set<string>();
-
 async function fetchLive(): Promise<RawFields[] | null> {
   if (!API_KEY) return null;
 
@@ -178,19 +122,69 @@ async function fetchLive(): Promise<RawFields[] | null> {
   }
 }
 
-export async function getMapEvents(): Promise<MapEvent[]> {
-  missingGeo.clear();
-  const live = await fetchLive();
+// ---------------------------------------------------------------------------
+// Homepage "This Week" strip.
 
-  let events: MapEvent[];
-  if (live) {
-    events = live
-      .map((f, i) => toMapEvent(`live-${i}`, f))
-      .filter((e): e is MapEvent => e !== null);
-    console.log(`[events] LIVE: ${events.length} placed from ${live.length} Airtable rows.`);
-  } else {
-    const seedEvents = (seed.events as any[]).map((e) =>
-      toMapEvent(e.id, {
+export type UpcomingEvent = {
+  name: string;
+  date: string; // YYYY-MM-DD
+  month: string; // "MAY"
+  day: string; // "21"
+  time: string; // "6:00 PM"
+  place: string; // "Litchfield, CT"
+  url: string;
+};
+
+function timeToMinutes(time: string): number {
+  const m = (time || '').match(/(\d{1,2})(?::(\d{2}))?\s*(am|pm)?/i);
+  if (!m) return 24 * 60;
+  let h = Number(m[1]);
+  const min = Number(m[2] || 0);
+  const ap = (m[3] || '').toLowerCase();
+  if (ap === 'pm' && h < 12) h += 12;
+  if (ap === 'am' && h === 12) h = 0;
+  return h * 60 + min;
+}
+
+function addDays(iso: string, days: number): string {
+  const d = new Date(`${iso}T12:00:00Z`);
+  d.setUTCDate(d.getUTCDate() + days);
+  return d.toISOString().slice(0, 10);
+}
+
+function placeLabel(address: string, venue: string): string {
+  const geo = geocodeQuery(address, venue);
+  const town = townFrom(address, geo) || venue;
+  if (!town) return '';
+  if (/\b(CT|Connecticut|NY|New York|MA|Massachusetts)\b/i.test(town)) return town;
+  return `${town}, CT`;
+}
+
+
+type FutureRow = {
+  id: string;
+  name: string;
+  date: string;
+  time: string;
+  endTime: string;
+  address: string;
+  venue: string;
+  url: string;
+};
+
+function todayIso(): string {
+  return new Date().toLocaleDateString('en-CA', { timeZone: 'America/New_York' });
+}
+
+// Every future event from live Airtable (when the key is set) or the committed
+// seed, normalised and sorted by date then start time. Shared by the homepage
+// strip and the /events calendar.
+async function loadFutureRows(today: string): Promise<FutureRow[]> {
+  const live = await fetchLive();
+  const rows: RawFields[] = live
+    ? live
+    : (seed.events as any[]).map((e) => ({
+        id: e.id,
         [FIELD.name]: e.name,
         [FIELD.date]: e.date,
         [FIELD.time]: e.time,
@@ -198,20 +192,123 @@ export async function getMapEvents(): Promise<MapEvent[]> {
         [FIELD.address]: e.address,
         [FIELD.venue]: e.venue,
         [FIELD.url]: e.url,
-        [FIELD.source]: e.source,
-      })
-    );
-    events = seedEvents.filter((e): e is MapEvent => e !== null);
-    console.log(`[events] SEED: ${events.length} placed from ${seed.events.length} snapshot rows (no AIRTABLE_API_KEY).`);
-  }
+      }));
 
-  if (missingGeo.size) {
-    console.warn(
-      `[events] ${missingGeo.size} location(s) missing from geocache — run \`node scripts/geocode.mjs\` and commit:\n  ` +
-        [...missingGeo].join('\n  ')
+  return rows
+    .map((f, i) => ({
+      id: (f.id as string) || `ev-${i}`,
+      name: (f[FIELD.name] || '').trim(),
+      date: (f[FIELD.date] || '').trim(),
+      time: (f[FIELD.time] || '').trim(),
+      endTime: (f[FIELD.endTime] || '').trim(),
+      address: (f[FIELD.address] || '').trim(),
+      venue: (f[FIELD.venue] || '').trim(),
+      url: (f[FIELD.url] || f[FIELD.listingUrl] || '').trim(),
+    }))
+    .filter((e) => e.name && e.date && e.date >= today)
+    .sort((a, b) =>
+      a.date < b.date ? -1 : a.date > b.date ? 1 : timeToMinutes(a.time) - timeToMinutes(b.time)
     );
-  }
+}
 
-  events.sort((a, b) => (a.date < b.date ? -1 : a.date > b.date ? 1 : a.name.localeCompare(b.name)));
-  return events;
+export type CalendarEvent = {
+  id: string;
+  name: string;
+  date: string; // YYYY-MM-DD
+  time: string; // "6:00 PM" or ""
+  endTime: string;
+  venue: string;
+  town: string;
+  url: string;
+  category: Category;
+};
+
+export type CalendarDay = {
+  date: string;
+  weekday: string; // "Thursday" / "Today" / "Tomorrow"
+  label: string; // "September 3"
+  month: string; // "SEP"
+  day: string; // "3"
+  events: CalendarEvent[];
+};
+
+// Full upcoming calendar for /events, grouped by date. Every occurrence of a
+// recurring event (weekly markets, etc.) gets its own row under its own date.
+export async function getCalendarDays(): Promise<CalendarDay[]> {
+  const today = todayIso();
+  const tomorrow = addDays(today, 1);
+  const rows = await loadFutureRows(today);
+
+  const days = new Map<string, CalendarDay>();
+  const seen = new Set<string>();
+  for (const e of rows) {
+    // The tracker can hold the same listing from two sources; show it once.
+    const key = `${e.date}|${e.time.toLowerCase()}|${e.name.toLowerCase().replace(/\s+/g, ' ')}`;
+    if (seen.has(key)) continue;
+    seen.add(key);
+    if (!days.has(e.date)) {
+      const d = new Date(`${e.date}T12:00:00`);
+      const weekday =
+        e.date === today
+          ? 'Today'
+          : e.date === tomorrow
+            ? 'Tomorrow'
+            : d.toLocaleDateString('en-US', { weekday: 'long' });
+      days.set(e.date, {
+        date: e.date,
+        weekday,
+        label: d.toLocaleDateString('en-US', { month: 'long', day: 'numeric' }),
+        month: d.toLocaleDateString('en-US', { month: 'short' }).toUpperCase(),
+        day: String(d.getDate()),
+        events: [],
+      });
+    }
+    const geo = geocodeQuery(e.address, e.venue);
+    days.get(e.date)!.events.push({
+      id: e.id,
+      name: e.name,
+      date: e.date,
+      time: e.time,
+      endTime: e.endTime,
+      venue: e.venue,
+      town: townFrom(e.address, geo),
+      url: e.url,
+      category: categorize(e.name),
+    });
+  }
+  return [...days.values()];
+}
+
+export async function getUpcomingEvents(
+  { limit = 3, days = 7 }: { limit?: number; days?: number } = {}
+): Promise<UpcomingEvent[]> {
+  const today = todayIso();
+  const horizon = addDays(today, days);
+  const all = await loadFutureRows(today);
+
+  // One slot per distinct event name, so a multi-day exhibition doesn't fill
+  // the whole strip.
+  const seen = new Set<string>();
+  const distinct = all.filter((e) => {
+    const key = e.name.toLowerCase();
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
+
+  let picked = distinct.filter((e) => e.date <= horizon).slice(0, limit);
+  if (picked.length < limit) picked = distinct.slice(0, limit);
+
+  return picked.map((e) => {
+    const d = new Date(`${e.date}T12:00:00`);
+    return {
+      name: e.name,
+      date: e.date,
+      month: d.toLocaleDateString('en-US', { month: 'short' }).toUpperCase(),
+      day: String(d.getDate()),
+      time: e.time,
+      place: placeLabel(e.address, e.venue),
+      url: e.url,
+    };
+  });
 }
