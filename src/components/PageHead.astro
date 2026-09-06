@@ -1,0 +1,61 @@
+---
+// Shared <head> contents: metadata, canonical, social cards, fonts, analytics.
+import Analytics from './Analytics.astro';
+import ConversionTracking from './ConversionTracking.astro';
+
+interface Props {
+  title: string;
+  description: string;
+  path: string; // "/" or "/events/kent"
+  image?: string; // absolute or site-relative
+  type?: 'website' | 'article';
+  jsonLd?: object | object[];
+}
+
+const SITE = 'https://litchfieldledger.com';
+const { title, description, path, image = '/images/og-home.jpg', type = 'website', jsonLd } = Astro.props;
+
+// Netlify serves directory indexes at the trailing-slash URL, and the sitemap
+// lists them that way, so canonicals match that form.
+const cleanPath = path === '/' ? '/' : `${path.replace(/\/+$/, '')}/`;
+const canonical = `${SITE}${cleanPath}`;
+const imageUrl = image.startsWith('http') ? image : `${SITE}${image}`;
+const fontsHref =
+  'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Source+Code+Pro:wght@400;600;700&family=Source+Serif+4:ital,wght@0,400;0,700;1,400&display=swap';
+const ld = jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : [];
+---
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{title}</title>
+<meta name="description" content={description}>
+<link rel="canonical" href={canonical}>
+<meta name="robots" content="index, follow, max-image-preview:large">
+
+<meta property="og:site_name" content="The Litchfield Ledger">
+<meta property="og:type" content={type}>
+<meta property="og:title" content={title}>
+<meta property="og:description" content={description}>
+<meta property="og:url" content={canonical}>
+<meta property="og:image" content={imageUrl}>
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content={title}>
+<meta name="twitter:description" content={description}>
+<meta name="twitter:image" content={imageUrl}>
+
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" as="font" href="/fonts/Sapiens-Bold.otf" type="font/otf" crossorigin>
+<link rel="preload" href={fontsHref} as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link href={fontsHref} rel="stylesheet"></noscript>
+
+{ld.map((obj) => (
+  <script type="application/ld+json" is:inline set:html={JSON.stringify(obj)} />
+))}
+
+<Analytics />
+<ConversionTracking />

@@ -1,8 +1,7 @@
 ---
 import SiteFooter from '../components/SiteFooter.astro';
 import LatestIssuePreview from '../components/LatestIssuePreview.astro';
-import Analytics from '../components/Analytics.astro';
-import ConversionTracking from '../components/ConversionTracking.astro';
+import PageHead from '../components/PageHead.astro';
 import { getLedgerPosts, getLedgerStats, getLatestIssue } from '../lib/beehiiv';
 import { getUpcomingEvents } from '../lib/events';
 import '../styles/home.css';
@@ -14,26 +13,38 @@ const events = await getUpcomingEvents({ limit: 3, days: 7 });
 
 const numberFmt = new Intl.NumberFormat('en-US');
 const submitUrl = 'https://litchfieldledger.beehiiv.com/add-your-event';
-const fontsHref =
-  'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Source+Code+Pro:wght@400;600;700&family=Source+Serif+4:ital,wght@0,400;0,700;1,400&display=swap';
+
+const SITE = 'https://litchfieldledger.com';
+const orgJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'NewsMediaOrganization',
+  name: 'The Litchfield Ledger',
+  url: SITE,
+  logo: `${SITE}/images/orange-logo.png`,
+  description:
+    'A free Tuesday newsletter about the nature, history, people, and events of Litchfield County, Connecticut.',
+  areaServed: { '@type': 'AdministrativeArea', name: 'Litchfield County, Connecticut' },
+  sameAs: ['https://www.instagram.com/litchfieldledger/', 'https://litchfieldledger.beehiiv.com/'],
+  contactPoint: { '@type': 'ContactPoint', email: 'patrick@litchfieldledger.com', contactType: 'editorial' },
+};
+const siteJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: 'The Litchfield Ledger',
+  url: SITE,
+  publisher: { '@type': 'NewsMediaOrganization', name: 'The Litchfield Ledger' },
+};
 ---
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>The Litchfield Ledger</title>
-<meta name="description" content="A free Tuesday newsletter full of weekly events and stories about the nature, history, and people of Litchfield County, Connecticut.">
-<link rel="icon" href="/favicon.svg" type="image/svg+xml">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preload" as="font" href="/fonts/Sapiens-Bold.otf" type="font/otf" crossorigin>
-<link rel="preload" as="image" href="/images/refresh/hero-river-1600.jpg" type="image/jpeg" fetchpriority="high" media="(min-width: 769px)">
-<link rel="preload" href={fontsHref} as="style" onload="this.onload=null;this.rel='stylesheet'">
-<noscript><link href={fontsHref} rel="stylesheet"></noscript>
-<Analytics />
-<ConversionTracking />
+<PageHead
+  title="The Litchfield Ledger — Things to Do & Stories from Litchfield County, CT"
+  description="A free Tuesday newsletter with this week's things to do in Litchfield County, Connecticut, plus stories about the nature, history, and people of the Northwest Corner."
+  path="/"
+  jsonLd={[orgJsonLd, siteJsonLd]}
+/>
 </head>
 <body>
 

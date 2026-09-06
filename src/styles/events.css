@@ -70,3 +70,22 @@
   .cal-filters { gap: 6px; margin-top: 18px; }
   .cal-filter { font-size: 10px; padding: 7px 11px; letter-spacing: 1px; }
 }
+
+/* SEO landing-page furniture */
+.cal-eyebrow { font-size: 10px; font-weight: 600; letter-spacing: 1.8px; text-transform: uppercase; color: var(--olive-light); margin-bottom: 14px; }
+.cal-eyebrow a { color: inherit; text-decoration: none; }
+.cal-eyebrow a:hover { color: var(--orange); }
+.cal-browse { display: flex; flex-direction: column; gap: 10px; margin-top: 26px; padding-top: 20px; border-top: 1px solid var(--rule); }
+.cal-browse-group { display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; }
+.cal-browse-label { font-size: 10px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-muted); width: 64px; flex-shrink: 0; }
+.cal-browse ul { display: flex; flex-wrap: wrap; gap: 4px 16px; }
+.cal-browse a { font-size: 13px; color: var(--text-mid); text-decoration: none; border-bottom: 1px solid transparent; }
+.cal-browse a:hover { color: var(--orange); }
+.cal-browse a[aria-current="page"] { color: var(--ink); font-weight: 600; border-bottom-color: var(--orange); }
+.cal-about { max-width: 720px; margin: 48px 0 8px; padding-top: 28px; border-top: 1px solid var(--rule); }
+.cal-about h2 { font-family: var(--display); font-size: 22px; text-transform: uppercase; margin-bottom: 10px; }
+.cal-about p { font-family: var(--serif); font-size: 16px; line-height: 1.6; color: var(--text-mid); }
+@media (max-width: 768px) {
+  .cal-browse-label { width: auto; }
+  .cal-browse-group { gap: 8px 12px; }
+}

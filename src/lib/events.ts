@@ -218,6 +218,7 @@ export type CalendarEvent = {
   time: string; // "6:00 PM" or ""
   endTime: string;
   venue: string;
+  address: string;
   town: string;
   url: string;
   category: Category;
@@ -271,6 +272,7 @@ export async function getCalendarDays(): Promise<CalendarDay[]> {
       time: e.time,
       endTime: e.endTime,
       venue: e.venue,
+      address: e.address,
       town: townFrom(e.address, geo),
       url: e.url,
       category: categorize(e.name),
@@ -311,4 +313,167 @@ export async function getUpcomingEvents(
       url: e.url,
     };
   });
+}
+
+// ---------------------------------------------------------------------------
+// SEO landing pages: /events/<town>, /events/<category>, /events/this-weekend.
+
+export const CATEGORY_SLUGS: Record<Category, string> = {
+  music: 'live-music',
+  market: 'farmers-markets',
+  art: 'art-and-theater',
+  talk: 'talks-and-classes',
+  outdoors: 'outdoors',
+  community: 'community',
+};
+
+export const CATEGORY_PAGES: Record<Category, { title: string; h1: string; intro: string }> = {
+  music: {
+    title: 'Live Music in Litchfield County, CT This Week',
+    h1: 'Live Music in Litchfield County',
+    intro: 'Concerts, jazz nights, string quartets, and bands on the green across Northwest Connecticut, from Music Mountain and Infinity Hall to the vineyards and breweries.',
+  },
+  market: {
+    title: 'Farmers Markets & Fairs in Litchfield County, CT',
+    h1: 'Farmers Markets & Fairs',
+    intro: 'Weekly farmers markets, craft fairs, tag sales, and makers markets across Litchfield County, with days and hours for each.',
+  },
+  art: {
+    title: 'Art Shows, Galleries & Theater in Litchfield County, CT',
+    h1: 'Art, Galleries & Theater',
+    intro: 'Gallery openings, exhibitions, film screenings, and stage productions across Northwest Connecticut.',
+  },
+  talk: {
+    title: 'Talks, Classes & Workshops in Litchfield County, CT',
+    h1: 'Talks, Classes & Workshops',
+    intro: 'Author talks, lectures, workshops, and library programs happening across Litchfield County.',
+  },
+  outdoors: {
+    title: 'Hikes, Walks & Outdoor Events in Litchfield County, CT',
+    h1: 'Outdoors',
+    intro: 'Guided hikes, bird walks, garden tours, paddles, and preserve events across the hills and rivers of Northwest Connecticut.',
+  },
+  community: {
+    title: 'Community Events, Festivals & Fundraisers in Litchfield County, CT',
+    h1: 'Community Events',
+    intro: 'Festivals, town celebrations, suppers, fundraisers, tastings, and the rest of what brings Litchfield County together.',
+  },
+};
+
+export function slugify(value: string): string {
+  return value
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[̀-ͯ]/g, '')
+    .replace(/&/g, ' and ')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+}
+
+// Drop every event that fails `keep`, then drop days left empty.
+export function filterDays(days: CalendarDay[], keep: (e: CalendarEvent) => boolean): CalendarDay[] {
+  return days
+    .map((d) => ({ ...d, events: d.events.filter(keep) }))
+    .filter((d) => d.events.length > 0);
+}
+
+export type TownEntry = { town: string; slug: string; count: number };
+
+// Towns with enough events to deserve their own landing page.
+export function townIndex(days: CalendarDay[], min = 2): TownEntry[] {
+  const counts = new Map<string, { town: string; count: number }>();
+  for (const d of days) {
+    for (const e of d.events) {
+      const town = e.town.trim();
+      if (!town) continue;
+      if (!/^[A-Za-z][A-Za-z .'-]{1,30}$/.test(town)) continue; // skip junk like "CT 06777"
+      if (town.split(/\s+/).length > 3) continue;
+      const key = town.toLowerCase();
+      const cur = counts.get(key) || { town, count: 0 };
+      cur.count += 1;
+      counts.set(key, cur);
+    }
+  }
+  return [...counts.values()]
+    .filter((t) => t.count >= min)
+    .map((t) => ({ town: t.town, slug: slugify(t.town), count: t.count }))
+    .sort((a, b) => b.count - a.count || a.town.localeCompare(b.town));
+}
+
+// Friday–Sunday of the coming weekend (or the current one, if it's Sat/Sun).
+export function weekendRange(today: string = todayIso()): { start: string; end: string; label: string } {
+  const d = new Date(`${today}T12:00:00Z`);
+  const dow = d.getUTCDay(); // 0 Sun … 6 Sat
+  let toFriday = (5 - dow + 7) % 7;
+  if (dow === 6) toFriday = -1;
+  if (dow === 0) toFriday = -2;
+  let start = addDays(today, toFriday);
+  const end = addDays(start, 2);
+  if (start < today) start = today; // mid-weekend: only what's still ahead
+  const long = (iso: string) =>
+    new Date(`${iso}T12:00:00`).toLocaleDateString('en-US', { month: 'long', day: 'numeric' });
+  const sameMonth = start.slice(0, 7) === end.slice(0, 7);
+  const label =
+    start === end ? long(start) : sameMonth ? `${long(start)}–${end.slice(8).replace(/^0/, '')}` : `${long(start)}–${long(end)}`;
+  return { start, end, label };
+}
+
+// "-04:00" / "-05:00" for a given calendar date in Connecticut.
+export function nyOffset(date: string): string {
+  const parts = new Intl.DateTimeFormat('en-US', {
+    timeZone: 'America/New_York',
+    timeZoneName: 'longOffset',
+  }).formatToParts(new Date(`${date}T12:00:00Z`));
+  const tz = parts.find((p) => p.type === 'timeZoneName')?.value || 'GMT-05:00';
+  const m = tz.match(/([+-])(\d{2}):(\d{2})/);
+  return m ? `${m[1]}${m[2]}:${m[3]}` : '-05:00';
+}
+
+function toIsoTime(time: string): string | null {
+  const mins = timeToMinutes(time);
+  if (!time || mins >= 24 * 60) return null;
+  const h = Math.floor(mins / 60);
+  const m = mins % 60;
+  return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}:00`;
+}
+
+// schema.org Event objects for a set of days (capped so the JSON-LD stays small).
+export function eventsJsonLd(days: CalendarDay[], pageUrl: string, cap = 120): object {
+  const items: object[] = [];
+  outer: for (const d of days) {
+    for (const e of d.events) {
+      if (items.length >= cap) break outer;
+      const offset = nyOffset(e.date);
+      const start = toIsoTime(e.time);
+      const end = toIsoTime(e.endTime);
+      const ev: Record<string, unknown> = {
+        '@type': 'Event',
+        name: e.name,
+        startDate: start ? `${e.date}T${start}${offset}` : e.date,
+        eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
+        eventStatus: 'https://schema.org/EventScheduled',
+        location: {
+          '@type': 'Place',
+          name: e.venue || e.town || 'Litchfield County, CT',
+          address: {
+            '@type': 'PostalAddress',
+            ...(e.address ? { streetAddress: e.address } : {}),
+            ...(e.town ? { addressLocality: e.town } : {}),
+            addressRegion: 'CT',
+            addressCountry: 'US',
+          },
+        },
+      };
+      if (end) ev.endDate = `${e.date}T${end}${offset}`;
+      if (e.url) ev.url = e.url;
+      items.push(ev);
+    }
+  }
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    url: pageUrl,
+    numberOfItems: items.length,
+    itemListElement: items.map((item, i) => ({ '@type': 'ListItem', position: i + 1, item })),
+  };
 }

@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://litchfieldledger.com/sitemap-index.xml

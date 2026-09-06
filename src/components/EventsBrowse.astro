@@ -1,0 +1,44 @@
+---
+// Cross-links between the calendar landing pages (towns, categories, weekend).
+import { CATEGORY_META, CATEGORY_SLUGS, CATEGORY_PAGES } from '../lib/events';
+import type { Category, TownEntry } from '../lib/events';
+
+interface Props {
+  towns: TownEntry[];
+  categories: Category[];
+  current?: string; // path of the page being rendered
+}
+
+const { towns, categories, current = '' } = Astro.props;
+const link = (href: string) => (href === current ? { 'aria-current': 'page' } : {});
+---
+
+<nav class="cal-browse" aria-label="Browse events">
+  <div class="cal-browse-group">
+    <span class="cal-browse-label">Browse</span>
+    <ul>
+      <li><a href="/events" {...link('/events')}>All events</a></li>
+      <li><a href="/events/this-weekend" {...link('/events/this-weekend')}>This weekend</a></li>
+    </ul>
+  </div>
+  {categories.length > 0 && (
+    <div class="cal-browse-group">
+      <span class="cal-browse-label">By type</span>
+      <ul>
+        {categories.map((c) => (
+          <li><a href={`/events/${CATEGORY_SLUGS[c]}`} {...link(`/events/${CATEGORY_SLUGS[c]}`)}>{CATEGORY_PAGES[c].h1 === 'Outdoors' ? 'Outdoors' : CATEGORY_META[c].label}</a></li>
+        ))}
+      </ul>
+    </div>
+  )}
+  {towns.length > 0 && (
+    <div class="cal-browse-group">
+      <span class="cal-browse-label">By town</span>
+      <ul>
+        {towns.map((t) => (
+          <li><a href={`/events/${t.slug}`} {...link(`/events/${t.slug}`)}>{t.town}</a></li>
+        ))}
+      </ul>
+    </div>
+  )}
+</nav>

@@ -1,0 +1,133 @@
+---
+// One static page per town and per category, all cut from the same calendar.
+import PageHead from '../../components/PageHead.astro';
+import SiteFooter from '../../components/SiteFooter.astro';
+import EventsCalendar from '../../components/EventsCalendar.astro';
+import EventsBrowse from '../../components/EventsBrowse.astro';
+import {
+  getCalendarDays,
+  townIndex,
+  filterDays,
+  eventsJsonLd,
+  CATEGORY_META,
+  CATEGORY_SLUGS,
+  CATEGORY_PAGES,
+} from '../../lib/events';
+import type { Category, CalendarDay, TownEntry } from '../../lib/events';
+import { SUBMIT_URL, SITE, breadcrumbs } from './_shared';
+import '../../styles/home.css';
+import '../../styles/events.css';
+
+type PageProps = {
+  kind: 'town' | 'category';
+  h1: string;
+  crumb: string;
+  title: string;
+  description: string;
+  intro: string;
+  days: CalendarDay[];
+  towns: TownEntry[];
+  categories: Category[];
+};
+
+export async function getStaticPaths() {
+  const allDays = await getCalendarDays();
+  const towns = townIndex(allDays);
+  const categories = (Object.keys(CATEGORY_META) as Category[]).filter((c) =>
+    allDays.some((d) => d.events.some((e) => e.category === c))
+  );
+
+  const paths: { params: { slug: string }; props: PageProps }[] = [];
+
+  for (const c of categories) {
+    const days = filterDays(allDays, (e) => e.category === c);
+    const total = days.reduce((n, d) => n + d.events.length, 0);
+    const page = CATEGORY_PAGES[c];
+    paths.push({
+      params: { slug: CATEGORY_SLUGS[c] },
+      props: {
+        kind: 'category',
+        h1: page.h1,
+        crumb: CATEGORY_META[c].label,
+        title: `${page.title} | The Litchfield Ledger`,
+        description: `${total} upcoming ${CATEGORY_META[c].label.toLowerCase()} events in Litchfield County, Connecticut. ${page.intro}`,
+        intro: page.intro,
+        days,
+        towns,
+        categories,
+      },
+    });
+  }
+
+  const taken = new Set(paths.map((p) => p.params.slug));
+  for (const t of towns) {
+    if (taken.has(t.slug)) continue;
+    const days = filterDays(allDays, (e) => e.town.toLowerCase() === t.town.toLowerCase());
+    const total = days.reduce((n, d) => n + d.events.length, 0);
+    paths.push({
+      params: { slug: t.slug },
+      props: {
+        kind: 'town',
+        h1: `Things to Do in ${t.town}, CT`,
+        crumb: t.town,
+        title: `Things to Do in ${t.town}, CT This Week | The Litchfield Ledger`,
+        description: `${total} upcoming events in ${t.town}, Connecticut: live music, markets, art, hikes, talks, and community events, updated weekly by The Litchfield Ledger.`,
+        intro: `Everything coming up in ${t.town} and just over the town line, pulled from the Ledger's Litchfield County event tracker and refreshed every week. Times are as posted by each organizer.`,
+        days,
+        towns,
+        categories,
+      },
+    });
+  }
+
+  return paths;
+}
+
+const { slug } = Astro.params;
+const { h1, crumb, title, description, intro, days, towns, categories } = Astro.props as PageProps;
+const path = `/events/${slug}`;
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<PageHead
+  title={title}
+  description={description}
+  path={path}
+  jsonLd={[
+    breadcrumbs([{ name: 'Home', path: '/' }, { name: 'Things to Do', path: '/events' }, { name: crumb, path }]),
+    eventsJsonLd(days, `${SITE}${path}/`),
+  ]}
+/>
+</head>
+<body>
+
+<header class="page-bar container">
+  <a href="/" class="wordmark" aria-label="The Litchfield Ledger — home">
+    <span>THE</span><span class="wordmark-box">LITCHFIELD</span><span>LEDGER</span>
+  </a>
+  <a class="page-bar-link" href={SUBMIT_URL} data-track-click="submit_event_click" data-track-location="calendar_bar">Submit event <span aria-hidden="true">→</span></a>
+</header>
+
+<main class="container">
+  <section class="cal-head">
+    <p class="cal-eyebrow"><a href="/events">Things to Do in Litchfield County</a> · {crumb}</p>
+    <h1 class="cal-title">
+      <img class="cal-title-icon" src="/images/refresh/calendar.svg" alt="" width="41" height="42">
+      {h1}
+    </h1>
+    <p class="cal-sub">
+      {intro}
+      Know of one we're missing? <a href={SUBMIT_URL} data-track-click="submit_event_click" data-track-location="calendar_intro">Submit it here</a>.
+    </p>
+    <EventsBrowse towns={towns} categories={categories} current={path} />
+  </section>
+
+  <EventsCalendar days={days} showFilters={false} emptyText="Nothing posted here yet." />
+</main>
+
+<SiteFooter showInstagram={true} />
+
+</body>
+</html>

@@ -1,0 +1,85 @@
+---
+import PageHead from '../../components/PageHead.astro';
+import SiteFooter from '../../components/SiteFooter.astro';
+import EventsCalendar from '../../components/EventsCalendar.astro';
+import EventsBrowse from '../../components/EventsBrowse.astro';
+import { getCalendarDays, townIndex, eventsJsonLd, CATEGORY_META } from '../../lib/events';
+import type { Category } from '../../lib/events';
+import { SUBMIT_URL, SITE, breadcrumbs } from './_shared';
+import '../../styles/home.css';
+import '../../styles/events.css';
+
+const days = await getCalendarDays();
+const towns = townIndex(days);
+const total = days.reduce((n, d) => n + d.events.length, 0);
+const categories = (Object.keys(CATEGORY_META) as Category[]).filter((c) =>
+  days.some((d) => d.events.some((e) => e.category === c))
+);
+
+const townNames = towns.slice(0, 8).map((t) => t.town);
+const townSentence =
+  townNames.length > 1
+    ? `${townNames.slice(0, -1).join(', ')}, and ${townNames[townNames.length - 1]}`
+    : townNames[0] || 'Litchfield';
+
+const title = 'Things to Do in Litchfield County, CT This Week | The Litchfield Ledger';
+const description = `${total} upcoming events across Litchfield County, Connecticut: live music, farmers markets, art openings, hikes, talks, and festivals in ${townSentence}. Updated weekly.`;
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<PageHead
+  title={title}
+  description={description}
+  path="/events"
+  jsonLd={[
+    breadcrumbs([{ name: 'Home', path: '/' }, { name: 'Things to Do', path: '/events' }]),
+    eventsJsonLd(days, `${SITE}/events/`),
+  ]}
+/>
+</head>
+<body>
+
+<header class="page-bar container">
+  <a href="/" class="wordmark" aria-label="The Litchfield Ledger — home">
+    <span>THE</span><span class="wordmark-box">LITCHFIELD</span><span>LEDGER</span>
+  </a>
+  <a class="page-bar-link" href={SUBMIT_URL} data-track-click="submit_event_click" data-track-location="calendar_bar">Submit event <span aria-hidden="true">→</span></a>
+</header>
+
+<main class="container">
+
+  <section class="cal-head">
+    <p class="cal-eyebrow">Calendar</p>
+    <h1 class="cal-title">
+      <img class="cal-title-icon" src="/images/refresh/calendar.svg" alt="" width="41" height="42">
+      Things to Do in Litchfield County
+    </h1>
+    <p class="cal-sub">
+      Every upcoming event we know about across Northwest Connecticut, from {townSentence}:
+      live music, farmers markets, art openings, hikes and bird walks, author talks, festivals, and town
+      suppers. Pulled from the Ledger's event tracker and refreshed every week.
+      Know of one we're missing? <a href={SUBMIT_URL} data-track-click="submit_event_click" data-track-location="calendar_intro">Submit it here</a>.
+    </p>
+    <EventsBrowse towns={towns} categories={categories} current="/events" />
+  </section>
+
+  <EventsCalendar days={days} />
+
+  <section class="cal-about">
+    <h2>About this calendar</h2>
+    <p>
+      The Litchfield Ledger is a free Tuesday newsletter about the nature, history, and people of Litchfield
+      County, Connecticut. This page is the running list behind our weekly events roundup. Listings link out to
+      the organizer's own page for tickets and details, and times are as posted by the organizer, so double-check
+      before you drive.
+    </p>
+  </section>
+
+</main>
+
+<SiteFooter showInstagram={true} />
+
+</body>
+</html>
