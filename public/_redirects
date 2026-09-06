@@ -6,6 +6,8 @@
 /author/*  https://litchfieldledger.beehiiv.com/author/:splat  200
 /upgrade   https://litchfieldledger.beehiiv.com/upgrade        301
 /add-your-event https://litchfieldledger.beehiiv.com/add-your-event 301
+# Sitemap URL from the previous site build, still referenced in Search Console
+/sitemap.xml /sitemap-index.xml 301
 /login     https://litchfieldledger.beehiiv.com/login          200
 # Visitor guide moved onto the main site. Fires once visit.litchfieldledger.com
 # is added as a domain alias of this Netlify site.
