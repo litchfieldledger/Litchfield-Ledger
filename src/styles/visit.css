@@ -11,9 +11,9 @@
 
 .visit-body { max-width: 760px; }
 .visit-section { padding: 48px 0 40px; border-bottom: 1px solid var(--rule); scroll-margin-top: 60px; }
-.visit-label { font-size: 10px; font-weight: 600; letter-spacing: 1.8px; text-transform: uppercase; color: var(--olive-light); margin-bottom: 12px; }
+.visit-section .visit-label { font-size: 10px; font-family: var(--sans); font-weight: 600; letter-spacing: 1.8px; text-transform: uppercase; color: var(--olive-light); margin-bottom: 12px; }
 .visit-section h2 { font-family: var(--display); font-weight: 700; font-size: 30px; line-height: 1.1; text-transform: uppercase; color: var(--ink); margin-bottom: 14px; }
-.visit-intro { font-family: var(--serif); font-size: 18px; line-height: 1.6; font-style: italic; color: var(--text-mid); margin-bottom: 26px; padding-bottom: 22px; border-bottom: 1px solid var(--rule); }
+.visit-section .visit-intro { font-family: var(--serif); font-size: 18px; line-height: 1.6; font-style: italic; color: var(--text-mid); margin-bottom: 26px; padding-bottom: 22px; border-bottom: 1px solid var(--rule); }
 .visit-section p { font-family: var(--serif); font-size: 17px; line-height: 1.75; color: var(--ink); margin-bottom: 18px; }
 .visit-section a { color: var(--orange); text-decoration: underline; text-underline-offset: 2px; text-decoration-thickness: 1px; }
 .visit-section a:hover { color: var(--orange-dark); }
