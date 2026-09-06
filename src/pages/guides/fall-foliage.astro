@@ -1,0 +1,290 @@
+---
+// Evergreen guide: fall foliage in Litchfield County. Refresh the dates and
+// the "status" line each September; everything else should hold year to year.
+import PageHead from '../../components/PageHead.astro';
+import SiteFooter from '../../components/SiteFooter.astro';
+import { getCalendarDays, townIndex } from '../../lib/events';
+import type { CalendarEvent } from '../../lib/events';
+import '../../styles/home.css';
+import '../../styles/article.css';
+import '../../styles/visit.css';
+import '../../styles/guide.css';
+
+const SITE = 'https://litchfieldledger.com';
+const PATH = '/guides/fall-foliage';
+const SUBMIT_URL = 'https://litchfieldledger.beehiiv.com/add-your-event';
+const CONTACT = 'mailto:patrick@litchfieldledger.com';
+
+const YEAR = 2026;
+const published = '2026-09-06';
+const updated = '2026-09-06';
+
+// Link town names to their events page when one exists.
+const days = await getCalendarDays();
+const towns = townIndex(days);
+const townSlugs = new Map(towns.map((t) => [t.town.toLowerCase(), t.slug]));
+const Town = (name: string) => {
+  const slug = townSlugs.get(name.toLowerCase());
+  return slug ? `<a href="/events/${slug}/">${name}</a>` : name;
+};
+
+// Fall events from the tracker: outdoors listings plus anything that reads
+// like a harvest-season event, between late September and early November.
+const FALL_START = `${YEAR}-09-20`;
+const FALL_END = `${YEAR}-11-08`;
+const fallish = /\b(foliage|leaf|leaves|fall|autumn|harvest|pumpkin|apple|cider|hayride|hay ride|corn maze|fair|festival|oktoberfest|halloween)\b/i;
+const seen = new Set<string>();
+const fallEvents: CalendarEvent[] = [];
+for (const d of days) {
+  if (d.date < FALL_START) continue;
+  if (d.date > FALL_END) break;
+  for (const e of d.events) {
+    if (!(e.category === 'outdoors' || fallish.test(e.name))) continue;
+    if (seen.has(e.name)) continue; // one row per recurring event
+    seen.add(e.name);
+    fallEvents.push(e);
+    if (fallEvents.length >= 12) break;
+  }
+  if (fallEvents.length >= 12) break;
+}
+const shortDate = (iso: string) =>
+  new Date(`${iso}T12:00:00`).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+
+const title = `Fall Foliage in Litchfield County, CT: Peak Times, Scenic Drives & Best Views (${YEAR}) | The Litchfield Ledger`;
+const description =
+  `When leaves peak in Litchfield County, CT (usually mid-October), the best scenic drives on Route 7 and Lake Waramaug, overlooks worth the climb, and where to pick apples.`;
+const ogImage = '/images/og-fall-foliage.jpg';
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: `${SITE}/` },
+      { '@type': 'ListItem', position: 2, name: 'Fall Foliage Guide', item: `${SITE}${PATH}/` },
+    ],
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: `Fall Foliage in Litchfield County, Connecticut: The ${YEAR} Guide`,
+    description,
+    url: `${SITE}${PATH}/`,
+    mainEntityOfPage: `${SITE}${PATH}/`,
+    datePublished: published,
+    dateModified: updated,
+    image: [`${SITE}${ogImage}`, `${SITE}/images/connecticut-mountains.jpg`],
+    author: { '@type': 'Person', name: 'Patrick Allers', url: SITE },
+    publisher: {
+      '@type': 'NewsMediaOrganization',
+      name: 'The Litchfield Ledger',
+      url: SITE,
+      logo: { '@type': 'ImageObject', url: `${SITE}/images/orange-logo.png` },
+    },
+    about: { '@type': 'AdministrativeArea', name: 'Litchfield County, Connecticut' },
+    keywords: 'fall foliage Connecticut, Litchfield County foliage, peak foliage CT, Route 7 foliage drive, leaf peeping Connecticut',
+  },
+];
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<PageHead title={title} description={description} path={PATH} type="article" image={ogImage} jsonLd={jsonLd} />
+</head>
+<body>
+
+<header class="page-bar container">
+  <a href="/" class="wordmark" aria-label="The Litchfield Ledger — home">
+    <span>THE</span><span class="wordmark-box">LITCHFIELD</span><span>LEDGER</span>
+  </a>
+  <a class="page-bar-link" href="/events/">Things to do this week <span aria-hidden="true">→</span></a>
+</header>
+
+<main class="container">
+
+  <section class="visit-hero">
+    <p class="cal-eyebrow"><a href="/visit/" style="color:inherit;text-decoration:none">Visitor Guide</a> · Fall</p>
+    <h1 class="visit-title">Fall Foliage in Litchfield County, Connecticut</h1>
+    <p class="visit-deck">When the leaves peak, which roads to drive, where to climb for the view, and what to do with the rest of the day. The local's version, updated every fall.</p>
+    <p class="visit-meta">Updated September {YEAR} · Litchfield, CT · Free &amp; independent</p>
+    <figure class="guide-hero-figure">
+      <img class="guide-hero-img" src="/images/connecticut-mountains.jpg" alt="Early fall color on the hills of Litchfield County, Connecticut, looking out over ridgelines toward the Berkshires" width="1300" height="868" fetchpriority="high" decoding="async">
+      <figcaption>The first color of the season on the ridges of the Litchfield Hills. By mid-October the whole view is orange.</figcaption>
+    </figure>
+    <div class="guide-status">
+      <span><strong>Where things stand:</strong> Early September. Swamp maples and a few roadside sugar maples are turning. Peak in the county is still roughly five to six weeks out.</span>
+      <a href="https://portal.ct.gov/deep/forestry/fall-foliage" rel="noopener" target="_blank">CT DEEP weekly foliage report</a>
+    </div>
+  </section>
+
+  <nav class="visit-toc" aria-label="Guide sections">
+    <a href="#when">When leaves peak</a>
+    <a href="#drives">Scenic drives</a>
+    <a href="#views">Best views</a>
+    <a href="#do">Apples, fairs &amp; more</a>
+    <a href="#events">On the calendar</a>
+    <a href="#tips">Local tips</a>
+    <a href="#faq">FAQ</a>
+  </nav>
+
+  <div class="visit-body">
+
+    <section class="visit-section" id="when">
+      <p class="visit-label">Timing</p>
+      <h2>When Fall Foliage Peaks in Litchfield County</h2>
+      <p class="visit-intro">The short answer: the second and third weeks of October. The longer answer depends on how high up you are.</p>
+      <p>Litchfield County is the highest, coldest corner of Connecticut, which is exactly why the foliage here is the best in the state. The season starts in the hill towns along the Massachusetts line, where elevations run past 1,500 feet and the first frost lands weeks ahead of the coast, and works its way south and downhill over about a month. That means you can chase peak color across the county for three or four weekends in a row without ever leaving it.</p>
+      <div class="peak-table-wrap">
+      <table class="peak-table">
+        <thead><tr><th>Area</th><th>First good color</th><th>Typical peak</th><th>What to expect</th></tr></thead>
+        <tbody>
+          <tr>
+            <td>The northern highlands<small>Norfolk, Colebrook, Salisbury, the Canaan hills</small></td>
+            <td>Late September</td>
+            <td class="peak-when">Oct 5–15</td>
+            <td>Earliest and shortest. Norfolk sits above 1,200 feet and is called the icebox of Connecticut for a reason. Sugar maples here go first.</td>
+          </tr>
+          <tr>
+            <td>The Housatonic hill towns<small>Cornwall, Sharon, Kent, Goshen</small></td>
+            <td>Early October</td>
+            <td class="peak-when">Oct 10–20</td>
+            <td>The classic Route 7 corridor. Ridges turn before the river valley, so the view from above is often a week ahead of the view from the road.</td>
+          </tr>
+          <tr>
+            <td>The center of the county<small>Litchfield, Torrington, Warren, Washington, Morris</small></td>
+            <td>Early October</td>
+            <td class="peak-when">Oct 12–22</td>
+            <td>Mid-elevation, mid-season. Lake Waramaug and Bantam Lake are reliably at their best in the middle of the month.</td>
+          </tr>
+          <tr>
+            <td>The southern and lower towns<small>New Milford, Woodbury, Bethlehem, Southbury, Watertown</small></td>
+            <td>Mid October</td>
+            <td class="peak-when">Oct 18–30</td>
+            <td>Latest in the county. Oaks hold their russets and browns into early November, so there is still plenty to see after the maples are done.</td>
+          </tr>
+        </tbody>
+      </table>
+      </div>
+      <p>Those windows move by as much as a week from year to year. A warm, wet September pushes everything later. An early hard frost brings the maples on all at once and then strips them in the first big wind. If you can be flexible, wait for the <a href="https://portal.ct.gov/deep/forestry/fall-foliage" rel="noopener" target="_blank">state's weekly report</a> to call the northwest hills "peak" and go that weekend. If you have to book in advance, Columbus Day weekend for the north and the following weekend for everywhere else is the safe bet.</p>
+      <div class="featured-item">
+        <p class="fi-label">The honest local take</p>
+        <p class="fi-name">Weekdays beat weekends, and mornings beat afternoons</p>
+        <p>Route 7 through Kent on a peak Saturday afternoon is a parade. The same road on a Thursday morning is empty, the light is better, and the diner has a table. If a weekday is out of the question, be on the road by 8:30am and have lunch reservations somewhere you've already decided on.</p>
+      </div>
+    </section>
+
+    <section class="visit-section" id="drives">
+      <p class="visit-label">By car</p>
+      <h2>The Best Fall Foliage Drives</h2>
+      <p class="visit-intro">None of these are long. The whole county fits inside an afternoon, and the point is to stop often.</p>
+      <ul class="guide-list">
+        <li><span class="li-bullet">01</span><span class="li-text"><strong>Route 7: New Milford to Canaan</strong>The signature drive and the one every out-of-state list mentions. From <Fragment set:html={Town('New Milford')} /> north through <Fragment set:html={Town('Kent')} />, Cornwall Bridge, West Cornwall, and Falls Village, the road hugs the Housatonic River with the wooded ridges rising on both sides. Stop at Bull's Bridge and the West Cornwall covered bridge, and at Kent Falls if you don't mind company. About 35 miles; give it two hours with stops.</span></li>
+        <li><span class="li-bullet">02</span><span class="li-text"><strong>The Lake Waramaug loop</strong>Eight miles around the lake on Route 45 and the lake roads through <Fragment set:html={Town('New Preston')} />, <Fragment set:html={Town('Warren')} />, and <Fragment set:html={Town('Washington')} />. Water on one side, hillside color on the other, and Hopkins Vineyard at the top of the hill for a glass afterward. The prettiest short drive in the county, full stop. Best in the late afternoon when the western shore lights up.</span></li>
+        <li><span class="li-bullet">03</span><span class="li-text"><strong>Route 4: Torrington to Sharon</strong>Climbs out of <Fragment set:html={Town('Torrington')} /> through <Fragment set:html={Town('Goshen')} /> and over the Cornwall hills, past the Mohawk Mountain turnoff, then drops into Cornwall Bridge and continues west to <Fragment set:html={Town('Sharon')} />. The stretch past Mohawk has long open views to the north. Combine with Route 7 for a loop.</span></li>
+        <li><span class="li-bullet">04</span><span class="li-text"><strong>Route 63 and Route 4 through Goshen and Litchfield</strong>Rolling farm country with stone walls, dairy barns, and long sightlines. From the <Fragment set:html={Town('Litchfield')} /> green head north on 63 through Goshen toward Canaan. Less dramatic than the river roads, more the classic New England postcard.</span></li>
+        <li><span class="li-bullet">05</span><span class="li-text"><strong>Route 41 and Route 44: Sharon to Salisbury to Norfolk</strong>Under Mountain Road (Route 41) runs along the base of the Taconic ridge with the Appalachian Trail above it, into <Fragment set:html={Town('Salisbury')} /> and Lakeville. Then Route 44 east through Canaan to <Fragment set:html={Town('Norfolk')} />. This is the earliest-peaking country in the state, so drive it first in the season.</span></li>
+        <li><span class="li-bullet">06</span><span class="li-text"><strong>Route 272: Torrington to Norfolk</strong>A short, steep climb north with Dennis Hill State Park near the top. The summit pavilion is a five-minute walk from the parking lot and one of the best payoff-per-effort views in Connecticut.</span></li>
+      </ul>
+      <p><strong>A note on the covered bridges:</strong> the county has two historic ones still in daily use, West Cornwall (Route 128, just off Route 7) and Bull's Bridge (Route 7 at the south end of Kent). Both are one lane. Park before the bridge, not on it, and expect a line of people doing the same thing on peak weekends.</p>
+    </section>
+
+    <section class="visit-section" id="views">
+      <p class="visit-label">On foot</p>
+      <h2>The Best Views: Overlooks, Towers, and Short Hikes</h2>
+      <p class="visit-intro">The county's summits are modest and the trails are short, which is exactly what you want in October. Big view, small effort, back in the car before lunch.</p>
+      <ul class="guide-list">
+        <li><span class="li-bullet">↑</span><span class="li-text"><strong>Mount Tom State Park — <Fragment set:html={Town('Morris')} /></strong>The county's most popular overlook. A one-mile climb to a stone tower with a 360-degree view over the hills and Bantam Lake. Manageable for kids. The pond at the base is worth a walk on its own. Parking fee for out-of-state plates on weekends.</span></li>
+        <li><span class="li-bullet">↑</span><span class="li-text"><strong>Dennis Hill State Park — <Fragment set:html={Town('Norfolk')} /></strong>At 1,627 feet, one of the highest points in the state, and you can practically drive to it. The stone pavilion at the summit looks north into the Berkshires and east across the whole county. Peaks early, usually the first or second week of October.</span></li>
+        <li><span class="li-bullet">↑</span><span class="li-text"><strong>Haystack Mountain — <Fragment set:html={Town('Norfolk')} /></strong>A short, steep half-mile from the upper lot to a stone tower with views into Massachusetts and New York. Pair it with Dennis Hill for a Norfolk morning.</span></li>
+        <li><span class="li-bullet">↑</span><span class="li-text"><strong>Mohawk Mountain — <Fragment set:html={Town('Cornwall')} /></strong>The ski area's summit road and the trails in Mohawk State Forest put you at 1,683 feet with open views north and west. Some of the earliest color in the Housatonic hills.</span></li>
+        <li><span class="li-bullet">↑</span><span class="li-text"><strong>Pine Knob Loop — <Fragment set:html={Town('Sharon')} /> / Cornwall</strong>A 2.5-mile loop off Route 7 near Housatonic Meadows that climbs to two outlooks over the river valley. The best moderate hike in the county for foliage, because you are looking down on Route 7 instead of sitting in traffic on it.</span></li>
+        <li><span class="li-bullet">↑</span><span class="li-text"><strong>Cobble Mountain, Macedonia Brook State Park — <Fragment set:html={Town('Kent')} /></strong>Steeper and rockier than the others, with a summit view west across the Taconics into New York. Worth it if you want a real hike.</span></li>
+        <li><span class="li-bullet">↑</span><span class="li-text"><strong>Bear Mountain and Lion's Head — <Fragment set:html={Town('Salisbury')} /></strong>Bear Mountain is the highest peak in Connecticut at 2,316 feet and a real day out on the Appalachian Trail. Lion's Head is the shorter cousin with an equally good view over the Twin Lakes. Both peak early.</span></li>
+        <li><span class="li-bullet">↑</span><span class="li-text"><strong>Steep Rock Preserve — <Fragment set:html={Town('Washington')} /></strong>The overlook above the Shepaug River bend, a moderate walk from the Steep Rock lot, is the county's best river-and-foliage view that isn't on the Housatonic.</span></li>
+      </ul>
+      <p>For flatter ground with the same color, White Memorial in Litchfield (the boardwalk around Little Pond), Topsmead State Forest's meadows, and the rail trail along the Housatonic in Kent are all excellent and rarely crowded. Guided fall walks show up on the <a href="/events/outdoors/">outdoors calendar</a>.</p>
+    </section>
+
+    <section class="visit-section" id="do">
+      <p class="visit-label">The rest of the day</p>
+      <h2>Apples, Cider, Fairs, and Everything Else</h2>
+      <p class="visit-intro">Foliage is the excuse. This is what people actually spend the day doing.</p>
+      <div class="card-grid">
+        <div class="card"><span class="card-icon">🍎</span><div class="card-title">Apple picking</div><p class="card-desc">March Farm in Bethlehem is the big one: pick-your-own, a corn maze, and a bakery whose cider donuts justify the drive. Averill Farm in Washington Depot is the quieter, older, more beautiful alternative. Ellsworth Hill Orchard in Sharon is the choice on the Route 7 side.</p></div>
+        <div class="card"><span class="card-icon">🎃</span><div class="card-title">Pumpkins &amp; corn mazes</div><p class="card-desc">Bunnell Farm in Litchfield does the full October: pumpkin patch, hayrides, and a corn maze, ten minutes from the green. Most orchards above have their own patches too.</p></div>
+        <div class="card"><span class="card-icon">🎡</span><div class="card-title">Agricultural fairs</div><p class="card-desc">The county's fair season runs from the Goshen Fair on Labor Day weekend through the Bethlehem Fair (mid-September), the Harwinton Fair (early October), and the Riverton Fair in Barkhamsted (mid-October). Oxen pulls, pie contests, the works.</p></div>
+        <div class="card"><span class="card-icon">🍷</span><div class="card-title">Vineyards</div><p class="card-desc">Hopkins Vineyard above Lake Waramaug and Sunset Meadow in Goshen both have views that get better every week in October. Haight-Brown in Litchfield is the closest to the green.</p></div>
+        <div class="card"><span class="card-icon">🍩</span><div class="card-title">Cider donuts, ranked by a local</div><p class="card-desc">March Farm first, then whichever farm stand you happen to be standing at. They are all good warm. None are good cold.</p></div>
+        <a class="card card-link" href="/events/this-weekend/"><span class="card-icon">📅</span><div class="card-title">What's on this weekend</div><p class="card-desc">Harvest festivals, church suppers, fall craft fairs, and the rest of the October calendar, updated every week. See this weekend →</p></a>
+      </div>
+      <p>For where to eat after, the <a href="/visit/#eat">visitor guide</a> has the short list. Book dinner ahead on October weekends. Every inn and every good restaurant in the county fills up.</p>
+    </section>
+
+    <section class="visit-section" id="events">
+      <p class="visit-label">From the Ledger's tracker</p>
+      <h2>Fall Events on the Calendar</h2>
+      <p class="visit-intro">Outdoor walks and harvest-season events from late September through early November, pulled from the same county tracker that feeds the <a href="/events/">weekly calendar</a>.</p>
+      {fallEvents.length > 0 ? (
+        <ul class="fall-events">
+          {fallEvents.map((e) => (
+            <li>
+              <span class="fe-date">{shortDate(e.date)}</span>
+              <span class="fe-name">
+                {e.url ? <a href={e.url} rel="noopener" target="_blank">{e.name}</a> : e.name}
+                <span class="fe-where">{[e.venue, e.town].filter(Boolean).join(' · ')}{e.time ? ` · ${e.time}` : ''}</span>
+              </span>
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p>Fall listings will appear here as organizers post them. Check <a href="/events/">the full calendar</a> in the meantime.</p>
+      )}
+      <p>Hosting a fall event? <a href={SUBMIT_URL}>Add it to the tracker</a> and it will show up here and in the Tuesday newsletter.</p>
+    </section>
+
+    <section class="visit-section" id="tips">
+      <p class="visit-label">Know before you go</p>
+      <h2>Local Tips for Leaf Season</h2>
+      <ul class="guide-list">
+        <li><span class="li-bullet">→</span><span class="li-text"><strong>Come from the south, leave to the north</strong>Everyone from New York drives up Route 7 in the morning and back down it in the afternoon. Do the opposite, or use Route 8 and Route 4 to come in from the east and skip the Kent bottleneck entirely.</span></li>
+        <li><span class="li-bullet">→</span><span class="li-text"><strong>Cell service is patchy in the river valleys</strong>Download offline maps before you leave the highway. This is not a figure of speech.</span></li>
+        <li><span class="li-bullet">→</span><span class="li-text"><strong>State parks charge out-of-state plates on weekends</strong>Kent Falls, Mount Tom, Macedonia Brook, and Housatonic Meadows all do. Connecticut plates park free. Bring a card; some lots are card-only.</span></li>
+        <li><span class="li-bullet">→</span><span class="li-text"><strong>Overcast is fine. Rain is fine.</strong>Wet leaves are more saturated than dry ones and a gray sky makes the reds pop. The photos are better than you expect. Clear blue skies are for the overlooks; save them for that.</span></li>
+        <li><span class="li-bullet">→</span><span class="li-text"><strong>Sunday is quieter than Saturday</strong>And Sunday morning is quieter still. The farm stands are open, the trails are empty, and the drive home is against the traffic.</span></li>
+        <li><span class="li-bullet">→</span><span class="li-text"><strong>Stay over</strong>The county's inns are at their best in October and the evening light on the hills is the part day-trippers miss. The <a href="/visit/#stay">visitor guide</a> has the list. Book early; peak weekends sell out in September.</span></li>
+      </ul>
+    </section>
+
+    <section class="visit-section faq" id="faq">
+      <p class="visit-label">Questions people ask</p>
+      <h2>Fall Foliage FAQ</h2>
+      <h3>When is peak fall foliage in Connecticut?</h3>
+      <p>Statewide, mid-to-late October. Litchfield County in the northwest corner peaks first, usually between October 10 and October 20, with the highest towns along the Massachusetts line a week ahead of that and the coast two weeks behind.</p>
+      <h3>Is Litchfield County good for leaf peeping?</h3>
+      <p>It is the best part of Connecticut for it, and it holds its own against southern Vermont and the Berkshires, with a fraction of the traffic. The combination of elevation, hardwood forest, river valleys, and open farmland means color at every scale, from a single roadside maple to a whole ridge.</p>
+      <h3>What is the best scenic drive for fall foliage in Connecticut?</h3>
+      <p>Route 7 through Kent and Cornwall along the Housatonic River is the one most people mean. The Lake Waramaug loop is shorter and, for our money, prettier.</p>
+      <h3>How far is Litchfield County from New York City?</h3>
+      <p>About two hours by car to Litchfield or Kent, a little less to New Milford. There is no train into the county, so you will need a car. Metro-North's Harlem Line ends at Wassaic, NY, about 20 minutes from Kent, if you want to rent from there.</p>
+      <h3>What is there to do besides look at leaves?</h3>
+      <p>Apple picking, agricultural fairs, vineyards, covered bridges, the historic green in Litchfield, antiquing in Woodbury, and a real restaurant scene. See the <a href="/visit/">full visitor guide</a> and <a href="/events/">this week's events</a>.</p>
+    </section>
+
+    <aside class="visit-cta" data-track-signup-view="foliage">
+      <p class="visit-cta-eyebrow">Weekly foliage updates</p>
+      <h3>Get the Tuesday Ledger</h3>
+      <p>Every Tuesday through the season: where the color is right now, what's on this weekend, and the one thing worth driving for. Free, forever.</p>
+      <div class="beehiiv-wrap visit-signup" data-track-signup="foliage">
+        <script is:inline src="https://subscribe-forms.beehiiv.com/v3/loader.js" data-beehiiv-form="48c597c3-c9e3-4c7a-b09b-db8627e0a48e"></script>
+      </div>
+      <p class="visit-cta-small">Run a business here? <a href={CONTACT}>Partner with the Ledger</a>. Hosting something? <a href={SUBMIT_URL}>Add your event</a>.</p>
+    </aside>
+
+  </div>
+</main>
+
+<SiteFooter showInstagram={true} />
+
+</body>
+</html>

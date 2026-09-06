@@ -1,0 +1,39 @@
+/* /guides/* — evergreen guides. Builds on home.css + article.css + visit.css. */
+
+.guide-hero-figure { margin: 26px 0 0; }
+.guide-hero-img { display: block; width: 100%; height: auto; aspect-ratio: 1300 / 868; object-fit: cover; border-radius: var(--radius); background: var(--bg-soft); }
+.guide-hero-figure figcaption { font-family: var(--sans); font-size: 11px; letter-spacing: 0.4px; color: var(--text-muted); margin-top: 8px; }
+
+/* Peak-timing table */
+.peak-table { width: 100%; border-collapse: collapse; margin: 8px 0 26px; font-family: var(--sans); font-size: 14px; line-height: 1.45; }
+.peak-table th, .peak-table td { text-align: left; vertical-align: top; padding: 12px 10px; border-bottom: 1px solid var(--rule); }
+.peak-table th { font-size: 10px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: var(--olive-light); border-bottom: 2px solid var(--ink); }
+.peak-table td:first-child { font-family: var(--serif); font-weight: 700; font-size: 16px; color: var(--ink); }
+.peak-table td:first-child small { display: block; font-family: var(--sans); font-weight: 400; font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+.peak-table .peak-when { white-space: nowrap; font-weight: 600; color: var(--orange-dark); }
+.peak-table-wrap { overflow-x: auto; }
+
+/* Status callout at the top of the page */
+.guide-status { display: flex; flex-wrap: wrap; gap: 8px 18px; align-items: baseline; padding: 14px 18px; margin: 22px 0 0; background: var(--bg-soft); border-radius: var(--radius); font-family: var(--sans); font-size: 14px; color: var(--text-mid); }
+.guide-status strong { font-family: var(--sans); color: var(--ink); }
+.guide-status a { color: var(--orange); }
+
+/* Fall events pulled from the tracker */
+.fall-events { margin: 8px 0 22px; }
+.fall-events li { display: flex; gap: 16px; padding: 12px 0; border-bottom: 1px solid var(--rule); align-items: baseline; }
+.fall-events li:last-child { border-bottom: none; }
+.fall-events .fe-date { font-family: var(--mono); font-size: 12px; font-weight: 600; letter-spacing: 0.5px; color: var(--olive-light); width: 64px; flex-shrink: 0; text-transform: uppercase; }
+.fall-events .fe-name { font-family: var(--serif); font-size: 16px; color: var(--ink); }
+.fall-events .fe-name a { color: var(--ink); text-decoration: none; }
+.fall-events .fe-name a:hover { color: var(--orange); }
+.fall-events .fe-where { display: block; font-family: var(--sans); font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+
+/* FAQ */
+.faq h3 { font-family: var(--serif); font-weight: 700; font-size: 18px; line-height: 1.35; color: var(--ink); margin: 22px 0 6px; }
+.faq h3:first-of-type { margin-top: 8px; }
+
+@media (max-width: 768px) {
+  .peak-table { font-size: 13px; }
+  .peak-table th, .peak-table td { padding: 10px 6px; }
+  .fall-events .fe-date { width: 56px; }
+}
