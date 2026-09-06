@@ -6,16 +6,13 @@ interface Props {
 const { showInstagram = false } = Astro.props;
 ---
 
-<footer class="site-footer" data-track-signup-view="footer">
+<footer class="site-footer">
   <div class="container footer-inner">
     <div class="footer-brand">
       <a href="/" class="wordmark" aria-label="The Litchfield Ledger — home">
         <span>THE</span><span class="wordmark-box">LITCHFIELD</span><span>LEDGER</span>
       </a>
       <p>A free Tuesday newsletter full of weekly events + stories about nature, history, and people.</p>
-      <div class="beehiiv-wrap footer-signup" data-track-signup="footer">
-        <script is:inline src="https://subscribe-forms.beehiiv.com/v3/loader.js" data-beehiiv-form="48c597c3-c9e3-4c7a-b09b-db8627e0a48e"></script>
-      </div>
     </div>
     <div class="footer-support">
       <p>The Ledger is free and independent. If you find value in it, consider supporting it.</p>

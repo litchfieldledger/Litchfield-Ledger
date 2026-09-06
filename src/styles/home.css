@@ -205,7 +205,6 @@ ul { list-style: none; }
 .site-footer { margin-top: 64px; border-top: 1px solid var(--rule); background: var(--bg-soft); padding: 48px 0 28px; }
 .footer-inner { display: grid; grid-template-columns: 1.2fr 1fr; gap: 48px; align-items: start; }
 .footer-brand p { font-family: var(--mono); font-size: 14px; line-height: 1.5; color: var(--text-mid); max-width: 420px; margin-top: 16px; }
-.footer-signup { max-width: 460px; margin-top: 18px; }
 .footer-support { padding-top: 4px; }
 .footer-support p { font-family: var(--serif); font-size: 16px; line-height: 1.5; color: var(--text-mid); margin-bottom: 16px; max-width: 420px; }
 .btn-outline { display: inline-block; font-size: 11px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: var(--orange); border: 1.5px solid var(--orange); border-radius: 4px; padding: 11px 20px; text-decoration: none; transition: background 0.15s, color 0.15s; }
@@ -239,11 +238,10 @@ ul { list-style: none; }
 
   .hero {
     margin: 0 calc(-1 * var(--gutter)); border-radius: 0;
-    padding-top: 64px;
-    height: auto; min-height: 418px; padding: 36px 28px; gap: 21px; justify-content: flex-start;
+    height: auto; min-height: 418px; padding: 96px 28px 36px; gap: 21px; justify-content: flex-start;
   }
   .hero-bg img { object-position: center 55%; }
-  .hero > .hero-corner { top: 20px; right: 22px; }
+  .hero > .hero-corner { top: 26px; right: 24px; }
   .hero-bg::after { background: rgba(0, 0, 0, 0.58); }
   .hero-title { font-size: clamp(46px, 15.4vw, 62px); line-height: 1.08; max-width: none; }
   .hero-book { display: block; }
@@ -299,6 +297,7 @@ ul { list-style: none; }
 }
 
 @media (max-width: 420px) {
-  .hero { padding: 32px 22px; }
+  .hero { padding-left: 22px; padding-right: 22px; padding-bottom: 32px; }
+  .hero-stats .sep { margin: 0 10px; }
   .hero-book { width: 56px; height: 39.5px; }
 }
