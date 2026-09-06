@@ -1,0 +1,226 @@
+---
+// The Litchfield County Visitor Guide, folded in from visit.litchfieldledger.com.
+import PageHead from '../components/PageHead.astro';
+import SiteFooter from '../components/SiteFooter.astro';
+import { getCalendarDays, townIndex } from '../lib/events';
+import '../styles/home.css';
+import '../styles/article.css';
+import '../styles/visit.css';
+
+const SITE = 'https://litchfieldledger.com';
+const SUBMIT_URL = 'https://litchfieldledger.beehiiv.com/add-your-event';
+const CONTACT = 'mailto:patrick@litchfieldledger.com';
+
+// Link town names to their events page when one exists.
+const towns = townIndex(await getCalendarDays());
+const townSlugs = new Map(towns.map((t) => [t.town.toLowerCase(), t.slug]));
+const townHref = (name: string) => {
+  const slug = townSlugs.get(name.toLowerCase());
+  return slug ? `/events/${slug}/` : null;
+};
+const Town = (name: string) => {
+  const href = townHref(name);
+  return href ? `<a href="${href}">${name}</a>` : name;
+};
+
+const title = 'Litchfield County, CT Visitor Guide: Things to Do, Eat, Hike & Stay | The Litchfield Ledger';
+const description =
+  "The local's guide to visiting Litchfield County, Connecticut: things to do, where to eat, the best hikes, where to stay, the towns worth knowing, and what's happening this week.";
+const updated = '2026-09-06';
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: `${SITE}/` },
+      { '@type': 'ListItem', position: 2, name: 'Visitor Guide', item: `${SITE}/visit/` },
+    ],
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: 'The Litchfield County Visitor Guide',
+    description,
+    url: `${SITE}/visit/`,
+    mainEntityOfPage: `${SITE}/visit/`,
+    datePublished: '2026-03-17',
+    dateModified: updated,
+    image: [`${SITE}/images/og-home.jpg`],
+    author: { '@type': 'Person', name: 'Patrick Allers', url: SITE },
+    publisher: { '@type': 'NewsMediaOrganization', name: 'The Litchfield Ledger', url: SITE, logo: { '@type': 'ImageObject', url: `${SITE}/images/orange-logo.png` } },
+    about: { '@type': 'AdministrativeArea', name: 'Litchfield County, Connecticut' },
+  },
+];
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<PageHead title={title} description={description} path="/visit" type="article" jsonLd={jsonLd} />
+</head>
+<body>
+
+<header class="page-bar container">
+  <a href="/" class="wordmark" aria-label="The Litchfield Ledger — home">
+    <span>THE</span><span class="wordmark-box">LITCHFIELD</span><span>LEDGER</span>
+  </a>
+  <a class="page-bar-link" href="/events/">Things to do this week <span aria-hidden="true">→</span></a>
+</header>
+
+<main class="container">
+
+  <section class="visit-hero">
+    <p class="cal-eyebrow">The local's guide to</p>
+    <h1 class="visit-title">Visiting Litchfield County, Connecticut</h1>
+    <p class="visit-deck">Everything worth doing, eating, hiking, and exploring, written by someone who actually lives here and updated every week.</p>
+    <p class="visit-meta">Updated weekly · Litchfield, CT · Free &amp; independent</p>
+  </section>
+
+  <nav class="visit-toc" aria-label="Guide sections">
+    <a href="#why">Why Litchfield</a>
+    <a href="#when">When to visit</a>
+    <a href="#do">Things to do</a>
+    <a href="#eat">Where to eat</a>
+    <a href="#hike">Hiking</a>
+    <a href="#stay">Where to stay</a>
+    <a href="#events">Events</a>
+    <a href="#towns">The towns</a>
+  </nav>
+
+  <div class="visit-body">
+
+    <section class="visit-section" id="why">
+      <p class="visit-label">The short version</p>
+      <h2>Why People Come to Litchfield County</h2>
+      <p class="visit-intro">Litchfield County is what the Berkshires and the Hudson Valley have been for decades, except it hasn't been discovered yet. That's the whole point.</p>
+      <p>Tucked into the northwest corner of Connecticut, Litchfield County is 920 square miles of rolling hills, historic village greens, farm-to-table restaurants, vineyard weekends, covered bridges, and some of the best hiking in New England. It borders New York's Hudson Valley to the west and Massachusetts' Berkshires to the north, and draws comparisons to both constantly. The difference is the price of a dinner reservation and the length of the wait for a parking spot.</p>
+      <p>The anchor is the town of <Fragment set:html={Town('Litchfield')} /> itself, a National Historic Landmark District with one of the most beautifully preserved 18th-century village greens in America. But the county is full of towns worth exploring: <Fragment set:html={Town('Kent')} />, with its art galleries and waterfalls. <Fragment set:html={Town('Washington')} />, with its Mayflower Inn. <Fragment set:html={Town('Salisbury')} />, with its prep school charm and White Hart Inn. <Fragment set:html={Town('New Milford')} />, <Fragment set:html={Town('New Preston')} />, <Fragment set:html={Town('Cornwall')} />, <Fragment set:html={Town('Woodbury')} />. Each one has its own character. None of them feel like tourist traps.</p>
+      <blockquote class="pull-quote">
+        <p>"A small town that more than carries its weight on the history, charm, and scenic beauty fronts."</p>
+        <cite>Travel + Leisure on Litchfield</cite>
+      </blockquote>
+      <p>The Litchfield Ledger covers this region every week: events, hidden gems, restaurant openings, local history, and everything worth doing on a Saturday morning. This guide is the distillation of that. Consider it your cheat sheet from a local.</p>
+    </section>
+
+    <section class="visit-section" id="when">
+      <p class="visit-label">Planning your trip</p>
+      <h2>When to Visit</h2>
+      <p class="visit-intro">Every season in Litchfield County has a different character. None of them are wrong.</p>
+      <div class="season-strip">
+        <div class="season-cell"><span class="season-name">Spring</span><span class="season-emoji">🌿</span><p>The hills go electric green. Trout fishing opens on the Housatonic. Farmers markets return. Crowds are minimal.</p></div>
+        <div class="season-cell"><span class="season-name">Summer</span><span class="season-emoji">☀️</span><p>Bantam Lake, vineyard weekends, outdoor concerts, farm stands everywhere. The peak season. Book ahead.</p></div>
+        <div class="season-cell"><span class="season-name">Fall</span><span class="season-emoji">🍂</span><p>The most spectacular. Peak foliage on Route 7 and Route 63 rivals anything in Vermont. Apple picking, cider donuts.</p></div>
+        <div class="season-cell"><span class="season-name">Winter</span><span class="season-emoji">❄️</span><p>Skiing at Mohawk Mountain. Cozy inn weekends. Antiquing in Woodbury. The prices drop significantly.</p></div>
+      </div>
+      <p><strong>The honest local take:</strong> Fall draws the biggest crowds and for good reason. The foliage here is genuinely extraordinary. But a late-spring Friday through Sunday, when the farms are coming alive and the trails are empty, is arguably the best-kept secret in New England travel.</p>
+    </section>
+
+    <section class="visit-section" id="do">
+      <p class="visit-label">The essentials</p>
+      <h2>Things to Do in Litchfield County</h2>
+      <p class="visit-intro">This is the non-exhaustive version. For what's on right now, see <a href="/events/">this week's calendar</a> or <a href="/events/this-weekend/">this weekend</a>.</p>
+      <div class="card-grid">
+        <div class="card"><span class="card-icon">🏛️</span><div class="card-title">Litchfield Village Green</div><p class="card-desc">One of the most intact 18th-century village centers in America. Walk it, sit on it, admire the churches. The whole thing is a National Historic Landmark.</p></div>
+        <div class="card"><span class="card-icon">⚖️</span><div class="card-title">Tapping Reeve House &amp; Law School</div><p class="card-desc">America's first law school. Aaron Burr studied here. Now a living history museum. Five-minute walk from the Green.</p></div>
+        <div class="card"><span class="card-icon">🌊</span><div class="card-title">Kent Falls State Park</div><p class="card-desc">The most-visited waterfall in Connecticut. A series of cascades over ancient Connecticut marble. Worth every person in the parking lot.</p></div>
+        <div class="card"><span class="card-icon">🍷</span><div class="card-title">Hopkins Vineyard</div><p class="card-desc">235 years old, overlooking Lake Waramaug in Warren. One of the most picturesque winery settings in New England.</p></div>
+        <div class="card"><span class="card-icon">🌲</span><div class="card-title">White Memorial Conservation Center</div><p class="card-desc">4,000 acres, 40+ miles of trails around Bantam Lake. The largest nature center in Connecticut. Free to enter and explore.</p></div>
+        <div class="card"><span class="card-icon">🌉</span><div class="card-title">West Cornwall Covered Bridge</div><p class="card-desc">The longest historic covered bridge in Connecticut, tucked into the village of Cornwall. A genuine 19th-century structure still in use.</p></div>
+        <div class="card"><span class="card-icon">🥃</span><div class="card-title">Litchfield Distillery</div><p class="card-desc">Open seven days a week. Guided tours, tastings, award-winning craft spirits. Great on a Monday when everything else is closed.</p></div>
+        <a class="card card-link" href="/events/"><span class="card-icon">🎭</span><div class="card-title">This Week's Events</div><p class="card-desc">The Ledger keeps a full county events calendar: concerts, farm dinners, art openings, festivals. The best way to know what's on. See the calendar →</p></a>
+      </div>
+    </section>
+
+    <section class="visit-section" id="eat">
+      <p class="visit-label">Food &amp; drink</p>
+      <h2>Where to Eat in Litchfield County</h2>
+      <p class="visit-intro">The food scene here is punching well above its weight. Farm-to-table isn't a marketing phrase. The farms are literally next door.</p>
+      <ul class="guide-list">
+        <li><span class="li-bullet">01</span><span class="li-text"><strong>Arethusa al Tavolo — Bantam</strong>The most-celebrated restaurant in the county. Farm-to-table with their own dairy, their own animals, their own standards. Reservations fill weeks in advance. Worth the planning.</span></li>
+        <li><span class="li-bullet">02</span><span class="li-text"><strong>Belden House &amp; Mews — Litchfield</strong>Refined seasonal cooking in a beautiful historic building on the Green. The Saturday lunch is a county institution. Prix-fixe dinners during Restaurant Week are exceptional value.</span></li>
+        <li><span class="li-bullet">03</span><span class="li-text"><strong>The White Hart Inn — Salisbury</strong>The classic Litchfield County inn experience. A good bar, a good dining room, and the kind of Saturday evening that makes you understand why New Yorkers drive up here every weekend.</span></li>
+        <li><span class="li-bullet">04</span><span class="li-text"><strong>Woodbury Brewing Company — Woodbury</strong>Live music, craft beer, great food, no pretension. A regular local favorite for a Friday night when you want something genuinely fun.</span></li>
+        <li><span class="li-bullet">05</span><span class="li-text"><strong>The Pantry — Washington</strong>A beloved local institution: casual, warm, farm-sourced. Open mic nights, community events. The kind of spot that makes a town feel like a place.</span></li>
+        <li><span class="li-bullet">06</span><span class="li-text"><strong>Litchfield Farmers Market — Litchfield</strong>Year-round, indoors through winter. Saturdays, 10am–1pm. The best way to understand what makes this region's food culture different. <a href="/events/farmers-markets/">All the county's markets →</a></span></li>
+      </ul>
+      <div class="featured-item">
+        <p class="fi-label">Local tip</p>
+        <p class="fi-name">Thorncrest Farm &amp; Milkhouse — Litchfield</p>
+        <p>If you eat one thing in the county, make it the chocolate here. A working dairy farm with an on-site chocolate shop. The product is made from their own cows' milk and is genuinely extraordinary. Don't skip it.</p>
+      </div>
+    </section>
+
+    <section class="visit-section" id="hike">
+      <p class="visit-label">Outdoors</p>
+      <h2>Hiking in Litchfield County</h2>
+      <p class="visit-intro">None of these hikes will kill you, which is part of the appeal. The views are big, the trails are manageable, and you can be back at a vineyard by 3pm.</p>
+      <ul class="guide-list">
+        <li><span class="li-bullet">↑</span><span class="li-text"><strong>Mount Tom State Park — Morris</strong>The most popular summit in the county. A stone tower at the top with panoramic views of the hills. The pond below is beautiful in every season. One of the oldest state parks in the country.</span></li>
+        <li><span class="li-bullet">↑</span><span class="li-text"><strong>Mohawk Mountain — Cornwall</strong>Best in winter (ski area) but also a solid trail hike in spring and fall with summit views. A 16-minute drive from Litchfield center.</span></li>
+        <li><span class="li-bullet">↑</span><span class="li-text"><strong>Steep Rock Preserve — Washington</strong>Steep Rock Association manages some of the most beautiful trail land in the region. The Shepaug River Gorge trails are dramatic and frequently empty on weekdays.</span></li>
+        <li><span class="li-bullet">↑</span><span class="li-text"><strong>White Memorial Conservation Center — Litchfield</strong>40+ miles of trails on 4,000 acres bordering Bantam Lake. Multiple trail systems for all ability levels. The boardwalk section is one of the best short walks in Connecticut.</span></li>
+        <li><span class="li-bullet">↑</span><span class="li-text"><strong>Topsmead State Forest — Litchfield</strong>A hidden gem. Drive in through a pine corridor that immediately feels like somewhere else. A Tudor Revival mansion, wildflower meadows, quiet trails. Remarkably uncrowded.</span></li>
+      </ul>
+      <p><strong>The Housatonic River</strong> runs through the center of the county and is one of the most celebrated trout fishing rivers in the Northeast. If that's your thing, the stretch through Cornwall and Kent is the one everyone points to. Guided walks and paddles show up on the <a href="/events/outdoors/">outdoors calendar</a>.</p>
+    </section>
+
+    <section class="visit-section" id="stay">
+      <p class="visit-label">Accommodations</p>
+      <h2>Where to Stay in Litchfield County</h2>
+      <p class="visit-intro">The county leans toward historic inns, beautiful rentals, and a handful of genuine luxury properties. There are no big box hotels. That's the point.</p>
+      <ul class="guide-list">
+        <li><span class="li-bullet">★</span><span class="li-text"><strong>The Mayflower Inn — Washington</strong>The most celebrated property in the region. A genuine luxury inn nestled in Washington with a spa, acclaimed restaurant, and grounds that feel removed from the world. A splurge worth making once.</span></li>
+        <li><span class="li-bullet">★</span><span class="li-text"><strong>Winvian Farm — Morris</strong>Fifteen individually designed cottage suites spread across a 113-acre working farm. Each cottage is a different concept: helicopter, tree house, log cabin. One of the most unusual hotel experiences in New England.</span></li>
+        <li><span class="li-bullet">★</span><span class="li-text"><strong>The White Hart Inn — Salisbury</strong>A classic New England inn in one of the county's most beautiful villages. More accessible price point than Mayflower, equally charming.</span></li>
+        <li><span class="li-bullet">★</span><span class="li-text"><strong>Airbnb / VRBO</strong>The county has an excellent range of vacation rentals: farmhouses, lakeside cabins, old colonials. Bantam Lake area rentals book fast in summer; plan ahead.</span></li>
+      </ul>
+    </section>
+
+    <section class="visit-section" id="events">
+      <p class="visit-label">What's happening</p>
+      <h2>Events in Litchfield County</h2>
+      <p class="visit-intro">This is where the Ledger is different from every other guide you'll find. We keep a full county events calendar and publish the week's picks every Tuesday.</p>
+      <p>Most travel guides for Litchfield County are static: written once, updated occasionally, missing the thing happening this weekend. The Litchfield Ledger tracks concerts, farm dinners, art openings, outdoor markets, community events, fundraisers, wine tastings, and everything in between, across the whole county from Torrington to Salisbury, New Milford to Canaan, Washington to Kent.</p>
+      <p>If you're planning a trip and want to know what's actually happening during your visit, not just the landmarks but the <em>events</em>, start with <a href="/events/">the calendar</a>. It's organized <a href="/events/this-weekend/">by weekend</a>, by type (<a href="/events/live-music/">live music</a>, <a href="/events/farmers-markets/">markets</a>, <a href="/events/art-and-theater/">art and theater</a>, <a href="/events/outdoors/">outdoors</a>), and by town.</p>
+      <div class="featured-item">
+        <p class="fi-label">Annual events worth planning around</p>
+        <p class="fi-name">The Litchfield County Calendar</p>
+        <p>Litchfield Jazz Festival (July) · Litchfield Hills Road Race · Hopkins Vineyard Cork Hunt · Kent Art Association Shows · Fall Foliage Season (October) · Empty Bowls benefit dinner (March) · Litchfield Farmers Market (year-round, Saturdays)</p>
+      </div>
+      <p>Subscribe below and you'll get this week's full events calendar delivered to your inbox every Tuesday morning.</p>
+    </section>
+
+    <section class="visit-section" id="towns">
+      <p class="visit-label">Know before you go</p>
+      <h2>The Towns of Litchfield County</h2>
+      <p class="visit-intro">The county is a collection of distinct villages, each worth knowing. Here's the quick map.</p>
+      <ul class="guide-list">
+        <li><span class="li-bullet">→</span><span class="li-text"><strong set:html={Town('Litchfield')} />The county seat. The historic Green, the Law School, the Farmers Market, the Distillery. The best single-town base for a visit.</span></li>
+        <li><span class="li-bullet">→</span><span class="li-text"><strong set:html={Town('Kent')} />Art galleries, Kent Falls, the Housatonic River, a genuinely charming downtown strip. Beloved by weekenders from New York City.</span></li>
+        <li><span class="li-bullet">→</span><span class="li-text"><strong set:html={`${Town('Washington')} / ${Town('New Preston')}`} />The Mayflower Inn, the Mayflower pub, Hopkins Vineyard on Lake Waramaug, Steep Rock trails. Quiet luxury.</span></li>
+        <li><span class="li-bullet">→</span><span class="li-text"><strong set:html={Town('Salisbury')} />Prep school energy, the White Hart Inn, beautiful lake country. Bordering Massachusetts.</span></li>
+        <li><span class="li-bullet">→</span><span class="li-text"><strong set:html={Town('Woodbury')} />The antiques capital of Connecticut. If you collect anything, block off an afternoon here.</span></li>
+        <li><span class="li-bullet">→</span><span class="li-text"><strong set:html={Town('Cornwall')} />The covered bridge, Mohawk Mountain, some of the most dramatic Housatonic River scenery in the county. Small but memorable.</span></li>
+        <li><span class="li-bullet">→</span><span class="li-text"><strong set:html={Town('New Milford')} />The county's largest town green and a lively, accessible base. Referred to by Gilmore Girls fans as a real-life Stars Hollow.</span></li>
+      </ul>
+      <p><strong>Getting here:</strong> Litchfield County is approximately 2 hours from New York City, 2.5 hours from Boston, and 45 minutes from Hartford. There's no train service into the county; you'll need a car. Download your Google Maps offline before arriving; cell service in some valleys is unreliable depending on your carrier.</p>
+    </section>
+
+    <aside class="visit-cta" data-track-signup-view="visit">
+      <p class="visit-cta-eyebrow">Stay current</p>
+      <h3>Get the Weekly Ledger</h3>
+      <p>Every Tuesday: this week's events, local stories, hidden gems, and the one thing worth doing this weekend. Free, forever.</p>
+      <div class="beehiiv-wrap visit-signup" data-track-signup="visit">
+        <script is:inline src="https://subscribe-forms.beehiiv.com/v3/loader.js" data-beehiiv-form="48c597c3-c9e3-4c7a-b09b-db8627e0a48e"></script>
+      </div>
+      <p class="visit-cta-small">Run a business here? <a href={CONTACT}>Partner with the Ledger</a>. Hosting something? <a href={SUBMIT_URL}>Add your event</a>.</p>
+    </aside>
+
+  </div>
+</main>
+
+<SiteFooter showInstagram={true} />
+
+</body>
+</html>

@@ -3,10 +3,12 @@ const API_KEY = import.meta.env.BEEHIIV_API_KEY;
 const POST_LIMIT = 4;
 
 export type LedgerPost = {
+  slug: string;
   title: string;
   excerpt: string;
   preview: string;
-  url: string;
+  url: string; // internal /p/<slug>/ page
+  webUrl: string; // Beehiiv-hosted copy
   date: string;
   dateShort: string;
   thumbnail: string;
@@ -19,10 +21,12 @@ export type LedgerStats = {
 };
 
 export type LedgerIssue = {
+  slug: string;
   title: string;
   subtitle: string;
   date: string;
-  url: string;
+  url: string; // internal /p/<slug>/ page
+  webUrl: string;
   html: string;
 };
 
@@ -241,11 +245,15 @@ export async function getLedgerPosts(): Promise<LedgerPost[]> {
       const contentPreview = cleanPreviewText(contentText, rawTitle);
       const published = new Date((p.publish_date ?? 0) * 1000);
 
+      const slug = p.slug ?? '';
+
       return {
+        slug,
         title: smartTitle(rawTitle),
         excerpt,
         preview: truncateText(contentPreview || excerpt, 1000),
-        url: p.web_url ?? '#',
+        url: slug ? `/p/${slug}/` : (p.web_url ?? '#'),
+        webUrl: p.web_url ?? '',
         date: published.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
         dateShort: published.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }).toUpperCase(),
         thumbnail: p.thumbnail_url ?? '',
@@ -351,9 +359,11 @@ export async function getLatestIssue(): Promise<LedgerIssue | null> {
     if (!html) return null;
 
     return {
+      slug: post.slug ?? '',
       title: smartTitle(post.title ?? ''),
       subtitle: (post.subtitle || post.preview_text || '').trim(),
-      url: webUrl,
+      url: post.slug ? `/p/${post.slug}/` : webUrl,
+      webUrl,
       html,
       date: new Date((post.publish_date ?? 0) * 1000).toLocaleDateString('en-US', {
         month: 'short',
@@ -365,4 +375,86 @@ export async function getLatestIssue(): Promise<LedgerIssue | null> {
     console.error('Beehiiv latest issue fetch error:', err);
     return null;
   }
+}
+
+export type LedgerArticle = {
+  slug: string;
+  title: string;
+  subtitle: string;
+  date: string; // "Sep 1, 2026"
+  dateShort: string; // "SEP 1"
+  dateIso: string; // ISO 8601
+  url: string; // internal /p/<slug>/
+  webUrl: string;
+  thumbnail: string;
+  readMinutes: number;
+  html: string;
+};
+
+// Every published post, newest first, as ready-to-render HTML. Used to build
+// the on-site article pages and the /journal archive at build time.
+export async function getAllArticles(): Promise<LedgerArticle[]> {
+  if (!PUBLICATION_ID || !API_KEY) {
+    console.warn('Missing Beehiiv env vars.');
+    return [];
+  }
+
+  const headers = { Authorization: `Bearer ${API_KEY}`, Accept: 'application/json' };
+  const raw: any[] = [];
+  try {
+    for (let page = 1; page <= 20; page += 1) {
+      const params = new URLSearchParams({
+        limit: '100',
+        page: String(page),
+        status: 'confirmed',
+        order_by: 'publish_date',
+        direction: 'desc',
+        platform: 'both',
+        hidden_from_feed: 'false',
+      });
+      params.append('expand', 'free_rss_content');
+      const res = await fetch(
+        `https://api.beehiiv.com/v2/publications/${PUBLICATION_ID}/posts?${params}`,
+        { headers }
+      );
+      if (!res.ok) {
+        console.error('Beehiiv archive fetch failed:', res.status, await res.text());
+        break;
+      }
+      const json = await res.json();
+      const batch: any[] = json.data ?? [];
+      raw.push(...batch);
+      if (batch.length < 100 || page >= (json.total_pages ?? 1)) break;
+    }
+  } catch (err) {
+    console.error('Beehiiv archive fetch error:', err);
+  }
+
+  const seen = new Set<string>();
+  const articles: LedgerArticle[] = [];
+  for (const post of raw) {
+    const slug: string = post.slug ?? '';
+    if (!slug || seen.has(slug)) continue;
+    const webUrl: string = post.web_url ?? `https://litchfieldledger.beehiiv.com/p/${slug}`;
+    const rss: string = post.content?.free?.rss || '';
+    const html = cleanIssueHtml(rss).replace(/\{\{live_url\}\}/gi, encodeURIComponent(webUrl));
+    if (!html) continue;
+    seen.add(slug);
+    const published = new Date((post.publish_date ?? 0) * 1000);
+    articles.push({
+      slug,
+      title: smartTitle(post.title ?? ''),
+      subtitle: (post.subtitle || post.preview_text || '').trim(),
+      date: published.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
+      dateShort: published.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }).toUpperCase(),
+      dateIso: published.toISOString(),
+      url: `/p/${slug}/`,
+      webUrl,
+      thumbnail: post.thumbnail_url ?? '',
+      readMinutes: readingMinutes(stripHtml(rss)),
+      html,
+    });
+  }
+  console.log(`[beehiiv] ${articles.length} articles for /p/ and /journal/.`);
+  return articles;
 }

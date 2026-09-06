@@ -168,6 +168,13 @@
     container.classList.remove('latest-issue-empty');
   };
 
+  // Beehiiv RSS links point at the beehiiv.com copy; we host the same post
+  // at /p/<slug>/ so keep readers (and crawlers) on this domain.
+  const toLocalUrl = (url) => {
+    const m = String(url || '').match(/\/p\/([^/?#]+)/);
+    return m ? `/p/${m[1]}/` : url;
+  };
+
   const getText = (item, selector) =>
     item.querySelector(selector)?.textContent?.trim() || '';
 
@@ -204,7 +211,7 @@
           .map((item) => {
             const rawTitle = stripHtml(getText(item, 'title'));
             const title = smartTitle(rawTitle);
-            const url = getText(item, 'link');
+            const url = toLocalUrl(getText(item, 'link'));
             const pubDate = getText(item, 'pubDate');
             const contentHtml = getContentText(item);
             const contentText = stripHtml(contentHtml || getText(item, 'description'));

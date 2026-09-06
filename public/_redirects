@@ -5,4 +5,8 @@
 /tag/*     https://litchfieldledger.beehiiv.com/tag/:splat     200
 /author/*  https://litchfieldledger.beehiiv.com/author/:splat  200
 /upgrade   https://litchfieldledger.beehiiv.com/upgrade        301
+/add-your-event https://litchfieldledger.beehiiv.com/add-your-event 301
 /login     https://litchfieldledger.beehiiv.com/login          200
+# Visitor guide moved onto the main site. Fires once visit.litchfieldledger.com
+# is added as a domain alias of this Netlify site.
+https://visit.litchfieldledger.com/* https://litchfieldledger.com/visit/ 301!

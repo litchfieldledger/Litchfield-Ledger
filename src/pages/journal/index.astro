@@ -1,0 +1,87 @@
+---
+import PageHead from '../../components/PageHead.astro';
+import SiteFooter from '../../components/SiteFooter.astro';
+import { getAllArticles } from '../../lib/beehiiv';
+import '../../styles/home.css';
+import '../../styles/article.css';
+
+const articles = await getAllArticles();
+const SITE = 'https://litchfieldledger.com';
+const title = 'The Weekly Journal: Stories from Litchfield County, CT | The Litchfield Ledger';
+const description = `Every issue of The Litchfield Ledger: ${articles.length} weekly letters on the nature, history, people, and events of Litchfield County, Connecticut.`;
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: `${SITE}/` },
+      { '@type': 'ListItem', position: 2, name: 'Weekly Journal', item: `${SITE}/journal/` },
+    ],
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    name: 'The Weekly Journal',
+    url: `${SITE}/journal/`,
+    description,
+    hasPart: articles.slice(0, 50).map((a) => ({
+      '@type': 'NewsArticle',
+      headline: a.title,
+      url: `${SITE}${a.url}`,
+      datePublished: a.dateIso,
+      ...(a.thumbnail ? { image: a.thumbnail } : {}),
+    })),
+  },
+];
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<PageHead title={title} description={description} path="/journal" jsonLd={jsonLd} />
+</head>
+<body>
+
+<header class="page-bar container">
+  <a href="/" class="wordmark" aria-label="The Litchfield Ledger — home">
+    <span>THE</span><span class="wordmark-box">LITCHFIELD</span><span>LEDGER</span>
+  </a>
+  <a class="page-bar-link" href="/events/">Things to do <span aria-hidden="true">→</span></a>
+</header>
+
+<main class="container">
+  <section class="cal-head">
+    <p class="cal-eyebrow">The Tuesday Letter</p>
+    <h1 class="cal-title">
+      <img class="cal-title-icon icon-pencil-lg" src="/images/refresh/pencil.svg" alt="" width="19" height="34">
+      The Weekly Journal
+    </h1>
+    <p class="cal-sub">
+      Every issue of the Ledger, newest first. One story a week about the nature, history, and people of
+      Litchfield County, plus the full events roundup. Free, every Tuesday.
+    </p>
+  </section>
+
+  <ul class="journal-grid journal-grid-archive">
+    {articles.map((post, i) => (
+      <li class="journal-card">
+        <a href={post.url} data-track-click="post_click" data-track-location="journal_archive">
+          <div class={`journal-thumb tone-${(i % 4) + 1}`}>
+            {post.thumbnail && <img src={post.thumbnail} alt="" width="548" height="344" loading="lazy" decoding="async">}
+          </div>
+          <div class="journal-text">
+            <h2 class="journal-title">{post.title}</h2>
+            {post.subtitle && <p class="journal-excerpt">{post.subtitle}</p>}
+            <p class="journal-meta">{post.date}<span class="dot">•</span>{post.readMinutes} min read</p>
+          </div>
+        </a>
+      </li>
+    ))}
+  </ul>
+</main>
+
+<SiteFooter showInstagram={true} />
+
+</body>
+</html>

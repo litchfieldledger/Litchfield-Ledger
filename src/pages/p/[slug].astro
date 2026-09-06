@@ -1,0 +1,148 @@
+---
+// On-site copy of every newsletter issue, so the writing earns rankings for
+// litchfieldledger.com rather than the Beehiiv subdomain.
+import PageHead from '../../components/PageHead.astro';
+import SiteFooter from '../../components/SiteFooter.astro';
+import { getAllArticles } from '../../lib/beehiiv';
+import type { LedgerArticle } from '../../lib/beehiiv';
+import '../../styles/home.css';
+import '../../styles/article.css';
+
+type PageProps = { article: LedgerArticle; newer: LedgerArticle | null; older: LedgerArticle | null; more: LedgerArticle[] };
+
+export async function getStaticPaths() {
+  const articles = await getAllArticles();
+  return articles.map((article, i) => ({
+    params: { slug: article.slug },
+    props: {
+      article,
+      newer: i > 0 ? articles[i - 1] : null,
+      older: i < articles.length - 1 ? articles[i + 1] : null,
+      more: articles.filter((a) => a.slug !== article.slug).slice(0, 3),
+    } satisfies PageProps,
+  }));
+}
+
+const { article, newer, older, more } = Astro.props as PageProps;
+const SITE = 'https://litchfieldledger.com';
+const path = `/p/${article.slug}`;
+const description = article.subtitle || `${article.title} — from The Litchfield Ledger, a weekly newsletter about Litchfield County, Connecticut.`;
+
+const articleJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'NewsArticle',
+  headline: article.title,
+  description,
+  datePublished: article.dateIso,
+  dateModified: article.dateIso,
+  mainEntityOfPage: `${SITE}${path}/`,
+  url: `${SITE}${path}/`,
+  ...(article.thumbnail ? { image: [article.thumbnail] } : {}),
+  author: { '@type': 'Person', name: 'Patrick Allers', url: SITE },
+  publisher: {
+    '@type': 'NewsMediaOrganization',
+    name: 'The Litchfield Ledger',
+    url: SITE,
+    logo: { '@type': 'ImageObject', url: `${SITE}/images/orange-logo.png` },
+  },
+  isAccessibleForFree: true,
+  about: { '@type': 'Place', name: 'Litchfield County, Connecticut' },
+};
+const crumbs = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: `${SITE}/` },
+    { '@type': 'ListItem', position: 2, name: 'Weekly Journal', item: `${SITE}/journal/` },
+    { '@type': 'ListItem', position: 3, name: article.title, item: `${SITE}${path}/` },
+  ],
+};
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<PageHead
+  title={`${article.title} | The Litchfield Ledger`}
+  description={description}
+  path={path}
+  type="article"
+  image={article.thumbnail || '/images/og-home.jpg'}
+  jsonLd={[crumbs, articleJsonLd]}
+/>
+</head>
+<body>
+
+<header class="page-bar container">
+  <a href="/" class="wordmark" aria-label="The Litchfield Ledger — home">
+    <span>THE</span><span class="wordmark-box">LITCHFIELD</span><span>LEDGER</span>
+  </a>
+  <a class="page-bar-link" href="/journal/">All issues <span aria-hidden="true">→</span></a>
+</header>
+
+<main class="container">
+  <article class="article">
+    <header class="article-head">
+      <p class="article-kicker">
+        <a href="/journal/">The Tuesday Letter</a>
+        <span>{article.date}</span>
+        <span>{article.readMinutes} min read</span>
+      </p>
+      <h1 class="article-title">{article.title}</h1>
+      {article.subtitle && <p class="article-deck">{article.subtitle}</p>}
+      {article.thumbnail && (
+        <figure class="article-lead">
+          <img src={article.thumbnail} alt="" width="1200" height="750" decoding="async" fetchpriority="high">
+        </figure>
+      )}
+    </header>
+
+    <div class="newsletter-body article-body" set:html={article.html} />
+
+    <aside class="latest-issue-cta article-cta" data-track-signup-view="article">
+      <h3>Get this in your inbox every Tuesday.</h3>
+      <div class="beehiiv-wrap latest-issue-signup" data-track-signup="article">
+        <script is:inline src="https://subscribe-forms.beehiiv.com/v3/loader.js" data-beehiiv-form="48c597c3-c9e3-4c7a-b09b-db8627e0a48e"></script>
+      </div>
+      <p>Free, every Tuesday. Unsubscribe anytime.</p>
+    </aside>
+
+    <nav class="article-nav" aria-label="Other issues">
+      {newer ? (
+        <a class="article-nav-link" href={newer.url} rel="next"><span class="article-nav-label">Newer</span><span class="article-nav-title">{newer.title}</span></a>
+      ) : <span />}
+      {older ? (
+        <a class="article-nav-link is-older" href={older.url} rel="prev"><span class="article-nav-label">Older</span><span class="article-nav-title">{older.title}</span></a>
+      ) : <span />}
+    </nav>
+  </article>
+
+  {more.length > 0 && (
+    <section class="section article-more">
+      <div class="section-head">
+        <h2 class="section-title">More from the Journal</h2>
+        <a class="section-link" href="/journal/">All issues <span aria-hidden="true">→</span></a>
+      </div>
+      <ul class="journal-grid journal-grid-3">
+        {more.map((post, i) => (
+          <li class="journal-card">
+            <a href={post.url} data-track-click="post_click" data-track-location="article_more">
+              <div class={`journal-thumb tone-${(i % 4) + 1}`}>
+                {post.thumbnail && <img src={post.thumbnail} alt="" width="548" height="344" loading="lazy" decoding="async">}
+              </div>
+              <div class="journal-text">
+                <h3 class="journal-title">{post.title}</h3>
+                <p class="journal-meta">{post.dateShort}<span class="dot">•</span>{post.readMinutes} min read</p>
+              </div>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </section>
+  )}
+</main>
+
+<SiteFooter showInstagram={true} />
+
+</body>
+</html>
