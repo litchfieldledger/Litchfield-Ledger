@@ -74,7 +74,7 @@ function townFrom(address: string, geo: string): string {
   for (let i = parts.length - 1; i >= 0; i -= 1) {
     const p = parts[i];
     if (/^\d{5}(-\d{4})?$/.test(p)) continue;
-    if (/^(CT|Connecticut|NY|New York|MA|Massachusetts)$/i.test(p)) continue;
+    if (/^(CT|Connecticut|NY|New York|MA|Massachusetts)(\s+\d{5}(-\d{4})?)?$/i.test(p)) continue;
     if (/\d/.test(p) && i === 0) continue; // skip a bare street-number-first part
     return p.replace(/\b(CT|Connecticut|NY)\b\.?$/i, '').trim() || p;
   }
