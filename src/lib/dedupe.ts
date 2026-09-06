@@ -120,11 +120,19 @@ export function dedupeRows<T extends DedupeRow>(
   onMerge?: (kept: T, dropped: T) => void
 ): T[] {
   const kept: T[] = [];
+  // Every row folded into each kept row. A row joins a group if it matches
+  // ANY member, not just the current best: two Instagram rewordings may only
+  // match each other through the organizer's title.
+  const members: T[][] = [];
   for (const row of rows) {
-    const i = kept.findIndex((k) => isSameEvent(k, row));
+    const i = members.findIndex((g) => g.some((m) => isSameEvent(m, row)));
     if (i === -1) {
       kept.push(row);
-    } else if (better(row, kept[i])) {
+      members.push([row]);
+      continue;
+    }
+    members[i].push(row);
+    if (better(row, kept[i])) {
       onMerge?.(row, kept[i]);
       kept[i] = row;
     } else {
