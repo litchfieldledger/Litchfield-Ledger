@@ -3,8 +3,9 @@
 //
 // Two modes, chosen automatically:
 //   1. LIVE  — when AIRTABLE_API_KEY is set, fetch approved/Include future
-//      events straight from the Event Tracker base. This is the "synced to the
-//      scraper + Airtable" path and is what production should run.
+//      events straight from the Event Tracker base, plus every community
+//      submission (Source = Tally) regardless of AI decision. This is the
+//      "synced to the scraper + Airtable" path and is what production should run.
 //   2. SEED  — otherwise, read the committed snapshot (src/data/events-seed.json)
 //      so the site still builds without secrets. Rebuild it with
 //      `node scripts/build-events-seed.mjs <airtable-dump.json>`.
@@ -93,10 +94,11 @@ async function fetchLive(): Promise<RawFields[] | null> {
   if (!API_KEY) return null;
 
   const today = new Date().toISOString().slice(0, 10);
-  const formula =
-    SOURCE_FILTER === 'approved'
-      ? `AND({Approved}=1, IS_AFTER({Event Date}, '${today}'))`
-      : `AND({AI Decision}='Include', IS_AFTER({Event Date}, '${today}'))`;
+  // Community submissions (Source = Tally) bypass the AI/approval gate for now:
+  // a person took the time to send them in, so publish them as submitted.
+  const gate =
+    SOURCE_FILTER === 'approved' ? `{Approved}=1` : `{AI Decision}='Include'`;
+  const formula = `AND(IS_AFTER({Event Date}, '${today}'), OR({Source}='Tally', ${gate}))`;
 
   const all: RawFields[] = [];
   let offset: string | undefined;
