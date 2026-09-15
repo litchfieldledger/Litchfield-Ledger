@@ -93,12 +93,15 @@ type RawFields = Record<string, string | undefined>;
 async function fetchLive(): Promise<RawFields[] | null> {
   if (!API_KEY) return null;
 
-  const today = new Date().toISOString().slice(0, 10);
+  // IS_AFTER is strict, so compare against yesterday (Connecticut time) to keep
+  // today's events: with a same-morning build, IS_AFTER(today) dropped every
+  // event happening that day. loadFutureRows does the precise `date >= today`.
+  const yesterday = addDays(todayIso(), -1);
   // Community submissions (Source = Tally) bypass the AI/approval gate for now:
   // a person took the time to send them in, so publish them as submitted.
   const gate =
     SOURCE_FILTER === 'approved' ? `{Approved}=1` : `{AI Decision}='Include'`;
-  const formula = `AND(IS_AFTER({Event Date}, '${today}'), OR({Source}='Tally', ${gate}))`;
+  const formula = `AND(IS_AFTER({Event Date}, '${yesterday}'), OR({Source}='Tally', ${gate}))`;
 
   const all: RawFields[] = [];
   let offset: string | undefined;
