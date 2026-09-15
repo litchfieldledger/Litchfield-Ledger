@@ -1,16 +1,32 @@
 ---
 // Day-grouped event list with category filter chips. Used by every /events page.
-import { CATEGORY_META } from '../lib/events';
-import type { CalendarDay, Category } from '../lib/events';
+import { CATEGORY_META, featuredPicks, SPONSOR_EMAIL, SPONSOR_MAILTO } from '../lib/events';
+import type { CalendarDay, CalendarEvent, Category } from '../lib/events';
 
 interface Props {
   days: CalendarDay[];
   showFilters?: boolean;
   emptyText?: string;
+  /** Sponsored "Featured" strip above the list (only renders when something is featured). */
+  showFeatured?: boolean;
+  /** "Want your event featured?" note under the list. */
+  showSponsorNote?: boolean;
 }
 
-const { days, showFilters = true, emptyText = 'Nothing on the calendar yet.' } = Astro.props;
+const {
+  days,
+  showFilters = true,
+  emptyText = 'Nothing on the calendar yet.',
+  showFeatured = true,
+  showSponsorNote = true,
+} = Astro.props;
 const total = days.reduce((n, d) => n + d.events.length, 0);
+const featured = showFeatured ? featuredPicks(days) : [];
+
+const whenLabel = (ev: CalendarEvent) => {
+  const day = new Date(`${ev.date}T12:00:00`).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
+  return ev.time ? `${day} · ${ev.time}` : day;
+};
 
 const counts = {} as Record<Category, number>;
 (Object.keys(CATEGORY_META) as Category[]).forEach((c) => (counts[c] = 0));
@@ -28,6 +44,25 @@ const placeLabel = (venue: string, town: string) => {
   return venue || town;
 };
 ---
+
+{featured.length > 0 && (
+  <div class="feat-wrap" id="featured" aria-label="Featured events">
+    <div class="feat-head">
+      <span class="feat-kicker">Featured</span>
+      <span class="feat-note">Want your event here? <a href={SPONSOR_MAILTO}>Sponsor a featured listing →</a></span>
+    </div>
+    <div class="feat-grid">
+      {featured.map((ev) => (
+        <a class="feat-card" data-date={ev.date} href={ev.url || submitUrl} data-track-click="event_click" data-track-location="featured" target={ev.url ? '_blank' : undefined} rel={ev.url ? 'noopener' : undefined}>
+          <span class="feat-when">{whenLabel(ev)}</span>
+          <span class="feat-name">{ev.name}</span>
+          {ev.blurb && <span class="feat-blurb">{ev.blurb}</span>}
+          <span class="feat-place">{placeLabel(ev.venue, ev.town)}</span>
+        </a>
+      ))}
+    </div>
+  </div>
+)}
 
 {showFilters && total > 0 && categories.length > 1 && (
   <div class="cal-filters" role="group" aria-label="Filter events by category">
@@ -58,11 +93,11 @@ const placeLabel = (venue: string, town: string) => {
       </div>
       <ul class="cal-list">
         {day.events.map((ev) => (
-          <li class="cal-item" data-cat={ev.category}>
-            <a href={ev.url || submitUrl} data-track-click="event_click" data-track-location="calendar" target={ev.url ? '_blank' : undefined} rel={ev.url ? 'noopener' : undefined}>
+          <li class:list={['cal-item', { 'is-featured': ev.featured }]} data-cat={ev.category}>
+            <a href={ev.url || submitUrl} data-track-click="event_click" data-track-location={ev.featured ? 'calendar_featured' : 'calendar'} target={ev.url ? '_blank' : undefined} rel={ev.url ? 'noopener' : undefined}>
               <span class="cal-time">{timeLabel(ev.time, ev.endTime)}</span>
               <span class="cal-info">
-                <span class="cal-name">{ev.name}</span>
+                <span class="cal-name">{ev.featured && <span class="cal-tag">Featured</span>}{ev.name}</span>
                 <span class="cal-place">{placeLabel(ev.venue, ev.town)}</span>
               </span>
               <span class="cal-cat" style={`--cat: ${CATEGORY_META[ev.category].color}`}>{CATEGORY_META[ev.category].label}</span>
@@ -74,6 +109,15 @@ const placeLabel = (venue: string, town: string) => {
     </div>
   ))}
   <p class="cal-none is-hidden" id="cal-none">No events in this category right now. <a href={submitUrl}>Know of one?</a></p>
+  {showSponsorNote && (
+    <p class="sponsor-line">
+      <span class="sponsor-star" aria-hidden="true">★</span>
+      <span>
+        <b>Want your event featured?</b> Featured listings appear at the top of this page, highlighted in the calendar, and in the weekly newsletter. They're sponsored placements.
+        Email <a href={SPONSOR_MAILTO}>{SPONSOR_EMAIL}</a> with your event and we'll send you the details.
+      </span>
+    </p>
+  )}
 </section>
 
 <script is:inline>
@@ -93,6 +137,11 @@ const placeLabel = (venue: string, town: string) => {
     const next = new Date(today + 'T12:00:00Z');
     next.setUTCDate(next.getUTCDate() + 1);
     const tomorrow = next.toISOString().slice(0, 10);
+    document.querySelectorAll('.feat-card').forEach((card) => {
+      if ((card.getAttribute('data-date') || '') < today) card.remove();
+    });
+    const feat = document.getElementById('featured');
+    if (feat && !feat.querySelector('.feat-card')) feat.remove();
     document.querySelectorAll('.cal-day').forEach((block) => {
       const date = block.getAttribute('data-date') || '';
       if (date < today) { block.remove(); return; }

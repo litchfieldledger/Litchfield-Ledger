@@ -34,7 +34,15 @@ const FIELD = {
   url: 'URL',
   listingUrl: 'Original Listing URL',
   source: 'Source Name',
+  // Sponsored placements. Optional: the live fetch retries without them if the
+  // tracker doesn't have these columns yet.
+  featured: 'Featured',
+  blurb: 'Featured blurb',
 } as const;
+const OPTIONAL_FIELDS: ReadonlySet<string> = new Set([FIELD.featured, FIELD.blurb]);
+
+export const SPONSOR_EMAIL = 'patrick@litchfieldledger.com';
+export const SPONSOR_MAILTO = `mailto:${SPONSOR_EMAIL}?subject=${encodeURIComponent('Featured event on the Ledger')}`;
 
 export type Category = 'music' | 'market' | 'art' | 'talk' | 'outdoors' | 'community';
 
@@ -104,23 +112,34 @@ async function fetchLive(): Promise<RawFields[] | null> {
   const formula = `AND(IS_AFTER({Event Date}, '${yesterday}'), OR({Source}='Tally', ${gate}))`;
 
   const all: RawFields[] = [];
+  let fields: string[] = Object.values(FIELD);
   let offset: string | undefined;
   try {
-    do {
+    for (;;) {
       const params = new URLSearchParams({ filterByFormula: formula, pageSize: '100' });
-      Object.values(FIELD).forEach((f) => params.append('fields[]', f));
+      fields.forEach((f) => params.append('fields[]', f));
       if (offset) params.set('offset', offset);
       const res = await fetch(`https://api.airtable.com/v0/${BASE_ID}/${TABLE_ID}?${params}`, {
         headers: { Authorization: `Bearer ${API_KEY}` },
       });
       if (!res.ok) {
-        console.error('[events] Airtable fetch failed:', res.status, await res.text());
+        const text = await res.text();
+        // Airtable 422s on an unknown field name. The Featured columns are
+        // optional, so drop them and retry the same page instead of failing
+        // the whole build (and falling back to the stale seed).
+        if (res.status === 422 && /UNKNOWN_FIELD_NAME/.test(text) && fields.some((f) => OPTIONAL_FIELDS.has(f))) {
+          console.warn('[events] Featured fields not in the tracker yet; building without them.');
+          fields = fields.filter((f) => !OPTIONAL_FIELDS.has(f));
+          continue;
+        }
+        console.error('[events] Airtable fetch failed:', res.status, text);
         return null;
       }
       const json = await res.json();
       for (const rec of json.records ?? []) all.push(rec.fields ?? {});
       offset = json.offset;
-    } while (offset);
+      if (!offset) break;
+    }
     return all;
   } catch (err) {
     console.error('[events] Airtable fetch error:', err);
@@ -166,6 +185,8 @@ type FutureRow = {
   venue: string;
   town: string;
   url: string;
+  featured: boolean;
+  blurb: string;
 };
 
 function todayIso(): string {
@@ -188,6 +209,8 @@ async function loadFutureRows(today: string): Promise<FutureRow[]> {
         [FIELD.address]: e.address,
         [FIELD.venue]: e.venue,
         [FIELD.url]: e.url,
+        [FIELD.featured]: e.featured,
+        [FIELD.blurb]: e.blurb,
       }));
 
   const future = rows
@@ -204,6 +227,8 @@ async function loadFutureRows(today: string): Promise<FutureRow[]> {
         venue,
         town: townFrom(address, geocodeQuery(address, venue)),
         url: (f[FIELD.url] || f[FIELD.listingUrl] || '').trim(),
+        featured: Boolean(f[FIELD.featured]),
+        blurb: (f[FIELD.blurb] || '').trim(),
       };
     })
     .filter((e) => e.name && e.date && e.date >= today)
@@ -211,7 +236,13 @@ async function loadFutureRows(today: string): Promise<FutureRow[]> {
       a.date < b.date ? -1 : a.date > b.date ? 1 : timeToMinutes(a.time) - timeToMinutes(b.time)
     );
   // The tracker holds the same listing from several sources; show it once.
-  return dedupeRows(future);
+  // A Featured tick on any copy carries over to the copy we keep.
+  return dedupeRows(future, (kept, dropped) => {
+    if (dropped.featured) {
+      kept.featured = true;
+      if (!kept.blurb) kept.blurb = dropped.blurb;
+    }
+  });
 }
 
 export type CalendarEvent = {
@@ -225,6 +256,8 @@ export type CalendarEvent = {
   town: string;
   url: string;
   category: Category;
+  featured: boolean;
+  blurb: string;
 };
 
 export type CalendarDay = {
@@ -273,9 +306,35 @@ export async function getCalendarDays(): Promise<CalendarDay[]> {
       town: e.town,
       url: e.url,
       category: categorize(e.name),
+      featured: e.featured,
+      blurb: e.blurb,
     });
   }
   return [...days.values()];
+}
+
+// Sponsored picks for the strip above a calendar: the next `limit` featured
+// events (one slot per event name, so a multi-day run doesn't fill the strip)
+// within `horizon` days of today.
+export function featuredPicks(
+  days: CalendarDay[],
+  { limit = 3, horizon = 14 }: { limit?: number; horizon?: number } = {}
+): CalendarEvent[] {
+  const cutoff = addDays(todayIso(), horizon);
+  const seen = new Set<string>();
+  const out: CalendarEvent[] = [];
+  for (const d of days) {
+    if (d.date > cutoff) break;
+    for (const e of d.events) {
+      if (!e.featured) continue;
+      const key = e.name.toLowerCase();
+      if (seen.has(key)) continue;
+      seen.add(key);
+      out.push(e);
+      if (out.length >= limit) return out;
+    }
+  }
+  return out;
 }
 
 export async function getUpcomingEvents(
