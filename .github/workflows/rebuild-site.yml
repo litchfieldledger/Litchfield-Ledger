@@ -1,0 +1,38 @@
+name: Daily site rebuild
+
+# The site is static: /events, /events/this-weekend, and the homepage strip
+# all compute "today", the past-day cutoff, and the weekend range at BUILD
+# time. Without this, the site only rebuilt when the scraper's Wednesday run
+# fired the Netlify hook (or on a push), so by Monday the calendar was listing
+# days that had already happened. This POSTs the Netlify build hook once a day
+# so the calendar is never more than a day stale.
+#
+# Requires the NETLIFY_BUILD_HOOK repo secret (the same hook the ledger-events
+# repo fires after its Wednesday scrape). Manual trigger: Actions -> Daily
+# site rebuild -> Run workflow.
+
+on:
+  schedule:
+    # 09:00 UTC = 5am EDT / 4am EST, before anyone is looking at the calendar.
+    - cron: "0 9 * * *"
+  workflow_dispatch:
+
+concurrency:
+  group: rebuild-site
+  cancel-in-progress: false
+
+jobs:
+  rebuild:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Trigger Netlify build
+        env:
+          HOOK: ${{ secrets.NETLIFY_BUILD_HOOK }}
+        run: |
+          if [ -z "$HOOK" ]; then
+            echo "::error::NETLIFY_BUILD_HOOK secret is not set on this repo (Settings -> Secrets -> Actions)"
+            exit 1
+          fi
+          curl -fsS -X POST -d '{}' "$HOOK"
+          echo "Netlify build triggered."
