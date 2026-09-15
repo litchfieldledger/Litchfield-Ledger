@@ -79,9 +79,44 @@ const placeLabel = (venue: string, town: string) => {
 <script is:inline>
 (function () {
   const buttons = Array.from(document.querySelectorAll('.cal-filter'));
+  const none = document.getElementById('cal-none');
+
+  // The page is built at most once a day, but "today" moves on. Re-derive it in
+  // the reader's browser (Connecticut time), drop day blocks that have already
+  // passed, and refresh the Today / Tomorrow labels so a build from earlier in
+  // the week never shows last Thursday as "Tomorrow".
+  let today = '';
+  try {
+    today = new Date().toLocaleDateString('en-CA', { timeZone: 'America/New_York' });
+  } catch (e) {}
+  if (/^\d{4}-\d{2}-\d{2}$/.test(today)) {
+    const next = new Date(today + 'T12:00:00Z');
+    next.setUTCDate(next.getUTCDate() + 1);
+    const tomorrow = next.toISOString().slice(0, 10);
+    document.querySelectorAll('.cal-day').forEach((block) => {
+      const date = block.getAttribute('data-date') || '';
+      if (date < today) { block.remove(); return; }
+      const name = block.querySelector('.cal-day-name');
+      if (!name) return;
+      const stale = name.textContent === 'Today' || name.textContent === 'Tomorrow';
+      if (date === today) name.textContent = 'Today';
+      else if (date === tomorrow) name.textContent = 'Tomorrow';
+      else if (stale) name.textContent = new Date(date + 'T12:00:00').toLocaleDateString('en-US', { weekday: 'long' });
+    });
+  }
+
   const items = Array.from(document.querySelectorAll('.cal-item'));
   const dayBlocks = Array.from(document.querySelectorAll('.cal-day'));
-  const none = document.getElementById('cal-none');
+
+  // Keep the chip counts honest after past days are dropped.
+  buttons.forEach((b) => {
+    const cat = b.dataset.cat;
+    const n = cat === 'all' ? items.length : items.filter((i) => i.dataset.cat === cat).length;
+    const count = b.querySelector('.cal-filter-count');
+    if (count) count.textContent = String(n);
+    if (cat !== 'all' && n === 0) b.classList.add('is-hidden');
+  });
+  if (!dayBlocks.length && none) none.classList.remove('is-hidden');
   if (!buttons.length) return;
 
   function apply(cat) {
