@@ -35,6 +35,7 @@ const FIELD = {
   listingUrl: 'Original Listing URL',
   source: 'Source Name',
   notes: 'Event Notes',
+  rank: 'AI Rank',
   // Sponsored placements. Optional: the live fetch retries without them if the
   // tracker doesn't have these columns yet.
   featured: 'Featured',
@@ -170,6 +171,7 @@ export type UpcomingEvent = {
   place: string; // "Litchfield, CT"
   url: string;
   path: string; // on-site event page, "/event/<slug>/"
+  weekday: string; // "Sat"
 };
 
 function addDays(iso: string, days: number): string {
@@ -191,6 +193,7 @@ type FutureRow = {
   id: string;
   slug: string;
   notes: string;
+  rank: number; // AI Rank 1-10; 0 when unranked
   name: string;
   date: string;
   time: string;
@@ -236,6 +239,7 @@ async function loadFutureRows(today: string): Promise<FutureRow[]> {
         id: (f.id as string) || `ev-${i}`,
         slug: '',
         notes: cleanNotes(f[FIELD.notes] || ''),
+        rank: Number(f[FIELD.rank]) || 0,
         name: (f[FIELD.name] || '').trim(),
         date: (f[FIELD.date] || '').trim(),
         time: (f[FIELD.time] || '').trim(),
@@ -260,6 +264,7 @@ async function loadFutureRows(today: string): Promise<FutureRow[]> {
       if (!kept.blurb) kept.blurb = dropped.blurb;
     }
     if (dropped.notes.length > kept.notes.length) kept.notes = dropped.notes;
+    kept.rank = Math.max(kept.rank, dropped.rank);
   });
   assignSlugs(kept);
   return kept;
@@ -401,15 +406,19 @@ export function featuredPicks(
   return out;
 }
 
+// The homepage strip: the week's strongest events rather than simply the next
+// few. Ranked by the tracker's AI Rank, one slot per event name, at most
+// `perCategory` from any one category so it isn't six gallery hours, then shown
+// in date order. Unranked rows (the seed, or not yet scored) fall back to date.
+const UNRANKED = 6;
+
 export async function getUpcomingEvents(
-  { limit = 3, days = 7 }: { limit?: number; days?: number } = {}
+  { limit = 6, days = 7, perCategory = 2 }: { limit?: number; days?: number; perCategory?: number } = {}
 ): Promise<UpcomingEvent[]> {
   const today = todayIso();
   const horizon = addDays(today, days);
   const all = await loadFutureRows(today);
 
-  // One slot per distinct event name, so a multi-day exhibition doesn't fill
-  // the whole strip.
   const seen = new Set<string>();
   const distinct = all.filter((e) => {
     const key = e.name.toLowerCase();
@@ -418,8 +427,29 @@ export async function getUpcomingEvents(
     return true;
   });
 
-  let picked = distinct.filter((e) => e.date <= horizon).slice(0, limit);
-  if (picked.length < limit) picked = distinct.slice(0, limit);
+  const byRank = (rows: FutureRow[]) =>
+    [...rows].sort((a, b) => (b.rank || UNRANKED) - (a.rank || UNRANKED)); // stable: ties stay in date order
+
+  const picked: FutureRow[] = [];
+  const perCat = new Map<Category, number>();
+  const take = (rows: FutureRow[], capped: boolean) => {
+    for (const e of rows) {
+      if (picked.length >= limit) return;
+      if (picked.includes(e)) continue;
+      const cat = categorize(e.name);
+      if (capped && (perCat.get(cat) || 0) >= perCategory) continue;
+      picked.push(e);
+      perCat.set(cat, (perCat.get(cat) || 0) + 1);
+    }
+  };
+  const thisWeek = byRank(distinct.filter((e) => e.date <= horizon));
+  take(thisWeek, true);
+  take(thisWeek, false); // a quiet week: relax the category mix
+  take(byRank(distinct), false); // still short: reach past the week
+
+  picked.sort((a, b) =>
+    a.date < b.date ? -1 : a.date > b.date ? 1 : timeToMinutes(a.time) - timeToMinutes(b.time)
+  );
 
   return picked.map((e) => {
     const d = new Date(`${e.date}T12:00:00`);
@@ -428,6 +458,7 @@ export async function getUpcomingEvents(
       date: e.date,
       month: d.toLocaleDateString('en-US', { month: 'short' }).toUpperCase(),
       day: String(d.getDate()),
+      weekday: d.toLocaleDateString('en-US', { weekday: 'short' }),
       time: e.time,
       place: placeLabel(e.address, e.venue),
       url: e.url,

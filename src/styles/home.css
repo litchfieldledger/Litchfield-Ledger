@@ -157,6 +157,34 @@ ul { list-style: none; }
 .event-chevron { display: none; }
 .events-empty { grid-column: 1 / -1; padding: 12px 0; font-size: 14px; color: var(--text-muted); }
 .events-empty a { color: var(--orange); }
+.events-row { row-gap: 26px; }
+.event-cell:nth-child(3n + 1) { border-left: none; padding-left: 0; }
+
+/* Below the strip: one clear way into the full calendar, then shortcuts. */
+.events-more { display: flex; flex-direction: column; gap: 16px; margin-top: 28px; padding-top: 24px; border-top: 1px solid var(--rule); }
+.events-all-btn {
+  display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%;
+  padding: 15px 20px; border-radius: 999px; background: var(--ink); color: #fff; text-decoration: none;
+  font-size: 12px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; transition: background 0.15s;
+}
+.events-all-btn span { font-size: 14px; letter-spacing: 0; }
+.events-all-btn:hover { background: var(--orange); }
+.events-quick { display: flex; flex-wrap: wrap; gap: 8px; }
+.events-quick a {
+  font-size: 13px; color: var(--text-mid); text-decoration: none; white-space: nowrap;
+  padding: 6px 12px; border: 1px solid var(--rule); border-radius: 999px; transition: border-color 0.15s, color 0.15s;
+}
+.events-quick a:hover { border-color: var(--ink); color: var(--ink); }
+
+/* Hero: a second way in for visitors not ready to subscribe. */
+.hero > .hero-cta {
+  display: inline-flex; align-items: center; gap: 8px; align-self: flex-start;
+  padding: 11px 18px; border: 1px solid rgba(255, 255, 255, 0.6); border-radius: 999px;
+  color: #fff; text-decoration: none; font-size: 12px; font-weight: 600; letter-spacing: 1.4px; text-transform: uppercase;
+  transition: background 0.15s, color 0.15s;
+}
+.hero-cta span { font-size: 14px; letter-spacing: 0; }
+.hero > .hero-cta:hover { background: #fff; color: var(--ink); }
 
 /* --------------------------------------------------------------------------
    Latest issue (full newsletter, ungated)
@@ -302,6 +330,11 @@ ul { list-style: none; }
   .event-name { font-size: 16px; }
   .event-chevron { display: block; font-size: 20px; color: var(--text-muted); flex-shrink: 0; }
   .events-empty { padding: 20px 0; }
+  .event-cell:nth-child(n + 5) { display: none; } /* four is plenty on a phone */
+  .event-cell:nth-child(4) { border-bottom: none; }
+  .events-more { margin-top: 8px; padding-top: 20px; }
+  .events-quick { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; mask-image: linear-gradient(to right, #000 88%, transparent); }
+  .events-quick::-webkit-scrollbar { display: none; }
 
   .latest-issue { margin-top: 20px; }
   .latest-issue-title { font-size: 24px; }

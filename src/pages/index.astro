@@ -3,13 +3,25 @@ import SiteFooter from '../components/SiteFooter.astro';
 import LatestIssuePreview from '../components/LatestIssuePreview.astro';
 import PageHead from '../components/PageHead.astro';
 import { getLedgerPosts, getLedgerStats, getLatestIssue } from '../lib/beehiiv';
-import { getUpcomingEvents } from '../lib/events';
+import { getUpcomingEvents, getCalendarDays, townIndex, CATEGORY_META, CATEGORY_SLUGS } from '../lib/events';
+import type { Category } from '../lib/events';
 import '../styles/home.css';
 
 const posts = await getLedgerPosts();
 const latestIssue = await getLatestIssue();
 const stats = await getLedgerStats();
-const events = await getUpcomingEvents({ limit: 3, days: 7 });
+const events = await getUpcomingEvents({ limit: 6, days: 7 });
+
+// Quick links under the strip: the weekend page, each category with events,
+// and the busiest towns. Every one is an existing /events landing page.
+const calendarDays = await getCalendarDays();
+const eventTotal = calendarDays.reduce((n, d) => n + d.events.length, 0);
+const categoryLinks = (Object.keys(CATEGORY_META) as Category[])
+  .filter((c) => calendarDays.some((d) => d.events.some((e) => e.category === c)))
+  .map((c) => ({ href: `/events/${CATEGORY_SLUGS[c]}/`, label: CATEGORY_META[c].label }));
+const townLinks = townIndex(calendarDays)
+  .slice(0, 4)
+  .map((t) => ({ href: `/events/${t.slug}/`, label: t.town }));
 
 const numberFmt = new Intl.NumberFormat('en-US');
 const submitUrl = 'https://litchfieldledger.beehiiv.com/add-your-event';
@@ -77,6 +89,7 @@ const siteJsonLd = {
     <div class="beehiiv-wrap hero-signup" data-track-signup="hero">
       <script is:inline src="https://subscribe-forms.beehiiv.com/v3/loader.js" data-beehiiv-form="48c597c3-c9e3-4c7a-b09b-db8627e0a48e"></script>
     </div>
+    <a class="hero-cta" href="#this-week" data-track-click="events_click" data-track-location="hero">See what's on this week <span aria-hidden="true">↓</span></a>
     {stats && stats.activeSubscribers > 0 && (
       <p class="hero-stats">
         <strong>{numberFmt.format(stats.activeSubscribers)}</strong> locals reading
@@ -109,7 +122,7 @@ const siteJsonLd = {
             <div class="event-info">
               <span class="event-name">{ev.name}</span>
               <span class="event-sub">
-                {ev.time}{ev.time && ev.place && <span class="dot">•</span>}{ev.place}
+                {ev.weekday}{ev.time && ` · ${ev.time}`}{ev.place && <span class="dot">•</span>}{ev.place}
               </span>
             </div>
             <span class="event-chevron" aria-hidden="true">›</span>
@@ -117,6 +130,18 @@ const siteJsonLd = {
         </li>
       ))}
     </ul>
+    {eventTotal > 0 && (
+      <div class="events-more">
+        <a class="events-all-btn" href="/events/" data-track-click="events_click" data-track-location="this_week_button">
+          See all {eventTotal} events <span aria-hidden="true">→</span>
+        </a>
+        <nav class="events-quick" aria-label="Browse events">
+          <a href="/events/this-weekend/" data-track-click="events_click" data-track-location="home_chip">This weekend</a>
+          {categoryLinks.map((l) => <a href={l.href} data-track-click="events_click" data-track-location="home_chip">{l.label}</a>)}
+          {townLinks.map((l) => <a href={l.href} data-track-click="events_click" data-track-location="home_chip">{l.label}</a>)}
+        </nav>
+      </div>
+    )}
   </section>
 
   {showFoliage && (
