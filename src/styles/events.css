@@ -138,12 +138,15 @@ a.feat-card:hover .feat-name { color: var(--orange); }
 .cal-item.is-featured .cal-time { font-weight: 600; }
 .cal-tag { display: inline-block; font-size: 9.5px; font-weight: 700; letter-spacing: 1.4px; text-transform: uppercase; color: #fff; background: var(--orange); padding: 3px 7px; border-radius: 3px; margin-right: 8px; vertical-align: 2px; }
 
-.sponsor-line { margin: 26px 0 0; padding: 14px 16px; border: 1px dashed #e3c9b8; border-radius: 6px; background: #fff; font-size: 13px; line-height: 1.5; color: var(--text-mid); display: flex; gap: 10px; align-items: flex-start; }
+.sponsor-line { margin: 22px 0 0; padding: 10px 14px; border: 1px dashed #e3c9b8; border-radius: 6px; background: #fff; font-size: 13px; line-height: 1.45; color: var(--text-mid); display: flex; gap: 10px; align-items: center; }
+.sponsor-line > span:nth-child(2) { flex: 1; }
 .sponsor-line .sponsor-star { color: var(--orange); }
-.sponsor-line b { color: var(--ink); font-weight: 600; }
-.sponsor-line a { color: var(--orange); font-weight: 600; text-decoration: underline; text-underline-offset: 2px; }
+.sponsor-line b, .sponsor-line .sponsor-price { color: var(--ink); font-weight: 600; }
+.sponsor-line .sponsor-cta { flex-shrink: 0; color: var(--orange); font-weight: 600; text-decoration: underline; text-underline-offset: 2px; white-space: nowrap; }
 
 @media (max-width: 760px) {
   .feat-wrap { padding: 16px; }
+  .sponsor-line { margin-top: 14px; padding: 9px 12px; font-size: 12.5px; }
+  .sponsor-line .sponsor-star, .sponsor-line .sponsor-more { display: none; }
   .cal-item.is-featured .cal-name { font-size: 16px; }
 }

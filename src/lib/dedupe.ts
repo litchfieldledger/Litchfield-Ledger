@@ -72,6 +72,7 @@ export function richness(e: DedupeRow): number {
   if (e.address) s += 2;
   if (e.venue) s += 1;
   if (e.endTime) s += 1;
+  if (e.time) s += 2;
   return s;
 }
 
@@ -90,9 +91,12 @@ function titlePair(a: DedupeRow, b: DedupeRow): [Set<string>, Set<string>] {
 
 export function isSameEvent(a: DedupeRow, b: DedupeRow): boolean {
   if (a.date !== b.date) return false;
-  if (timeToMinutes(a.time) !== timeToMinutes(b.time)) return false;
+  // A copy with no start time (a community calendar that only lists the day)
+  // can still be the organizer's listing; it just has to match more closely.
+  const untimed = !a.time.trim() !== !b.time.trim();
+  if (!untimed && timeToMinutes(a.time) !== timeToMinutes(b.time)) return false;
   if (a.name.trim().toLowerCase() === b.name.trim().toLowerCase()) return true;
-  if (overlap(...titlePair(a, b)) < 0.6) return false;
+  if (overlap(...titlePair(a, b)) < (untimed ? 0.8 : 0.6)) return false;
   // Similar titles at the same minute, but clearly different places
   // (e.g. "Story Time" at two libraries): keep both.
   const va = tokens(a.venue, VENUE_STOP);

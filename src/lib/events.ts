@@ -13,6 +13,9 @@
 import aliases from '../data/geo-aliases.json';
 import seed from '../data/events-seed.json';
 import { dedupeRows, timeToMinutes } from './dedupe';
+import { categorize } from './categorize';
+import { tidyName, tidyTimes } from './tidy';
+import type { Category } from './categorize';
 
 const BASE_ID = 'apprsKJr6ge2bytOh';
 const TABLE_ID = 'tblOuZCYYHK1u41TD';
@@ -44,9 +47,12 @@ const FIELD = {
 const OPTIONAL_FIELDS: ReadonlySet<string> = new Set([FIELD.featured, FIELD.blurb]);
 
 export const SPONSOR_EMAIL = 'patrick@litchfieldledger.com';
+// What a Featured listing costs, as shown on the calendar ("$50 a week").
+// Leave blank to hide the price.
+export const SPONSOR_PRICE = '';
 export const SPONSOR_MAILTO = `mailto:${SPONSOR_EMAIL}?subject=${encodeURIComponent('Featured event on the Ledger')}`;
 
-export type Category = 'music' | 'market' | 'art' | 'talk' | 'outdoors' | 'community';
+export type { Category };
 
 export const CATEGORY_META: Record<Category, { label: string; color: string; emoji: string }> = {
   music: { label: 'Live music', color: '#c85c1e', emoji: '♪' },
@@ -56,20 +62,6 @@ export const CATEGORY_META: Record<Category, { label: string; color: string; emo
   outdoors: { label: 'Outdoors', color: '#1e3d28', emoji: '✦' },
   community: { label: 'Community', color: '#b0872f', emoji: '★' },
 };
-
-const CATEGORY_RULES: [Category, RegExp][] = [
-  ['music', /\b(concert|music|jazz|band|orchestra|quartet|trio|sonata|singer|songwriter|choir|chorus|symphony|acoustic|recital|dj|tribute|blues|folk|opera|ceili)\b/i],
-  ['market', /\b(market|farmers?|flea|bazaar|brocante|craft fair|makers|vendor|tag sale|rummage)\b/i],
-  ['outdoors', /\b(hike|hikes|walk|trail|garden|nature|birding|bird walk|preserve|farm tour|forest|river|paddle|kayak|park|clean-?up|scavenger|wildflower|foraging|trout|fishing)\b/i],
-  ['art', /\b(art|gallery|exhibit|exhibition|studio|painting|paint|sculpture|photography|pottery|ceramics|film|movie|screening|theater|theatre|play|dance)\b/i],
-  ['talk', /\b(talk|author|lecture|reading|book|poetry|discussion|panel|workshop|class|seminar|lesson|storytime|history|genealogy|library)\b/i],
-  ['community', /\b(town hall|meeting|voting|vote|election|primary|selectmen|board of|hearing|fundraiser|benefit|supper|dinner|breakfast|potluck|festival|fair|celebration|parade|blood drive|tasting|wine|beer|brewery|bbq|barbecue)\b/i],
-];
-
-function categorize(name = ''): Category {
-  for (const [cat, re] of CATEGORY_RULES) if (re.test(name)) return cat;
-  return 'community';
-}
 
 function geocodeQuery(address = '', venue = ''): string {
   let q = (address || '').trim();
@@ -237,15 +229,16 @@ async function loadFutureRows(today: string): Promise<FutureRow[]> {
     .map((f, i) => {
       const address = (f[FIELD.address] || '').trim();
       const venue = (f[FIELD.venue] || '').trim();
+      const [time, endTime] = tidyTimes(f[FIELD.time] || '', f[FIELD.endTime] || '');
       return {
         id: (f.id as string) || `ev-${i}`,
         slug: '',
         notes: cleanNotes(f[FIELD.notes] || ''),
         rank: Number(f[FIELD.rank]) || 0,
-        name: (f[FIELD.name] || '').trim(),
+        name: tidyName(f[FIELD.name] || ''),
         date: (f[FIELD.date] || '').trim(),
-        time: (f[FIELD.time] || '').trim(),
-        endTime: (f[FIELD.endTime] || '').trim(),
+        time,
+        endTime,
         address,
         venue,
         town: townFrom(address, geocodeQuery(address, venue)),
@@ -376,7 +369,7 @@ export async function getCalendarDays(): Promise<CalendarDay[]> {
       address: e.address,
       town: e.town,
       url: e.url,
-      category: categorize(e.name),
+      category: categorize(e),
       featured: e.featured,
       blurb: e.blurb,
     });
@@ -446,7 +439,7 @@ export async function getUpcomingEvents(
     for (const e of rows) {
       if (picked.length >= limit) return;
       if (picked.includes(e)) continue;
-      const cat = categorize(e.name);
+      const cat = categorize(e);
       if (capped && (perCat.get(cat) || 0) >= perCategory) continue;
       picked.push(e);
       perCat.set(cat, (perCat.get(cat) || 0) + 1);

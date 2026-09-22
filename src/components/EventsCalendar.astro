@@ -1,6 +1,6 @@
 ---
 // Day-grouped event list with category filter chips. Used by every /events page.
-import { CATEGORY_META, featuredPicks, eventPath, SPONSOR_EMAIL, SPONSOR_MAILTO } from '../lib/events';
+import { CATEGORY_META, featuredPicks, eventPath, SPONSOR_MAILTO, SPONSOR_PRICE } from '../lib/events';
 import type { CalendarDay, CalendarEvent, Category } from '../lib/events';
 
 interface Props {
@@ -9,7 +9,7 @@ interface Props {
   emptyText?: string;
   /** Sponsored "Featured" strip above the list (only renders when something is featured). */
   showFeatured?: boolean;
-  /** "Want your event featured?" note under the list. */
+  /** "Promote your event" offer above the list (folded into the strip when one shows). */
   showSponsorNote?: boolean;
 }
 
@@ -49,7 +49,7 @@ const placeLabel = (venue: string, town: string) => {
   <div class="feat-wrap" id="featured" aria-label="Featured events">
     <div class="feat-head">
       <span class="feat-kicker">Featured</span>
-      <span class="feat-note">Want your event here? <a href={SPONSOR_MAILTO}>Sponsor a featured listing →</a></span>
+      <span class="feat-note">Want your event here?{SPONSOR_PRICE && ` ${SPONSOR_PRICE}.`} <a href={SPONSOR_MAILTO} data-track-click="sponsor_click" data-track-location="featured_strip">Feature your event →</a></span>
     </div>
     <div class="feat-grid">
       {featured.map((ev) => (
@@ -62,6 +62,18 @@ const placeLabel = (venue: string, town: string) => {
       ))}
     </div>
   </div>
+)}
+
+{showSponsorNote && featured.length === 0 && total > 0 && (
+  <p class="sponsor-line">
+    <span class="sponsor-star" aria-hidden="true">★</span>
+    <span>
+      <b>Promote your event.</b>{' '}
+      <span class="sponsor-more">Featured listings sit at the top of this calendar and in Tuesday's newsletter.</span>{' '}
+      {SPONSOR_PRICE && <span class="sponsor-price">{SPONSOR_PRICE}.</span>}
+    </span>
+    <a class="sponsor-cta" href={SPONSOR_MAILTO} data-track-click="sponsor_click" data-track-location="calendar_top">Feature your event →</a>
+  </p>
 )}
 
 {showFilters && total > 0 && categories.length > 1 && (
@@ -108,16 +120,7 @@ const placeLabel = (venue: string, town: string) => {
       </ul>
     </div>
   ))}
-  <p class="cal-none is-hidden" id="cal-none">No events in this category right now. <a href={submitUrl}>Know of one?</a></p>
-  {showSponsorNote && (
-    <p class="sponsor-line">
-      <span class="sponsor-star" aria-hidden="true">★</span>
-      <span>
-        <b>Want your event featured?</b> Featured listings appear at the top of this page, highlighted in the calendar, and in the weekly newsletter. They're sponsored placements.
-        Email <a href={SPONSOR_MAILTO}>{SPONSOR_EMAIL}</a> with your event and we'll send you the details.
-      </span>
-    </p>
-  )}
+  <p class="cal-none" id="cal-none" hidden>No events in this category right now. <a href={submitUrl}>Know of one?</a></p>
 </section>
 
 <script is:inline>
@@ -165,7 +168,7 @@ const placeLabel = (venue: string, town: string) => {
     if (count) count.textContent = String(n);
     if (cat !== 'all' && n === 0) b.classList.add('is-hidden');
   });
-  if (!dayBlocks.length && none) none.classList.remove('is-hidden');
+  if (!dayBlocks.length && none) none.hidden = false;
   if (!buttons.length) return;
 
   function apply(cat) {
@@ -179,7 +182,7 @@ const placeLabel = (venue: string, town: string) => {
       const any = block.querySelector('.cal-item:not(.is-hidden)');
       block.classList.toggle('is-hidden', !any);
     });
-    if (none) none.classList.toggle('is-hidden', visible > 0);
+    if (none) none.hidden = visible > 0;
     buttons.forEach((b) => {
       const active = b.dataset.cat === cat;
       b.classList.toggle('is-active', active);
