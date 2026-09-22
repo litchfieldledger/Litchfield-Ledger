@@ -11,6 +11,8 @@ interface Props {
   showFeatured?: boolean;
   /** "Promote your event" offer above the list (folded into the strip when one shows). */
   showSponsorNote?: boolean;
+  /** Newsletter signup between the coming week and later dates. */
+  showSignup?: boolean;
 }
 
 const {
@@ -19,6 +21,7 @@ const {
   emptyText = 'Nothing on the calendar yet.',
   showFeatured = true,
   showSponsorNote = true,
+  showSignup = true,
 } = Astro.props;
 const total = days.reduce((n, d) => n + d.events.length, 0);
 const featured = showFeatured ? featuredPicks(days) : [];
@@ -34,6 +37,15 @@ for (const d of days) for (const e of d.events) counts[e.category] += 1;
 const categories = (Object.keys(CATEGORY_META) as Category[]).filter((c) => counts[c] > 0);
 
 const submitUrl = 'https://litchfieldledger.beehiiv.com/add-your-event';
+
+// The signup sits after the coming week (today + 6 days, Connecticut time):
+// someone who has read that far has seen what the newsletter is. Only when
+// there are days on both sides, so a short list never ends on a form.
+const todayNY = new Date().toLocaleDateString('en-CA', { timeZone: 'America/New_York' });
+const weekEnd = new Date(`${todayNY}T12:00:00Z`);
+weekEnd.setUTCDate(weekEnd.getUTCDate() + 6);
+const weekEndIso = weekEnd.toISOString().slice(0, 10);
+const signupAt = showSignup ? days.findIndex((d) => d.date > weekEndIso) : -1;
 
 const timeLabel = (time: string, endTime: string) => {
   if (!time) return 'TBA';
@@ -90,7 +102,20 @@ const placeLabel = (venue: string, town: string) => {
   {days.length === 0 && (
     <p class="cal-empty">{emptyText} <a href={submitUrl}>Submit an event</a> and it'll show up here.</p>
   )}
-  {days.map((day) => (
+  {days.map((day, i) => (
+    <>
+    {i === signupAt && i > 0 && (
+      <aside class="cal-signup" id="cal-signup" data-track-signup-view="calendar_week_break">
+        <div class="cal-signup-text">
+          <p class="cal-signup-kicker">Every Tuesday</p>
+          <h2>That's the week.</h2>
+          <p>Get the Ledger's picks for the week ahead in your inbox every Tuesday morning. Free.</p>
+        </div>
+        <div class="beehiiv-wrap cal-signup-form" data-track-signup="calendar_week_break">
+          <script is:inline src="https://subscribe-forms.beehiiv.com/v3/loader.js" data-beehiiv-form="48c597c3-c9e3-4c7a-b09b-db8627e0a48e"></script>
+        </div>
+      </aside>
+    )}
     <div class="cal-day" data-date={day.date}>
       <div class="cal-day-head">
         <div class="event-date">
@@ -118,6 +143,7 @@ const placeLabel = (venue: string, town: string) => {
         ))}
       </ul>
     </div>
+    </>
   ))}
   <p class="cal-none" id="cal-none" hidden>No events in this category right now. <a href={submitUrl}>Know of one?</a></p>
 </section>
@@ -156,6 +182,7 @@ const placeLabel = (venue: string, town: string) => {
     });
   }
 
+  const signup = document.getElementById('cal-signup');
   const items = Array.from(document.querySelectorAll('.cal-item'));
   const dayBlocks = Array.from(document.querySelectorAll('.cal-day'));
 
@@ -182,6 +209,13 @@ const placeLabel = (venue: string, town: string) => {
       block.classList.toggle('is-hidden', !any);
     });
     if (none) none.hidden = visible > 0;
+    // Keep the signup between two visible days, never alone at either end.
+    if (signup) {
+      const shown = dayBlocks.filter((b) => !b.classList.contains('is-hidden'));
+      const before = shown.some((b) => b.compareDocumentPosition(signup) & Node.DOCUMENT_POSITION_FOLLOWING);
+      const after = shown.some((b) => b.compareDocumentPosition(signup) & Node.DOCUMENT_POSITION_PRECEDING);
+      signup.classList.toggle('is-hidden', !(before && after));
+    }
     buttons.forEach((b) => {
       const active = b.dataset.cat === cat;
       b.classList.toggle('is-active', active);

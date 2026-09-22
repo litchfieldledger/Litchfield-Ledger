@@ -115,6 +115,14 @@
   .cal-filter { flex-shrink: 0; }
 }
 
+/* --- Newsletter signup after the coming week ------------------------------- */
+.cal-signup { margin: 28px 0; padding: 28px 30px; background: var(--ink); color: #fff; border-radius: 8px; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 12px 32px; align-items: center; }
+.cal-signup-kicker { font-size: 10px; font-weight: 600; letter-spacing: 1.8px; text-transform: uppercase; color: rgba(255, 255, 255, 0.55); margin: 0 0 8px; }
+.cal-signup h2 { font-family: var(--display); font-size: 28px; line-height: 1.05; text-transform: uppercase; color: #fff; margin: 0 0 8px; }
+.cal-signup p { font-family: var(--serif); font-size: 15.5px; line-height: 1.5; color: rgba(255, 255, 255, 0.78); margin: 0; }
+.cal-signup .cal-signup-kicker { font-family: var(--sans); }
+.cal-signup-form { min-width: 0; }
+
 /* --- Featured (sponsored) events ------------------------------------------ */
 .feat-wrap { margin: 28px 0 4px; padding: 20px 22px 18px; background: var(--bg-soft); border: 1px solid #efe9dc; border-radius: 8px; }
 .feat-head { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin-bottom: 14px; }
@@ -146,6 +154,9 @@ a.feat-card:hover .feat-name { color: var(--orange); }
 
 @media (max-width: 760px) {
   .feat-wrap { padding: 16px; }
+  .cal-signup { grid-template-columns: 1fr; padding: 22px 18px; margin: 20px 0; }
+  .cal-signup h2 { font-size: 24px; }
+  .cal-signup p { font-size: 14.5px; }
   .sponsor-line { margin-top: 14px; padding: 9px 12px; font-size: 12.5px; }
   .sponsor-line .sponsor-star, .sponsor-line .sponsor-more { display: none; }
   .cal-item.is-featured .cal-name { font-size: 16px; }
