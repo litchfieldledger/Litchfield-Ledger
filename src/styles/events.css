@@ -34,11 +34,11 @@
 
 .cal-item { border-top: 1px solid var(--rule); }
 .cal-item:first-child { border-top: none; }
-.cal-item a { display: grid; grid-template-columns: 132px minmax(0, 1fr) auto; align-items: center; gap: 20px; padding: 16px 0; text-decoration: none; color: inherit; }
+.cal-item .cal-row { display: grid; grid-template-columns: 132px minmax(0, 1fr) auto; align-items: center; gap: 20px; padding: 16px 0; text-decoration: none; color: inherit; }
 .cal-time { font-size: 13px; font-weight: 500; color: var(--ink); line-height: 1.3; }
 .cal-info { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
 .cal-name { font-size: 16px; font-weight: 500; line-height: 1.3; color: var(--ink); transition: color 0.15s; }
-.cal-item a:hover .cal-name { color: var(--orange); }
+.cal-item a.cal-row:hover .cal-name { color: var(--orange); }
 .cal-place { font-size: 12px; color: var(--text-faint); }
 .cal-cat { font-size: 10px; font-weight: 600; letter-spacing: 1.2px; text-transform: uppercase; color: var(--cat, var(--text-muted)); white-space: nowrap; display: inline-flex; align-items: center; gap: 6px; }
 .cal-cat::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--cat, var(--text-muted)); }
@@ -53,7 +53,7 @@
   .cal-day-head { position: static; }
   .cal-day-head .event-date { display: none; }
   .cal-day-text { flex-direction: row; align-items: baseline; gap: 10px; padding-top: 0; }
-  .cal-item a { grid-template-columns: minmax(0, 1fr) auto; gap: 12px; padding: 14px 0; }
+  .cal-item .cal-row { grid-template-columns: minmax(0, 1fr) auto; gap: 12px; padding: 14px 0; }
   .cal-time { grid-column: 1; font-size: 12px; color: var(--text-muted); order: 1; }
   .cal-info { grid-column: 1; order: 2; }
   .cal-cat { grid-column: 1; order: 3; }
@@ -90,6 +90,31 @@
   .cal-browse-group { gap: 8px 12px; }
 }
 
+/* Phones: get the first listings onto the first screen. The intro clamps to two
+   lines and each browse group becomes one swipeable row instead of a wrapped block. */
+@media (max-width: 600px) {
+  .cal-head { padding: 18px 0 14px; }
+  .cal-eyebrow { margin-bottom: 8px; }
+  .cal-title { font-size: 28px; }
+  .cal-title-icon { width: 28px; height: 28.6px; }
+  .cal-sub { font-size: 15px; margin-top: 10px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  .cal-browse { gap: 8px; margin-top: 14px; padding-top: 12px; }
+  .cal-browse-group { flex-wrap: nowrap; align-items: center; }
+  .cal-browse-label { width: 52px; font-size: 9px; letter-spacing: 1.2px; }
+  .cal-browse ul {
+    flex-wrap: nowrap; overflow-x: auto; gap: 6px; min-width: 0;
+    scrollbar-width: none; -webkit-overflow-scrolling: touch;
+    mask-image: linear-gradient(to right, #000 88%, transparent);
+  }
+  .cal-browse ul::-webkit-scrollbar { display: none; }
+  .cal-browse li { flex-shrink: 0; }
+  .cal-browse a { display: inline-block; white-space: nowrap; font-size: 12.5px; padding: 5px 10px; border: 1px solid var(--rule); border-radius: 999px; }
+  .cal-browse a[aria-current="page"] { border-color: var(--ink); }
+  .cal-filters { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; margin-top: 14px; padding-bottom: 2px; }
+  .cal-filters::-webkit-scrollbar { display: none; }
+  .cal-filter { flex-shrink: 0; }
+}
+
 /* --- Featured (sponsored) events ------------------------------------------ */
 .feat-wrap { margin: 28px 0 4px; padding: 20px 22px 18px; background: var(--bg-soft); border: 1px solid #efe9dc; border-radius: 8px; }
 .feat-head { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin-bottom: 14px; }
@@ -99,16 +124,16 @@
 .feat-note a { color: var(--orange); text-decoration: underline; text-underline-offset: 2px; font-style: normal; font-family: var(--sans); font-weight: 600; }
 .feat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; }
 .feat-card { background: #fff; border: 1px solid var(--rule); border-top: 3px solid var(--orange); border-radius: 6px; padding: 14px 16px 16px; text-decoration: none; color: inherit; display: flex; flex-direction: column; gap: 6px; box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04); transition: transform 0.15s, box-shadow 0.15s; }
-.feat-card:hover { transform: translateY(-1px); box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08); }
+a.feat-card:hover { transform: translateY(-1px); box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08); }
 .feat-when { font-size: 11px; font-weight: 600; letter-spacing: 1.2px; text-transform: uppercase; color: var(--olive-light); }
 .feat-name { font-family: var(--serif); font-weight: 700; font-size: 18px; line-height: 1.2; color: var(--ink); transition: color 0.15s; }
-.feat-card:hover .feat-name { color: var(--orange); }
+a.feat-card:hover .feat-name { color: var(--orange); }
 .feat-blurb { font-size: 13px; line-height: 1.45; color: var(--text-mid); }
 .feat-place { font-size: 12px; color: var(--text-faint); margin-top: auto; padding-top: 4px; }
 
 /* A featured event keeps its place in the day list but stands out. */
 .cal-item.is-featured { background: #fdf3ee; border-top: 1px solid #f3d9cc; border-bottom: 1px solid #f3d9cc; border-left: 3px solid var(--orange); border-radius: 6px; margin: 6px 0; }
-.cal-item.is-featured a { padding-left: 16px; padding-right: 12px; }
+.cal-item.is-featured .cal-row { padding-left: 16px; padding-right: 12px; }
 .cal-item.is-featured .cal-name { font-family: var(--serif); font-weight: 700; font-size: 18px; }
 .cal-item.is-featured .cal-time { font-weight: 600; }
 .cal-tag { display: inline-block; font-size: 9.5px; font-weight: 700; letter-spacing: 1.4px; text-transform: uppercase; color: #fff; background: var(--orange); padding: 3px 7px; border-radius: 3px; margin-right: 8px; vertical-align: 2px; }

@@ -324,3 +324,6 @@ ul { list-style: none; }
   .hero-stats .sep { margin: 0 10px; }
   .hero-book { width: 56px; height: 39.5px; }
 }
+
+/* Long bare URLs in issue HTML must wrap, or they widen the whole page on phones. */
+.newsletter-body { overflow-wrap: anywhere; }
