@@ -14,7 +14,7 @@ import aliases from '../data/geo-aliases.json';
 import seed from '../data/events-seed.json';
 import { dedupeRows, timeToMinutes } from './dedupe';
 import { categorize } from './categorize';
-import { tidyName, tidyTimes } from './tidy';
+import { tidyName, tidyTimes, tidyUrl } from './tidy';
 import type { Category } from './categorize';
 
 const BASE_ID = 'apprsKJr6ge2bytOh';
@@ -239,7 +239,7 @@ async function loadFutureRows(today: string): Promise<FutureRow[]> {
         address,
         venue,
         town: townFrom(address, geocodeQuery(address, venue)),
-        url: (f[FIELD.url] || f[FIELD.listingUrl] || '').trim(),
+        url: tidyUrl(f[FIELD.url] || '') || tidyUrl(f[FIELD.listingUrl] || ''),
         featured: Boolean(f[FIELD.featured]),
         blurb: (f[FIELD.blurb] || '').trim(),
       };

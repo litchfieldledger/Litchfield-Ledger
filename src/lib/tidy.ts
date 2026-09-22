@@ -76,3 +76,18 @@ export function tidyName(name: string): string {
   const cut = n.replace(TRAILING_DATE, '').trim();
   return cut.length >= 4 ? cut : n;
 }
+
+// What people type into the submission form's link field: "www.site.org",
+// "Site.com/events", sometimes an email address. A bare domain gets https:// so
+// it isn't read as a path on our own site; anything that isn't a web address
+// (an email, "see Instagram") is dropped rather than shown as a broken
+// "Details & tickets" button.
+export function tidyUrl(raw: string): string {
+  const u = (raw || '').trim();
+  if (!u) return '';
+  if (/^https?:\/\//i.test(u)) return u;
+  if (u.startsWith('//')) return `https:${u}`;
+  if (/\s/.test(u) || u.includes('@')) return '';
+  if (/^[a-z0-9-]+(\.[a-z0-9-]+)*\.[a-z]{2,}(:\d+)?([/?#]|$)/i.test(u)) return `https://${u}`;
+  return '';
+}
