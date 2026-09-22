@@ -2,8 +2,6 @@
 
 Astro site for The Litchfield Ledger: the homepage, the events calendar and on-site event pages (built from the Event Tracker in Airtable), the Beehiiv post feed and journal, newsletter signup embeds, and Netlify redirects.
 
-Goals, metrics, what has shipped, and what's next live in [ROADMAP.md](ROADMAP.md).
-
 ## Local Development
 
 ```sh
