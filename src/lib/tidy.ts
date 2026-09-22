@@ -59,7 +59,7 @@ export function tidyTimes(time: string, endTime: string): [string, string] {
 }
 
 const MONTH = '(jan|feb|mar|apr|may|jun|jul|aug|sep|sept|oct|nov|dec)[a-z]*\\.?';
-const WEEKDAY = '(mon|tues|wednes|thurs|fri|satur|sun)day';
+const WEEKDAY = '(mon|tues?|wed(nes)?|thu(rs?)?|fri|sat(ur)?|sun)(day)?\\.?';
 
 // "Fall Saunters: Johnson Farm – Thursday, October 15, 2026" → "Fall Saunters:
 // Johnson Farm". The row already has its date; the pasted copy just makes two
