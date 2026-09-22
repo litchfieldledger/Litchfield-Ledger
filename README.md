@@ -1,6 +1,8 @@
 # Litchfield Ledger
 
-Astro site for The Litchfield Ledger, including the homepage, zine-style page, Beehiiv post feed, newsletter signup embeds, and Netlify redirects.
+Astro site for The Litchfield Ledger: the homepage, the events calendar and on-site event pages (built from the Event Tracker in Airtable), the Beehiiv post feed and journal, newsletter signup embeds, and Netlify redirects.
+
+Goals, metrics, what has shipped, and what's next live in [ROADMAP.md](ROADMAP.md).
 
 ## Local Development
 
@@ -24,11 +26,10 @@ Astro writes the production build to `dist/`. The `dist/` folder is generated an
 ```text
 public/
   images/          Static site images served from /images/...
-  zine-assets/     Texture and collage assets for the zine page
   _redirects       Netlify redirects and Beehiiv proxy routes
 src/
   components/      Shared Astro components such as nav and footer
-  lib/             Beehiiv API helpers
+  lib/             Beehiiv API helpers, events data (Airtable), event page helpers
   pages/           Astro routes
   styles/          Page stylesheets
 ```
@@ -45,6 +46,8 @@ Required values:
 
 - `BEEHIIV_PUBLICATION_ID`
 - `BEEHIIV_API_KEY`
+
+Optional: `AIRTABLE_API_KEY` (read access to the Event Tracker). Without it, the calendar builds from the committed snapshot in `src/data/events-seed.json`.
 
 The browser-side feed refresher also uses the Netlify `/feed` redirect in `public/_redirects`.
 
