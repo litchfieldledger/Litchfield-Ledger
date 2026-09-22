@@ -79,23 +79,59 @@
       });
     }
 
+    // "/event/<slug>/" → "<slug>": which event a click or view is about, for
+    // per-event reports (the featured-listing report for sponsors).
+    function eventSlugFrom(url) {
+      try {
+        const m = new URL(url, window.location.href).pathname.match(/^\/event\/([^/]+)/);
+        return m ? m[1] : '';
+      } catch (e) {
+        return '';
+      }
+    }
+
     function setupLinkClicks() {
       document.addEventListener('click', (event) => {
         const link = event.target?.closest?.('a[data-track-click]');
         if (!link) return;
 
-        track(link.dataset.trackClick, {
+        // A link to an event page names that event; an action on an event page
+        // (tickets, directions, add to calendar) names the page's event.
+        const slug = eventSlugFrom(link.href) || eventSlugFrom(window.location.href);
+        track(link.dataset.trackClick, Object.assign({
           link_location: link.dataset.trackLocation || '',
           link_text: link.textContent.trim().replace(/\s+/g, ' ').slice(0, 120),
           link_url: link.href,
-        });
+        }, slug ? { event_slug: slug } : {}));
       });
+    }
+
+    // Sponsored placements: one featured_impression per event and placement
+    // per page view, when at least half the listing is on screen.
+    function setupFeaturedViews() {
+      const blocks = document.querySelectorAll('[data-featured-view]');
+      if (!blocks.length || !('IntersectionObserver' in window)) return;
+      const seen = new Set();
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          observer.unobserve(entry.target);
+          const slug = eventSlugFrom(entry.target.getAttribute('href') || '');
+          const placement = entry.target.dataset.featuredView;
+          const key = slug + '|' + placement;
+          if (!slug || seen.has(key)) return;
+          seen.add(key);
+          track('featured_impression', { event_slug: slug, placement: placement });
+        });
+      }, { threshold: 0.5 });
+      blocks.forEach((block) => observer.observe(block));
     }
 
     function init() {
       setupSignupViews();
       setupSignupClicks();
       setupLinkClicks();
+      setupFeaturedViews();
     }
 
     if (document.readyState === 'loading') {

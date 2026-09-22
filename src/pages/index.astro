@@ -114,7 +114,7 @@ const siteJsonLd = {
       )}
       {events.map((ev) => (
         <li class:list={['event-cell', { 'is-featured': ev.featured }]}>
-          <a href={ev.path} data-track-click="event_click" data-track-location={ev.featured ? 'this_week_featured' : 'this_week'}>
+          <a href={ev.path} data-track-click="event_click" data-track-location={ev.featured ? 'this_week_featured' : 'this_week'} data-featured-view={ev.featured ? 'home_strip' : undefined}>
             <div class="event-date">
               <span class="event-month">{ev.month}</span>
               <span class="event-day">{ev.day}</span>

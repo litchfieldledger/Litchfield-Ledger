@@ -65,7 +65,7 @@ const placeLabel = (venue: string, town: string) => {
     </div>
     <div class="feat-grid">
       {featured.map((ev) => (
-        <a class="feat-card" data-date={ev.date} href={eventPath(ev)} data-track-click="event_click" data-track-location="featured">
+        <a class="feat-card" data-date={ev.date} href={eventPath(ev)} data-track-click="event_click" data-track-location="featured" data-featured-view="calendar_strip">
           <span class="feat-when">{whenLabel(ev)}</span>
           <span class="feat-name">{ev.name}</span>
           {ev.blurb && <span class="feat-blurb">{ev.blurb}</span>}
@@ -130,7 +130,7 @@ const placeLabel = (venue: string, town: string) => {
       <ul class="cal-list">
         {day.events.map((ev) => (
           <li class:list={['cal-item', { 'is-featured': ev.featured }]} data-cat={ev.category}>
-            <a class="cal-row" href={eventPath(ev)} data-track-click="event_click" data-track-location={ev.featured ? 'calendar_featured' : 'calendar'}>
+            <a class="cal-row" href={eventPath(ev)} data-track-click="event_click" data-track-location={ev.featured ? 'calendar_featured' : 'calendar'} data-featured-view={ev.featured ? 'calendar_row' : undefined}>
               <span class="cal-time">{timeLabel(ev.time, ev.endTime)}</span>
               <span class="cal-info">
                 <span class="cal-name">{ev.featured && <span class="cal-tag">Featured</span>}{ev.name}</span>
