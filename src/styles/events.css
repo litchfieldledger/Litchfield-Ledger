@@ -141,7 +141,7 @@ a.feat-card:hover .feat-name { color: var(--orange); }
 .sponsor-line { margin: 22px 0 0; padding: 10px 14px; border: 1px dashed #e3c9b8; border-radius: 6px; background: #fff; font-size: 13px; line-height: 1.45; color: var(--text-mid); display: flex; gap: 10px; align-items: center; }
 .sponsor-line > span:nth-child(2) { flex: 1; }
 .sponsor-line .sponsor-star { color: var(--orange); }
-.sponsor-line b, .sponsor-line .sponsor-price { color: var(--ink); font-weight: 600; }
+.sponsor-line b { color: var(--ink); font-weight: 600; }
 .sponsor-line .sponsor-cta { flex-shrink: 0; color: var(--orange); font-weight: 600; text-decoration: underline; text-underline-offset: 2px; white-space: nowrap; }
 
 @media (max-width: 760px) {

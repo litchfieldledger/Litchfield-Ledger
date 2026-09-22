@@ -1,6 +1,6 @@
 ---
 // Day-grouped event list with category filter chips. Used by every /events page.
-import { CATEGORY_META, featuredPicks, eventPath, SPONSOR_MAILTO, SPONSOR_PRICE } from '../lib/events';
+import { CATEGORY_META, featuredPicks, eventPath, SPONSOR_MAILTO } from '../lib/events';
 import type { CalendarDay, CalendarEvent, Category } from '../lib/events';
 
 interface Props {
@@ -49,7 +49,7 @@ const placeLabel = (venue: string, town: string) => {
   <div class="feat-wrap" id="featured" aria-label="Featured events">
     <div class="feat-head">
       <span class="feat-kicker">Featured</span>
-      <span class="feat-note">Want your event here?{SPONSOR_PRICE && ` ${SPONSOR_PRICE}.`} <a href={SPONSOR_MAILTO} data-track-click="sponsor_click" data-track-location="featured_strip">Feature your event →</a></span>
+      <span class="feat-note">Want your event here? <a href={SPONSOR_MAILTO} data-track-click="sponsor_click" data-track-location="featured_strip">Feature your event →</a></span>
     </div>
     <div class="feat-grid">
       {featured.map((ev) => (
@@ -69,8 +69,7 @@ const placeLabel = (venue: string, town: string) => {
     <span class="sponsor-star" aria-hidden="true">★</span>
     <span>
       <b>Promote your event.</b>{' '}
-      <span class="sponsor-more">Featured listings sit at the top of this calendar and in Tuesday's newsletter.</span>{' '}
-      {SPONSOR_PRICE && <span class="sponsor-price">{SPONSOR_PRICE}.</span>}
+      <span class="sponsor-more">Featured listings sit at the top of this calendar and in Tuesday's newsletter.</span>
     </span>
     <a class="sponsor-cta" href={SPONSOR_MAILTO} data-track-click="sponsor_click" data-track-location="calendar_top">Feature your event →</a>
   </p>

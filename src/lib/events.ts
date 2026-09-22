@@ -47,9 +47,6 @@ const FIELD = {
 const OPTIONAL_FIELDS: ReadonlySet<string> = new Set([FIELD.featured, FIELD.blurb]);
 
 export const SPONSOR_EMAIL = 'patrick@litchfieldledger.com';
-// What a Featured listing costs, as shown on the calendar ("$50 a week").
-// Leave blank to hide the price.
-export const SPONSOR_PRICE = '';
 export const SPONSOR_MAILTO = `mailto:${SPONSOR_EMAIL}?subject=${encodeURIComponent('Featured event on the Ledger')}`;
 
 export type { Category };
