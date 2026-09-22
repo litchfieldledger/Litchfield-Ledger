@@ -102,6 +102,9 @@ export function isSameEvent(a: DedupeRow, b: DedupeRow): boolean {
   const va = tokens(a.venue, VENUE_STOP);
   const vb = tokens(b.venue, VENUE_STOP);
   if (va.size && vb.size && overlap(va, vb) === 0) {
+    // Without a shared start time, a shared town isn't enough either:
+    // "Fall Saunters" at two preserves in Washington are two walks.
+    if (untimed) return false;
     const ta = (a.town || '').toLowerCase();
     const tb = (b.town || '').toLowerCase();
     if (ta && tb && ta !== tb) return false;
