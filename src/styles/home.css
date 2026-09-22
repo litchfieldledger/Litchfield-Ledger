@@ -158,6 +158,10 @@ ul { list-style: none; }
 .events-empty { grid-column: 1 / -1; padding: 12px 0; font-size: 14px; color: var(--text-muted); }
 .events-empty a { color: var(--orange); }
 .events-row { row-gap: 26px; }
+/* Sponsored picks lead the strip and get a light highlight. */
+.event-cell.is-featured a { background: #fdf3ee; border-left: 3px solid var(--orange); border-radius: 6px; padding: 12px 14px; margin: -12px 0; }
+.event-feat-tag { align-self: flex-start; font-size: 9.5px; font-weight: 700; letter-spacing: 1.4px; text-transform: uppercase; color: #fff; background: var(--orange); padding: 3px 7px; border-radius: 3px; }
+.event-blurb { font-size: 13px; line-height: 1.4; color: var(--text-mid); }
 .event-cell:nth-child(3n + 1) { border-left: none; padding-left: 0; }
 
 /* Below the strip: one clear way into the full calendar, then shortcuts. */
@@ -332,6 +336,7 @@ ul { list-style: none; }
   .events-empty { padding: 20px 0; }
   .event-cell:nth-child(n + 5) { display: none; } /* four is plenty on a phone */
   .event-cell:nth-child(4) { border-bottom: none; }
+  .event-cell.is-featured a { margin: 0; padding: 14px 12px; }
   .events-more { margin-top: 8px; padding-top: 20px; }
   .events-quick { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; mask-image: linear-gradient(to right, #000 88%, transparent); }
   .events-quick::-webkit-scrollbar { display: none; }

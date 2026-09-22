@@ -113,14 +113,16 @@ const siteJsonLd = {
         <li class="events-empty">No events on the calendar yet. <a href={submitUrl}>Submit one</a>.</li>
       )}
       {events.map((ev) => (
-        <li class="event-cell">
-          <a href={ev.path} data-track-click="event_click" data-track-location="this_week">
+        <li class:list={['event-cell', { 'is-featured': ev.featured }]}>
+          <a href={ev.path} data-track-click="event_click" data-track-location={ev.featured ? 'this_week_featured' : 'this_week'}>
             <div class="event-date">
               <span class="event-month">{ev.month}</span>
               <span class="event-day">{ev.day}</span>
             </div>
             <div class="event-info">
+              {ev.featured && <span class="event-feat-tag">Featured</span>}
               <span class="event-name">{ev.name}</span>
+              {ev.featured && ev.blurb && <span class="event-blurb">{ev.blurb}</span>}
               <span class="event-sub">
                 {ev.weekday}{ev.time && ` · ${ev.time}`}{ev.place && <span class="dot">•</span>}{ev.place}
               </span>
