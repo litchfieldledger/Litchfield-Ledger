@@ -9,6 +9,13 @@
 .evp-title { font-family: var(--serif); font-weight: 700; font-size: 44px; line-height: 1.1; color: var(--ink); max-width: 820px; }
 .evp-featured { margin-top: 14px; font-size: 15px; color: var(--text-mid); display: flex; align-items: baseline; gap: 4px; flex-wrap: wrap; }
 
+.evp-past { margin-top: 16px; padding: 12px 16px; background: var(--bg-soft, #f6f3ec); border-left: 3px solid var(--olive-light); border-radius: 4px; font-size: 15px; color: var(--ink); display: flex; flex-wrap: wrap; gap: 6px 14px; align-items: baseline; max-width: 820px; }
+.evp-past[hidden] { display: none; }
+.evp-past span { font-family: var(--serif); font-weight: 700; }
+.evp-past a { color: var(--orange); font-weight: 600; text-decoration: none; font-size: 14px; }
+.evp-past a:hover { text-decoration: underline; }
+.evp-actions-gap { height: 24px; }
+[data-upcoming-only][hidden] { display: none !important; }
 .evp-grid { display: grid; grid-template-columns: minmax(0, 1fr) 320px; gap: 56px; margin-top: 30px; padding-top: 30px; border-top: 1px solid var(--rule); }
 
 .evp-facts { display: grid; gap: 18px; }

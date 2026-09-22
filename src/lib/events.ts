@@ -43,8 +43,17 @@ const FIELD = {
   // tracker doesn't have these columns yet.
   featured: 'Featured',
   blurb: 'Featured blurb',
+  // An event page's address, saved once by the ledger-events persist_slugs job
+  // from this site's /event-slugs.json so a later title edit can't move it.
+  pageSlug: 'Page slug',
 } as const;
-const OPTIONAL_FIELDS: ReadonlySet<string> = new Set([FIELD.featured, FIELD.blurb]);
+const OPTIONAL_FIELDS: ReadonlySet<string> = new Set([FIELD.featured, FIELD.blurb, FIELD.pageSlug]);
+
+// Event pages went live on this date; past events keep their pages (marked as
+// over) for a year so links from newsletter issues and shares keep working.
+// Nothing older ever had a page.
+const PAGES_LAUNCHED = '2026-09-22';
+const PAST_PAGE_DAYS = 365;
 
 export const SPONSOR_EMAIL = 'patrick@litchfieldledger.com';
 export const SPONSOR_MAILTO = `mailto:${SPONSOR_EMAIL}?subject=${encodeURIComponent('Featured event on the Ledger')}`;
@@ -101,15 +110,15 @@ function fetchLive(): Promise<RawFields[] | null> {
 async function fetchLiveUncached(): Promise<RawFields[] | null> {
   if (!API_KEY) return null;
 
-  // IS_AFTER is strict, so compare against yesterday (Connecticut time) to keep
-  // today's events: with a same-morning build, IS_AFTER(today) dropped every
-  // event happening that day. loadFutureRows does the precise `date >= today`.
-  const yesterday = addDays(todayIso(), -1);
+  // IS_AFTER is strict, so compare against the day before the first date we
+  // want (Connecticut time). Past events since pages launched are included for
+  // their pages; loadRows splits past from upcoming precisely.
+  const dayBefore = addDays(pastFrom(todayIso()), -1);
   // Community submissions (Source = Tally) bypass the AI/approval gate for now:
   // a person took the time to send them in, so publish them as submitted.
   const gate =
     SOURCE_FILTER === 'approved' ? `{Approved}=1` : `{AI Decision}='Include'`;
-  const formula = `AND(IS_AFTER({Event Date}, '${yesterday}'), OR({Source}='Tally', ${gate}))`;
+  const formula = `AND(IS_AFTER({Event Date}, '${dayBefore}'), OR({Source}='Tally', ${gate}))`;
 
   const all: RawFields[] = [];
   let fields: string[] = Object.values(FIELD);
@@ -128,7 +137,7 @@ async function fetchLiveUncached(): Promise<RawFields[] | null> {
         // optional, so drop them and retry the same page instead of failing
         // the whole build (and falling back to the stale seed).
         if (res.status === 422 && /UNKNOWN_FIELD_NAME/.test(text) && fields.some((f) => OPTIONAL_FIELDS.has(f))) {
-          console.warn('[events] Featured fields not in the tracker yet; building without them.');
+          console.warn('[events] Optional fields (Featured / Page slug) not in the tracker; building without them.');
           fields = fields.filter((f) => !OPTIONAL_FIELDS.has(f));
           continue;
         }
@@ -183,6 +192,7 @@ function placeLabel(address: string, venue: string): string {
 type FutureRow = {
   id: string;
   slug: string;
+  pageSlug: string; // saved in the tracker; wins over a computed slug
   notes: string;
   rank: number; // AI Rank 1-10; 0 when unranked
   name: string;
@@ -201,10 +211,26 @@ function todayIso(): string {
   return new Date().toLocaleDateString('en-CA', { timeZone: 'America/New_York' });
 }
 
-// Every future event from live Airtable (when the key is set) or the committed
-// seed, normalised and sorted by date then start time. Shared by the homepage
-// strip and the /events calendar.
+function pastFrom(today: string): string {
+  const yearAgo = addDays(today, -PAST_PAGE_DAYS);
+  return yearAgo > PAGES_LAUNCHED ? yearAgo : PAGES_LAUNCHED;
+}
+
+// Every event from pastFrom() on, from live Airtable (when the key is set) or
+// the committed seed, normalised, deduped, slugged, and sorted by date then
+// start time. Past and upcoming are deduped and slugged together so a page's
+// address doesn't change on the day its event passes.
+let rowsOnce: Promise<FutureRow[]> | undefined;
+function loadRows(): Promise<FutureRow[]> {
+  rowsOnce ??= loadRowsUncached(todayIso());
+  return rowsOnce;
+}
+
 async function loadFutureRows(today: string): Promise<FutureRow[]> {
+  return (await loadRows()).filter((e) => e.date >= today);
+}
+
+async function loadRowsUncached(today: string): Promise<FutureRow[]> {
   const live = await fetchLive();
   const rows: RawFields[] = live
     ? live
@@ -220,6 +246,7 @@ async function loadFutureRows(today: string): Promise<FutureRow[]> {
         [FIELD.featured]: e.featured,
         [FIELD.blurb]: e.blurb,
         [FIELD.notes]: e.notes,
+        [FIELD.pageSlug]: e.pageSlug,
       }));
 
   const future = rows
@@ -230,6 +257,7 @@ async function loadFutureRows(today: string): Promise<FutureRow[]> {
       return {
         id: (f.id as string) || `ev-${i}`,
         slug: '',
+        pageSlug: (f[FIELD.pageSlug] || '').trim(),
         notes: cleanNotes(f[FIELD.notes] || ''),
         rank: Number(f[FIELD.rank]) || 0,
         name: tidyName(f[FIELD.name] || ''),
@@ -244,7 +272,7 @@ async function loadFutureRows(today: string): Promise<FutureRow[]> {
         blurb: (f[FIELD.blurb] || '').trim(),
       };
     })
-    .filter((e) => e.name && e.date && e.date >= today)
+    .filter((e) => e.name && e.date && e.date >= pastFrom(today))
     .sort((a, b) =>
       a.date < b.date ? -1 : a.date > b.date ? 1 : timeToMinutes(a.time) - timeToMinutes(b.time)
     );
@@ -257,6 +285,8 @@ async function loadFutureRows(today: string): Promise<FutureRow[]> {
     }
     if (dropped.notes.length > kept.notes.length) kept.notes = dropped.notes;
     kept.rank = Math.max(kept.rank, dropped.rank);
+    // The page address follows the event, whichever copy it was saved on.
+    if (!kept.pageSlug && dropped.pageSlug) kept.pageSlug = dropped.pageSlug;
   });
   assignSlugs(kept);
   return kept;
@@ -277,15 +307,25 @@ function nameSlug(name: string): string {
   return slug.replace(/-+$/, '') || 'event';
 }
 
-// Name + date keeps an event's URL stable across builds even when the tracker
-// re-scrapes it. Same-day same-name collisions get -2, -3 in start-time order.
+// An event's address is name + date, saved to the tracker once it has been
+// published (see FIELD.pageSlug) so a later title edit can't move it. Saved
+// addresses are reserved first; new ones take the first free of base, base-2,
+// base-3 in start-time order.
 function assignSlugs(rows: FutureRow[]): void {
-  const used = new Map<string, number>();
+  const used = new Set<string>();
   for (const r of rows) {
+    if (r.pageSlug && !used.has(r.pageSlug)) {
+      r.slug = r.pageSlug;
+      used.add(r.slug);
+    }
+  }
+  for (const r of rows) {
+    if (r.slug) continue;
     const base = `${nameSlug(r.name)}-${r.date}`;
-    const n = (used.get(base) || 0) + 1;
-    used.set(base, n);
-    r.slug = n === 1 ? base : `${base}-${n}`;
+    let slug = base;
+    for (let n = 2; used.has(slug); n += 1) slug = `${base}-${n}`;
+    r.slug = slug;
+    used.add(slug);
   }
 }
 
@@ -354,24 +394,47 @@ export async function getCalendarDays(): Promise<CalendarDay[]> {
         events: [],
       });
     }
-    days.get(e.date)!.events.push({
-      id: e.id,
-      slug: e.slug,
-      notes: e.notes,
-      name: e.name,
-      date: e.date,
-      time: e.time,
-      endTime: e.endTime,
-      venue: e.venue,
-      address: e.address,
-      town: e.town,
-      url: e.url,
-      category: categorize(e),
-      featured: e.featured,
-      blurb: e.blurb,
-    });
+    days.get(e.date)!.events.push(toCalendarEvent(e));
   }
   return [...days.values()];
+}
+
+function toCalendarEvent(e: FutureRow): CalendarEvent {
+  return {
+    id: e.id,
+    slug: e.slug,
+    notes: e.notes,
+    name: e.name,
+    date: e.date,
+    time: e.time,
+    endTime: e.endTime,
+    venue: e.venue,
+    address: e.address,
+    town: e.town,
+    url: e.url,
+    category: categorize(e),
+    featured: e.featured,
+    blurb: e.blurb,
+  };
+}
+
+// Events that have happened since pages launched, newest first. Their pages
+// stay up, marked as over, so links from newsletter issues keep working.
+export async function getPastEvents(): Promise<CalendarEvent[]> {
+  const today = todayIso();
+  return (await loadRows())
+    .filter((e) => e.date < today)
+    .reverse()
+    .map(toCalendarEvent);
+}
+
+// Record id → page address for every event with a page, published as
+// /event-slugs.json. ledger-events' persist_slugs.py saves each one into the
+// tracker's Page slug field, after which it never changes.
+export async function getSlugManifest(): Promise<Record<string, string>> {
+  const out: Record<string, string> = {};
+  for (const e of await loadRows()) if (/^rec[A-Za-z0-9]{14}$/.test(e.id)) out[e.id] = e.slug;
+  return out;
 }
 
 // Sponsored picks for the strip above a calendar: the next `limit` featured

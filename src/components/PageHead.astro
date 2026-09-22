@@ -10,10 +10,12 @@ interface Props {
   image?: string; // absolute or site-relative
   type?: 'website' | 'article';
   jsonLd?: object | object[];
+  /** Keep the page out of search results (it still loads for anyone with the link). */
+  noindex?: boolean;
 }
 
 const SITE = 'https://litchfieldledger.com';
-const { title, description, path, image = '/images/og-home.jpg', type = 'website', jsonLd } = Astro.props;
+const { title, description, path, image = '/images/og-home.jpg', type = 'website', jsonLd, noindex = false } = Astro.props;
 
 // Netlify serves directory indexes at the trailing-slash URL, and the sitemap
 // lists them that way, so canonicals match that form.
@@ -30,7 +32,7 @@ const ld = jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : [];
 <title>{title}</title>
 <meta name="description" content={description}>
 <link rel="canonical" href={canonical}>
-<meta name="robots" content="index, follow, max-image-preview:large">
+<meta name="robots" content={noindex ? 'noindex, follow' : 'index, follow, max-image-preview:large'}>
 
 <meta property="og:site_name" content="The Litchfield Ledger">
 <meta property="og:type" content={type}>

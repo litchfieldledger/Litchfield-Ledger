@@ -1,11 +1,13 @@
 ---
-// One page per upcoming event: the details, directions, add-to-calendar, and
-// what else is on nearby, so a click from the calendar lands on the Ledger
-// instead of leaving for the organizer's site.
+// One page per event: the details, directions, add-to-calendar, and what else
+// is on nearby, so a click from the calendar lands on the Ledger instead of
+// leaving for the organizer's site. Past events keep their page (newsletter
+// issues link here), marked as over and pointing at what's coming up.
 import PageHead from '../../../components/PageHead.astro';
 import SiteFooter from '../../../components/SiteFooter.astro';
 import {
   getCalendarDays,
+  getPastEvents,
   townIndex,
   eventPath,
   eventLd,
@@ -25,7 +27,14 @@ type Props = {
   townSlug: string | null;
   nearby: CalendarEvent[];
   sameDay: CalendarEvent[];
+  past: boolean;
+  /** Past events only: the next date of the same event, if it's on the calendar. */
+  next: CalendarEvent | null;
+  /** Past events only: what's coming up in the same category. */
+  comingUp: CalendarEvent[];
+  noindex: boolean;
 };
+
 
 export async function getStaticPaths() {
   const days = await getCalendarDays();
@@ -46,7 +55,7 @@ export async function getStaticPaths() {
     return out;
   };
 
-  return all.map((ev) => {
+  const upcoming = all.map((ev) => {
     const town = ev.town.toLowerCase();
     const fromToday = all.filter((e) => e.date >= ev.date);
     const nearby = town ? distinctAfter(fromToday.filter((e) => e.town.toLowerCase() === town), ev, 4) : [];
@@ -58,12 +67,49 @@ export async function getStaticPaths() {
     );
     return {
       params: { slug: ev.slug },
-      props: { ev, townSlug: townSlugs.get(town) ?? null, nearby, sameDay } satisfies Props,
+      props: { ev, townSlug: townSlugs.get(town) ?? null, nearby, sameDay, past: false, next: null, comingUp: [], noindex: false } satisfies Props,
     };
   });
+
+  // "fall-saunters-johnson-farm-2026-10-15-2" → "fall-saunters-johnson-farm":
+  // the same event on another date shares it.
+  const series = (slug: string) => slug.replace(/-\d{4}-\d{2}-\d{2}(-\d+)?$/, '');
+  const today = new Date().toLocaleDateString('en-CA', { timeZone: 'America/New_York' });
+  // A month after the event, a past page drops out of search results (it still
+  // loads for anyone following a link).
+  const indexFrom = new Date(`${today}T12:00:00Z`);
+  indexFrom.setUTCDate(indexFrom.getUTCDate() - 30);
+  const indexFromIso = indexFrom.toISOString().slice(0, 10);
+
+  const past = (await getPastEvents()).map((ev) => {
+    const town = ev.town.toLowerCase();
+    const next = all.find((e) => series(e.slug) === series(ev.slug)) ?? null;
+    const nearby = town ? distinctAfter(all.filter((e) => e.town.toLowerCase() === town), ev, 4) : [];
+    const shown = new Set(nearby.map((e) => e.slug));
+    const comingUp = distinctAfter(
+      all.filter((e) => e.category === ev.category && !shown.has(e.slug) && e.slug !== next?.slug),
+      ev,
+      5
+    );
+    return {
+      params: { slug: ev.slug },
+      props: {
+        ev,
+        townSlug: townSlugs.get(town) ?? null,
+        nearby,
+        sameDay: [],
+        past: true,
+        next,
+        comingUp,
+        noindex: ev.date < indexFromIso,
+      } satisfies Props,
+    };
+  });
+
+  return [...upcoming, ...past];
 }
 
-const { ev, townSlug, nearby, sameDay } = Astro.props as Props;
+const { ev, townSlug, nearby, sameDay, past, next, comingUp, noindex } = Astro.props as Props;
 const path = eventPath(ev).replace(/\/$/, '');
 const cat = CATEGORY_META[ev.category];
 const when = whenLong(ev.date);
@@ -91,7 +137,8 @@ const shortWhen = (e: CalendarEvent) =>
   title={title}
   description={description}
   path={path}
-  jsonLd={[breadcrumbs(crumbs), { '@context': 'https://schema.org', ...eventLd(ev, description) }]}
+  jsonLd={past ? [breadcrumbs(crumbs)] : [breadcrumbs(crumbs), { '@context': 'https://schema.org', ...eventLd(ev, description) }]}
+  noindex={noindex}
 />
 </head>
 <body>
@@ -110,6 +157,19 @@ const shortWhen = (e: CalendarEvent) =>
     · <a href={`/events/${CATEGORY_SLUGS[ev.category]}/`} style={`--cat: ${cat.color}`} class="evp-cat">{cat.label}</a>
   </p>
   <h1 class="evp-title">{ev.name}</h1>
+  {past ? (
+    <p class="evp-past">
+      <span>This event was on {when}.</span>
+      {next
+        ? <a href={eventPath(next)} data-track-click="event_click" data-track-location="past_next">Next one: {shortWhen(next)} →</a>
+        : <a href="/events/" data-track-click="events_click" data-track-location="past_event">See what's on this week →</a>}
+    </p>
+  ) : (
+    <p class="evp-past" id="evp-past" data-date={ev.date} hidden>
+      <span>This event has passed.</span>
+      <a href="/events/" data-track-click="events_click" data-track-location="past_event">See what's on this week →</a>
+    </p>
+  )}
   {ev.featured && <p class="evp-featured"><span class="cal-tag">Featured</span>{ev.blurb}</p>}
 
   <div class="evp-grid">
@@ -124,22 +184,25 @@ const shortWhen = (e: CalendarEvent) =>
             <dt>Where</dt>
             <dd>
               {place.map((line, i) => (i === 0 ? <strong>{line}</strong> : <span>{line}</span>))}
-              {maps && <a class="evp-inline-link" href={maps} target="_blank" rel="noopener" data-track-click="event_directions_click" data-track-location="event_page">Get directions ↗</a>}
+              {maps && !past && <a data-upcoming-only class="evp-inline-link" href={maps} target="_blank" rel="noopener" data-track-click="event_directions_click" data-track-location="event_page">Get directions ↗</a>}
             </dd>
           </div>
         )}
       </dl>
 
-      <div class="evp-actions">
-        {ev.url && (
-          <a class="evp-btn evp-btn-primary" href={ev.url} target="_blank" rel="noopener" data-track-click="event_outbound_click" data-track-location="event_page">
-            Details &amp; tickets <span aria-hidden="true">↗</span>
-          </a>
-        )}
-        <a class="evp-btn" href={`${eventPath(ev)}calendar.ics`} download data-track-click="event_calendar_add" data-track-location="ics">Add to calendar</a>
-        <a class="evp-btn" href={googleCalendarUrl(ev)} target="_blank" rel="noopener" data-track-click="event_calendar_add" data-track-location="google">Google Calendar</a>
-        <button type="button" class="evp-btn" id="evp-share">Share</button>
-      </div>
+      {!past && (
+        <div class="evp-actions" data-upcoming-only>
+          {ev.url && (
+            <a class="evp-btn evp-btn-primary" href={ev.url} target="_blank" rel="noopener" data-track-click="event_outbound_click" data-track-location="event_page">
+              Details &amp; tickets <span aria-hidden="true">↗</span>
+            </a>
+          )}
+          <a class="evp-btn" href={`${eventPath(ev)}calendar.ics`} download data-track-click="event_calendar_add" data-track-location="ics">Add to calendar</a>
+          <a class="evp-btn" href={googleCalendarUrl(ev)} target="_blank" rel="noopener" data-track-click="event_calendar_add" data-track-location="google">Google Calendar</a>
+          <button type="button" class="evp-btn" id="evp-share">Share</button>
+        </div>
+      )}
+      {past && <div class="evp-actions-gap"></div>}
 
       <div class="evp-body">
         {paragraphs.length > 0
@@ -147,15 +210,15 @@ const shortWhen = (e: CalendarEvent) =>
           : <p>The organizer hasn't posted a description yet.{ev.url && <> Their <a href={ev.url} target="_blank" rel="noopener" data-track-click="event_outbound_click" data-track-location="event_body">event page</a> has the latest.</>}</p>}
       </div>
       <p class="evp-fine">
-        Listed on the Ledger's Litchfield County calendar. Times and details are as posted by the organizer, so
-        double-check before you drive. Hosting something? <a href={SUBMIT_URL} data-track-click="submit_event_click" data-track-location="event_page">Add your event</a>.
+        Listed on the Ledger's Litchfield County calendar.{!past && <> Times and details are as posted by the organizer, so
+        double-check before you drive.</>} Hosting something? <a href={SUBMIT_URL} data-track-click="submit_event_click" data-track-location="event_page">Add your event</a>.
       </p>
     </article>
 
     <aside class="evp-side">
       {nearby.length > 0 && (
         <section class="evp-more">
-          <h2>More in {ev.town}</h2>
+          <h2>{past ? `Coming up in ${ev.town}` : `More in ${ev.town}`}</h2>
           <ul>
             {nearby.map((e) => (
               <li><a href={eventPath(e)} data-track-click="event_click" data-track-location="event_nearby">
@@ -165,6 +228,20 @@ const shortWhen = (e: CalendarEvent) =>
             ))}
           </ul>
           {townSlug && <a class="evp-more-all" href={`/events/${townSlug}/`}>All {ev.town} events →</a>}
+        </section>
+      )}
+      {comingUp.length > 0 && (
+        <section class="evp-more">
+          <h2>Coming up: {cat.label}</h2>
+          <ul>
+            {comingUp.map((e) => (
+              <li><a href={eventPath(e)} data-track-click="event_click" data-track-location="past_coming_up">
+                <span class="evp-more-when">{[shortWhen(e), e.town].filter(Boolean).join(' · ')}</span>
+                <span class="evp-more-name">{e.name}</span>
+              </a></li>
+            ))}
+          </ul>
+          <a class="evp-more-all" href={`/events/${CATEGORY_SLUGS[ev.category]}/`}>All {cat.label.toLowerCase()} →</a>
         </section>
       )}
       {sameDay.length > 0 && (
@@ -197,6 +274,18 @@ const shortWhen = (e: CalendarEvent) =>
 <SiteFooter showInstagram={true} />
 
 <script is:inline>
+(function () {
+  // Pages rebuild daily; between rebuilds, mark an event that has just passed.
+  const banner = document.getElementById('evp-past');
+  if (banner) {
+    let today = '';
+    try { today = new Date().toLocaleDateString('en-CA', { timeZone: 'America/New_York' }); } catch (e) {}
+    if (today && (banner.dataset.date || '') < today) {
+      banner.hidden = false;
+      document.querySelectorAll('[data-upcoming-only]').forEach((el) => { el.hidden = true; });
+    }
+  }
+})();
 (function () {
   const btn = document.getElementById('evp-share');
   if (!btn) return;
