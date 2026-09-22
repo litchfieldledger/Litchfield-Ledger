@@ -1,6 +1,6 @@
 ---
 // Day-grouped event list with category filter chips. Used by every /events page.
-import { CATEGORY_META, featuredPicks, SPONSOR_EMAIL, SPONSOR_MAILTO } from '../lib/events';
+import { CATEGORY_META, featuredPicks, eventPath, SPONSOR_EMAIL, SPONSOR_MAILTO } from '../lib/events';
 import type { CalendarDay, CalendarEvent, Category } from '../lib/events';
 
 interface Props {
@@ -35,14 +35,6 @@ const categories = (Object.keys(CATEGORY_META) as Category[]).filter((c) => coun
 
 const submitUrl = 'https://litchfieldledger.beehiiv.com/add-your-event';
 
-// Events without an organizer link render as a plain row. They used to fall
-// back to the submit form, which read as a broken link to anyone tapping them.
-const rowTag = (ev: CalendarEvent) => (ev.url ? 'a' : 'div');
-const rowLink = (ev: CalendarEvent, location: string) =>
-  ev.url
-    ? { href: ev.url, target: '_blank', rel: 'noopener', 'data-track-click': 'event_click', 'data-track-location': location }
-    : {};
-
 const timeLabel = (time: string, endTime: string) => {
   if (!time) return 'TBA';
   return endTime ? `${time} – ${endTime}` : time;
@@ -60,14 +52,14 @@ const placeLabel = (venue: string, town: string) => {
       <span class="feat-note">Want your event here? <a href={SPONSOR_MAILTO}>Sponsor a featured listing →</a></span>
     </div>
     <div class="feat-grid">
-      {featured.map((ev) => { const Row = rowTag(ev); return (
-        <Row class="feat-card" data-date={ev.date} {...rowLink(ev, 'featured')}>
+      {featured.map((ev) => (
+        <a class="feat-card" data-date={ev.date} href={eventPath(ev)} data-track-click="event_click" data-track-location="featured">
           <span class="feat-when">{whenLabel(ev)}</span>
           <span class="feat-name">{ev.name}</span>
           {ev.blurb && <span class="feat-blurb">{ev.blurb}</span>}
           <span class="feat-place">{placeLabel(ev.venue, ev.town)}</span>
-        </Row>
-      ); })}
+        </a>
+      ))}
     </div>
   </div>
 )}
@@ -100,19 +92,19 @@ const placeLabel = (venue: string, town: string) => {
         </div>
       </div>
       <ul class="cal-list">
-        {day.events.map((ev) => { const Row = rowTag(ev); return (
+        {day.events.map((ev) => (
           <li class:list={['cal-item', { 'is-featured': ev.featured }]} data-cat={ev.category}>
-            <Row class="cal-row" {...rowLink(ev, ev.featured ? 'calendar_featured' : 'calendar')}>
+            <a class="cal-row" href={eventPath(ev)} data-track-click="event_click" data-track-location={ev.featured ? 'calendar_featured' : 'calendar'}>
               <span class="cal-time">{timeLabel(ev.time, ev.endTime)}</span>
               <span class="cal-info">
                 <span class="cal-name">{ev.featured && <span class="cal-tag">Featured</span>}{ev.name}</span>
                 <span class="cal-place">{placeLabel(ev.venue, ev.town)}</span>
               </span>
               <span class="cal-cat" style={`--cat: ${CATEGORY_META[ev.category].color}`}>{CATEGORY_META[ev.category].label}</span>
-              {ev.url && <span class="event-chevron" aria-hidden="true">›</span>}
-            </Row>
+              <span class="event-chevron" aria-hidden="true">›</span>
+            </a>
           </li>
-        ); })}
+        ))}
       </ul>
     </div>
   ))}

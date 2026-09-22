@@ -34,6 +34,7 @@ const FIELD = {
   url: 'URL',
   listingUrl: 'Original Listing URL',
   source: 'Source Name',
+  notes: 'Event Notes',
   // Sponsored placements. Optional: the live fetch retries without them if the
   // tracker doesn't have these columns yet.
   featured: 'Featured',
@@ -98,7 +99,16 @@ function townFrom(address: string, geo: string): string {
 }
 
 type RawFields = Record<string, string | undefined>;
-async function fetchLive(): Promise<RawFields[] | null> {
+
+// Every calendar route (list pages, ~200 event pages, their .ics files) asks for
+// the same rows during one build; fetch Airtable once and share the result.
+let liveOnce: Promise<RawFields[] | null> | undefined;
+function fetchLive(): Promise<RawFields[] | null> {
+  liveOnce ??= fetchLiveUncached();
+  return liveOnce;
+}
+
+async function fetchLiveUncached(): Promise<RawFields[] | null> {
   if (!API_KEY) return null;
 
   // IS_AFTER is strict, so compare against yesterday (Connecticut time) to keep
@@ -136,7 +146,8 @@ async function fetchLive(): Promise<RawFields[] | null> {
         return null;
       }
       const json = await res.json();
-      for (const rec of json.records ?? []) all.push(rec.fields ?? {});
+      // Keep the record id: event pages key their related-event lookups on it.
+      for (const rec of json.records ?? []) all.push({ id: rec.id, ...(rec.fields ?? {}) });
       offset = json.offset;
       if (!offset) break;
     }
@@ -158,6 +169,7 @@ export type UpcomingEvent = {
   time: string; // "6:00 PM"
   place: string; // "Litchfield, CT"
   url: string;
+  path: string; // on-site event page, "/event/<slug>/"
 };
 
 function addDays(iso: string, days: number): string {
@@ -177,6 +189,8 @@ function placeLabel(address: string, venue: string): string {
 
 type FutureRow = {
   id: string;
+  slug: string;
+  notes: string;
   name: string;
   date: string;
   time: string;
@@ -211,6 +225,7 @@ async function loadFutureRows(today: string): Promise<FutureRow[]> {
         [FIELD.url]: e.url,
         [FIELD.featured]: e.featured,
         [FIELD.blurb]: e.blurb,
+        [FIELD.notes]: e.notes,
       }));
 
   const future = rows
@@ -219,6 +234,8 @@ async function loadFutureRows(today: string): Promise<FutureRow[]> {
       const venue = (f[FIELD.venue] || '').trim();
       return {
         id: (f.id as string) || `ev-${i}`,
+        slug: '',
+        notes: cleanNotes(f[FIELD.notes] || ''),
         name: (f[FIELD.name] || '').trim(),
         date: (f[FIELD.date] || '').trim(),
         time: (f[FIELD.time] || '').trim(),
@@ -237,16 +254,61 @@ async function loadFutureRows(today: string): Promise<FutureRow[]> {
     );
   // The tracker holds the same listing from several sources; show it once.
   // A Featured tick on any copy carries over to the copy we keep.
-  return dedupeRows(future, (kept, dropped) => {
+  const kept = dedupeRows(future, (kept, dropped) => {
     if (dropped.featured) {
       kept.featured = true;
       if (!kept.blurb) kept.blurb = dropped.blurb;
     }
+    if (dropped.notes.length > kept.notes.length) kept.notes = dropped.notes;
   });
+  assignSlugs(kept);
+  return kept;
+}
+
+// ---------------------------------------------------------------------------
+// On-site event pages: /event/<slug>/.
+
+const MONTHS = 'january|february|march|april|may|june|july|august|september|october|november|december';
+const WEEKDAYS = 'monday|tuesday|wednesday|thursday|friday|saturday|sunday';
+
+// "Fall Saunters: Hillside Farm, Tuesday, September 22, 2026" → "fall-saunters-hillside-farm".
+// The date goes on the end separately, so a date already in the title is noise.
+function nameSlug(name: string): string {
+  let slug = slugify(name);
+  slug = slug.replace(new RegExp(`(-(${WEEKDAYS}))?-(${MONTHS})-\\d{1,2}(-\\d{4})?$`), '');
+  if (slug.length > 70) slug = slug.slice(0, 70).replace(/-[^-]*$/, ''); // cut at a word break
+  return slug.replace(/-+$/, '') || 'event';
+}
+
+// Name + date keeps an event's URL stable across builds even when the tracker
+// re-scrapes it. Same-day same-name collisions get -2, -3 in start-time order.
+function assignSlugs(rows: FutureRow[]): void {
+  const used = new Map<string, number>();
+  for (const r of rows) {
+    const base = `${nameSlug(r.name)}-${r.date}`;
+    const n = (used.get(base) || 0) + 1;
+    used.set(base, n);
+    r.slug = n === 1 ? base : `${base}-${n}`;
+  }
+}
+
+export const eventPath = (e: { slug: string }) => `/event/${e.slug}/`;
+
+// Scraped notes arrive with stray whitespace and the odd HTML entity.
+function cleanNotes(raw: string): string {
+  return raw
+    .replace(/\r\n?/g, '\n')
+    .replace(/&nbsp;/g, ' ')
+    .replace(/&amp;/g, '&')
+    .replace(/[ \t]+/g, ' ')
+    .replace(/\n{3,}/g, '\n\n')
+    .trim();
 }
 
 export type CalendarEvent = {
   id: string;
+  slug: string;
+  notes: string;
   name: string;
   date: string; // YYYY-MM-DD
   time: string; // "6:00 PM" or ""
@@ -297,6 +359,8 @@ export async function getCalendarDays(): Promise<CalendarDay[]> {
     }
     days.get(e.date)!.events.push({
       id: e.id,
+      slug: e.slug,
+      notes: e.notes,
       name: e.name,
       date: e.date,
       time: e.time,
@@ -367,6 +431,7 @@ export async function getUpcomingEvents(
       time: e.time,
       place: placeLabel(e.address, e.venue),
       url: e.url,
+      path: eventPath(e),
     };
   });
 }
@@ -499,30 +564,7 @@ export function eventsJsonLd(days: CalendarDay[], pageUrl: string, cap = 120): o
   outer: for (const d of days) {
     for (const e of d.events) {
       if (items.length >= cap) break outer;
-      const offset = nyOffset(e.date);
-      const start = toIsoTime(e.time);
-      const end = toIsoTime(e.endTime);
-      const ev: Record<string, unknown> = {
-        '@type': 'Event',
-        name: e.name,
-        startDate: start ? `${e.date}T${start}${offset}` : e.date,
-        eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
-        eventStatus: 'https://schema.org/EventScheduled',
-        location: {
-          '@type': 'Place',
-          name: e.venue || e.town || 'Litchfield County, CT',
-          address: {
-            '@type': 'PostalAddress',
-            ...(e.address ? { streetAddress: e.address } : {}),
-            ...(e.town ? { addressLocality: e.town } : {}),
-            addressRegion: 'CT',
-            addressCountry: 'US',
-          },
-        },
-      };
-      if (end) ev.endDate = `${e.date}T${end}${offset}`;
-      if (e.url) ev.url = e.url;
-      items.push(ev);
+      items.push(eventLd(e));
     }
   }
   return {
@@ -532,4 +574,35 @@ export function eventsJsonLd(days: CalendarDay[], pageUrl: string, cap = 120): o
     numberOfItems: items.length,
     itemListElement: items.map((item, i) => ({ '@type': 'ListItem', position: i + 1, item })),
   };
+}
+
+// One schema.org Event. Points at the on-site page; the organizer's link rides
+// along as sameAs so Google can still find the source.
+export function eventLd(e: CalendarEvent, description = ''): Record<string, unknown> {
+  const offset = nyOffset(e.date);
+  const start = toIsoTime(e.time);
+  const end = toIsoTime(e.endTime);
+  const ev: Record<string, unknown> = {
+    '@type': 'Event',
+    name: e.name,
+    startDate: start ? `${e.date}T${start}${offset}` : e.date,
+    eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
+    eventStatus: 'https://schema.org/EventScheduled',
+    location: {
+      '@type': 'Place',
+      name: e.venue || e.town || 'Litchfield County, CT',
+      address: {
+        '@type': 'PostalAddress',
+        ...(e.address ? { streetAddress: e.address } : {}),
+        ...(e.town ? { addressLocality: e.town } : {}),
+        addressRegion: 'CT',
+        addressCountry: 'US',
+      },
+    },
+  };
+  if (end) ev.endDate = `${e.date}T${end}${offset}`;
+  ev.url = `https://litchfieldledger.com${eventPath(e)}`;
+  if (e.url) ev.sameAs = e.url;
+  if (description) ev.description = description;
+  return ev;
 }

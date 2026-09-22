@@ -101,7 +101,7 @@ const siteJsonLd = {
       )}
       {events.map((ev) => (
         <li class="event-cell">
-          <a href={ev.url || '/events'} data-track-click="event_click" data-track-location="this_week">
+          <a href={ev.path} data-track-click="event_click" data-track-location="this_week">
             <div class="event-date">
               <span class="event-month">{ev.month}</span>
               <span class="event-day">{ev.day}</span>

@@ -1,0 +1,224 @@
+---
+// One page per upcoming event: the details, directions, add-to-calendar, and
+// what else is on nearby, so a click from the calendar lands on the Ledger
+// instead of leaving for the organizer's site.
+import PageHead from '../../../components/PageHead.astro';
+import SiteFooter from '../../../components/SiteFooter.astro';
+import {
+  getCalendarDays,
+  townIndex,
+  eventPath,
+  eventLd,
+  CATEGORY_META,
+  CATEGORY_SLUGS,
+} from '../../../lib/events';
+import type { CalendarEvent } from '../../../lib/events';
+import { SUBMIT_URL, breadcrumbs } from '../../events/_shared';
+import { googleCalendarUrl, whenLong, timeRange, placeLine, mapsUrl, metaDescription } from '../../../lib/event-page';
+import '../../../styles/home.css';
+import '../../../styles/visit.css';
+import '../../../styles/events.css';
+import '../../../styles/event.css';
+
+type Props = {
+  ev: CalendarEvent;
+  townSlug: string | null;
+  nearby: CalendarEvent[];
+  sameDay: CalendarEvent[];
+};
+
+export async function getStaticPaths() {
+  const days = await getCalendarDays();
+  const all = days.flatMap((d) => d.events);
+  const townSlugs = new Map(townIndex(days).map((t) => [t.town.toLowerCase(), t.slug]));
+
+  // One entry per event name, so a weekly market shows once in "More nearby".
+  const distinctAfter = (list: CalendarEvent[], ev: CalendarEvent, limit: number) => {
+    const seen = new Set([ev.name.toLowerCase()]);
+    const out: CalendarEvent[] = [];
+    for (const e of list) {
+      const key = e.name.toLowerCase();
+      if (seen.has(key)) continue;
+      seen.add(key);
+      out.push(e);
+      if (out.length >= limit) break;
+    }
+    return out;
+  };
+
+  return all.map((ev) => {
+    const town = ev.town.toLowerCase();
+    const fromToday = all.filter((e) => e.date >= ev.date);
+    const nearby = town ? distinctAfter(fromToday.filter((e) => e.town.toLowerCase() === town), ev, 4) : [];
+    const shown = new Set(nearby.map((e) => e.slug));
+    const sameDay = distinctAfter(
+      all.filter((e) => e.date === ev.date && !shown.has(e.slug)),
+      ev,
+      5
+    );
+    return {
+      params: { slug: ev.slug },
+      props: { ev, townSlug: townSlugs.get(town) ?? null, nearby, sameDay } satisfies Props,
+    };
+  });
+}
+
+const { ev, townSlug, nearby, sameDay } = Astro.props as Props;
+const path = eventPath(ev).replace(/\/$/, '');
+const cat = CATEGORY_META[ev.category];
+const when = whenLong(ev.date);
+const time = timeRange(ev.time, ev.endTime);
+const place = placeLine(ev);
+const maps = mapsUrl(ev);
+const paragraphs = ev.notes ? ev.notes.split(/\n\s*\n|\n/).map((p) => p.trim()).filter(Boolean) : [];
+const description = metaDescription(ev);
+const title = `${ev.name} · ${when} | The Litchfield Ledger`;
+const crumbs = [
+  { name: 'Home', path: '/' },
+  { name: 'Things to Do', path: '/events' },
+  ...(townSlug ? [{ name: ev.town, path: `/events/${townSlug}` }] : []),
+  { name: ev.name, path },
+];
+const shortWhen = (e: CalendarEvent) =>
+  new Date(`${e.date}T12:00:00`).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' }) +
+  (e.time ? ` · ${e.time}` : '');
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<PageHead
+  title={title}
+  description={description}
+  path={path}
+  jsonLd={[breadcrumbs(crumbs), { '@context': 'https://schema.org', ...eventLd(ev, description) }]}
+/>
+</head>
+<body>
+
+<header class="page-bar container">
+  <a href="/" class="wordmark" aria-label="The Litchfield Ledger — home">
+    <span>THE</span><span class="wordmark-box">LITCHFIELD</span><span>LEDGER</span>
+  </a>
+  <a class="page-bar-link" href="/events/">All events <span aria-hidden="true">→</span></a>
+</header>
+
+<main class="container evp">
+  <p class="evp-eyebrow">
+    <a href="/events/">Things to Do</a>
+    {townSlug && <> · <a href={`/events/${townSlug}/`}>{ev.town}</a></>}
+    · <a href={`/events/${CATEGORY_SLUGS[ev.category]}/`} style={`--cat: ${cat.color}`} class="evp-cat">{cat.label}</a>
+  </p>
+  <h1 class="evp-title">{ev.name}</h1>
+  {ev.featured && <p class="evp-featured"><span class="cal-tag">Featured</span>{ev.blurb}</p>}
+
+  <div class="evp-grid">
+    <article class="evp-main">
+      <dl class="evp-facts">
+        <div>
+          <dt>When</dt>
+          <dd><strong>{when}</strong>{time && <span>{time}</span>}</dd>
+        </div>
+        {place.length > 0 && (
+          <div>
+            <dt>Where</dt>
+            <dd>
+              {place.map((line, i) => (i === 0 ? <strong>{line}</strong> : <span>{line}</span>))}
+              {maps && <a class="evp-inline-link" href={maps} target="_blank" rel="noopener" data-track-click="event_directions_click" data-track-location="event_page">Get directions ↗</a>}
+            </dd>
+          </div>
+        )}
+      </dl>
+
+      <div class="evp-actions">
+        {ev.url && (
+          <a class="evp-btn evp-btn-primary" href={ev.url} target="_blank" rel="noopener" data-track-click="event_outbound_click" data-track-location="event_page">
+            Details &amp; tickets <span aria-hidden="true">↗</span>
+          </a>
+        )}
+        <a class="evp-btn" href={`${eventPath(ev)}calendar.ics`} download data-track-click="event_calendar_add" data-track-location="ics">Add to calendar</a>
+        <a class="evp-btn" href={googleCalendarUrl(ev)} target="_blank" rel="noopener" data-track-click="event_calendar_add" data-track-location="google">Google Calendar</a>
+        <button type="button" class="evp-btn" id="evp-share">Share</button>
+      </div>
+
+      <div class="evp-body">
+        {paragraphs.length > 0
+          ? paragraphs.map((p) => <p>{p}</p>)
+          : <p>The organizer hasn't posted a description yet.{ev.url && <> Their <a href={ev.url} target="_blank" rel="noopener" data-track-click="event_outbound_click" data-track-location="event_body">event page</a> has the latest.</>}</p>}
+      </div>
+      <p class="evp-fine">
+        Listed on the Ledger's Litchfield County calendar. Times and details are as posted by the organizer, so
+        double-check before you drive. Hosting something? <a href={SUBMIT_URL} data-track-click="submit_event_click" data-track-location="event_page">Add your event</a>.
+      </p>
+    </article>
+
+    <aside class="evp-side">
+      {nearby.length > 0 && (
+        <section class="evp-more">
+          <h2>More in {ev.town}</h2>
+          <ul>
+            {nearby.map((e) => (
+              <li><a href={eventPath(e)} data-track-click="event_click" data-track-location="event_nearby">
+                <span class="evp-more-when">{shortWhen(e)}</span>
+                <span class="evp-more-name">{e.name}</span>
+              </a></li>
+            ))}
+          </ul>
+          {townSlug && <a class="evp-more-all" href={`/events/${townSlug}/`}>All {ev.town} events →</a>}
+        </section>
+      )}
+      {sameDay.length > 0 && (
+        <section class="evp-more">
+          <h2>Also on {new Date(`${ev.date}T12:00:00`).toLocaleDateString('en-US', { weekday: 'long' })}</h2>
+          <ul>
+            {sameDay.map((e) => (
+              <li><a href={eventPath(e)} data-track-click="event_click" data-track-location="event_same_day">
+                <span class="evp-more-when">{[e.time, e.town].filter(Boolean).join(' · ')}</span>
+                <span class="evp-more-name">{e.name}</span>
+              </a></li>
+            ))}
+          </ul>
+          <a class="evp-more-all" href="/events/">Full calendar →</a>
+        </section>
+      )}
+    </aside>
+  </div>
+
+  <aside class="visit-cta evp-cta" data-track-signup-view="event_page">
+    <p class="visit-cta-eyebrow">Every Tuesday</p>
+    <h3>Get the week's best events</h3>
+    <p>The Ledger picks what's worth leaving the house for in Litchfield County and sends it Tuesday morning. Free. About 4,000 locals read it.</p>
+    <div class="beehiiv-wrap visit-signup" data-track-signup="event_page">
+      <script is:inline src="https://subscribe-forms.beehiiv.com/v3/loader.js" data-beehiiv-form="48c597c3-c9e3-4c7a-b09b-db8627e0a48e"></script>
+    </div>
+  </aside>
+</main>
+
+<SiteFooter showInstagram={true} />
+
+<script is:inline>
+(function () {
+  const btn = document.getElementById('evp-share');
+  if (!btn) return;
+  btn.addEventListener('click', async () => {
+    const data = { title: document.title, url: location.href.split('#')[0] };
+    let method = 'copy';
+    try {
+      if (navigator.share) {
+        method = 'native';
+        await navigator.share(data);
+      } else {
+        await navigator.clipboard.writeText(data.url);
+        btn.textContent = 'Link copied';
+        setTimeout(() => (btn.textContent = 'Share'), 2000);
+      }
+    } catch (e) {
+      return; // dismissed the share sheet
+    }
+    if (window.gtag) window.gtag('event', 'event_share', { method });
+  });
+})();
+</script>
+
+</body>
+</html>
