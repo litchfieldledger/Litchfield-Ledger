@@ -65,7 +65,7 @@ ul { list-style: none; }
   font-family: var(--sans); font-weight: 600; font-size: 17px; letter-spacing: 1px; line-height: 1;
   color: var(--ink); text-decoration: none; white-space: nowrap;
 }
-.wordmark-box { border: 1.5px solid var(--orange); border-radius: 2px; padding: 3px 7px; }
+.wordmark-box { font-family: var(--display); border: 1.5px solid var(--orange); border-radius: 2px; padding: 3px 7px; }
 
 /* --------------------------------------------------------------------------
    Hero
