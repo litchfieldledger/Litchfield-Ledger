@@ -116,9 +116,13 @@ async function fetchLiveUncached(): Promise<RawFields[] | null> {
   const dayBefore = addDays(pastFrom(todayIso()), -1);
   // Community submissions (Source = Tally) bypass the AI/approval gate for now:
   // a person took the time to send them in, so publish them as submitted.
+  // To take one down (e.g. the organizer asks), set AI Decision = Reject with
+  // any Reject Reason except Duplicate — a rejected-as-Duplicate Tally row is
+  // still the copy the site shows, so that combination stays published.
   const gate =
     SOURCE_FILTER === 'approved' ? `{Approved}=1` : `{AI Decision}='Include'`;
-  const formula = `AND(IS_AFTER({Event Date}, '${dayBefore}'), OR({Source}='Tally', ${gate}))`;
+  const tally = `AND({Source}='Tally', OR({AI Decision}!='Reject', {Reject Reason}='Duplicate'))`;
+  const formula = `AND(IS_AFTER({Event Date}, '${dayBefore}'), OR(${tally}, ${gate}))`;
 
   const all: RawFields[] = [];
   let fields: string[] = Object.values(FIELD);
