@@ -12,3 +12,7 @@
 # Visitor guide moved onto the main site. Fires once visit.litchfieldledger.com
 # is added as a domain alias of this Netlify site.
 https://visit.litchfieldledger.com/* https://litchfieldledger.com/visit/ 301!
+
+# Sponsor ad kit (PDF served at a clean URL)
+/sponsor   /Litchfield-Ledger-Ad-Kit.pdf   200
+/sponsor/  /Litchfield-Ledger-Ad-Kit.pdf   200
