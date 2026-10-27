@@ -79,6 +79,40 @@
       });
     }
 
+    // Completed signups. The Beehiiv form lives in a cross-origin iframe, but it
+    // posts `beehiiv:submitted` (and `beehiiv:success-toast`) to the page on
+    // success. Matching event.source to the iframe tells us which form it was.
+    // This is the event to mark as a key event in GA4.
+    function setupSubscribeSuccess() {
+      const BEEHIIV_ORIGIN = 'https://subscribe-forms.beehiiv.com';
+      const SUCCESS_TYPES = ['beehiiv:submitted', 'beehiiv:success-toast'];
+      const lastTrackedAt = new Map();
+
+      window.addEventListener('message', (event) => {
+        if (event.origin !== BEEHIIV_ORIGIN) return;
+        const type = event.data && event.data.type;
+        if (SUCCESS_TYPES.indexOf(type) === -1) return;
+
+        let location = 'unknown';
+        document.querySelectorAll('[data-track-signup]').forEach((block) => {
+          const frame = block.querySelector('iframe');
+          if (frame && frame.contentWindow === event.source) location = block.dataset.trackSignup;
+        });
+
+        // submitted + success-toast can both arrive for one signup.
+        const now = Date.now();
+        if (now - (lastTrackedAt.get(location) || 0) < 5000) return;
+        lastTrackedAt.set(location, now);
+
+        // beacon transport: a form can redirect right after success.
+        track('newsletter_subscribe', {
+          signup_location: location,
+          signup_message: type,
+          transport_type: 'beacon',
+        });
+      });
+    }
+
     // "/event/<slug>/" → "<slug>": which event a click or view is about, for
     // per-event reports (the featured-listing report for sponsors).
     function eventSlugFrom(url) {
@@ -130,6 +164,7 @@
     function init() {
       setupSignupViews();
       setupSignupClicks();
+      setupSubscribeSuccess();
       setupLinkClicks();
       setupFeaturedViews();
     }
