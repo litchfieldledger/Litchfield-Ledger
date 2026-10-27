@@ -85,6 +85,7 @@
 .cal-about { max-width: 720px; margin: 48px 0 8px; padding-top: 28px; border-top: 1px solid var(--rule); }
 .cal-about h2 { font-family: var(--display); font-size: 22px; text-transform: uppercase; margin-bottom: 10px; }
 .cal-about p { font-family: var(--serif); font-size: 16px; line-height: 1.6; color: var(--text-mid); }
+.cal-about .cal-support { margin-top: 14px; margin-bottom: 16px; }
 @media (max-width: 768px) {
   .cal-browse-label { width: auto; }
   .cal-browse-group { gap: 8px 12px; }
