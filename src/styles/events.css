@@ -74,6 +74,10 @@
 /* SEO landing-page furniture */
 .cal-eyebrow { font-size: 10px; font-weight: 600; letter-spacing: 1.8px; text-transform: uppercase; color: var(--olive-light); margin-bottom: 14px; }
 .cal-eyebrow a { color: inherit; text-decoration: none; }
+.cal-eyebrow-row { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; margin-bottom: 14px; }
+.cal-eyebrow-row .cal-eyebrow { margin-bottom: 0; }
+.cal-support-link { font-size: 10px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: var(--orange); text-decoration: none; white-space: nowrap; }
+.cal-support-link:hover { text-decoration: underline; }
 .cal-eyebrow a:hover { color: var(--orange); }
 .cal-browse { display: flex; flex-direction: column; gap: 10px; margin-top: 26px; padding-top: 20px; border-top: 1px solid var(--rule); }
 .cal-browse-group { display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; }
