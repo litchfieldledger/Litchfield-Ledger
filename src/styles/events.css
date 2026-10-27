@@ -76,7 +76,7 @@
 .cal-eyebrow a { color: inherit; text-decoration: none; }
 
 /* Support callout under the hero */
-.cal-callout { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 16px 32px; align-items: center; margin: 8px 0 28px; padding: 28px 30px; background: var(--bg-soft); border: 1.5px solid var(--orange); border-radius: 8px; }
+.cal-callout { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 16px 32px; align-items: center; margin: 8px 0 0; padding: 28px 30px; background: var(--bg-soft); border: 1.5px solid var(--orange); border-radius: 8px; }
 .cal-callout-kicker { font-size: 11px; font-weight: 600; letter-spacing: 1.8px; text-transform: uppercase; color: var(--orange); margin: 0 0 8px; }
 .cal-callout h2 { font-family: var(--display); font-size: 30px; line-height: 1.05; text-transform: uppercase; margin: 0 0 10px; }
 .cal-callout p { font-family: var(--serif); font-size: 16px; line-height: 1.55; color: var(--text-mid); margin: 0; }
@@ -84,7 +84,7 @@
 .cal-callout-btn { display: inline-block; white-space: nowrap; font-size: 13px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: #fff; background: var(--orange); border: 1.5px solid var(--orange); border-radius: 4px; padding: 16px 28px; text-decoration: none; transition: background 0.15s, color 0.15s; }
 .cal-callout-btn:hover { background: transparent; color: var(--orange); }
 @media (max-width: 768px) {
-  .cal-callout { grid-template-columns: 1fr; gap: 14px; padding: 18px 18px; margin-bottom: 20px; }
+  .cal-callout { grid-template-columns: 1fr; gap: 14px; padding: 18px 18px; margin-bottom: 0; }
   .cal-callout h2 { font-size: 22px; margin-bottom: 8px; }
   .cal-callout p { font-size: 14.5px; line-height: 1.5; }
   .cal-callout-btn { text-align: center; padding: 13px 20px; font-size: 12px; }

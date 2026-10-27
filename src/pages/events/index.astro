@@ -50,6 +50,19 @@ const description = `${total} upcoming events across Litchfield County, Connecti
 
 <main class="container">
 
+  <section class="cal-callout" aria-labelledby="cal-callout-title">
+    <div class="cal-callout-copy">
+      <p class="cal-callout-kicker">Community-run, reader-supported</p>
+      <h2 id="cal-callout-title">This calendar runs on people like you</h2>
+      <p>
+        The Litchfield Ledger is a community-run newsletter, not a big media company. A small team gathers every
+        event on this page by hand, week after week, and keeps it free for everyone in the county. It only
+        works because neighbors chip in. If the Ledger helps you find something to do, please help keep it going.
+      </p>
+    </div>
+    <a class="cal-callout-btn" href="https://litchfieldledger.beehiiv.com/upgrade" data-track-click="support_click" data-track-location="calendar_callout">Support the Ledger <span aria-hidden="true">→</span></a>
+  </section>
+
   <section class="cal-head">
     <p class="cal-eyebrow">Calendar</p>
     <h1 class="cal-title">
@@ -63,19 +76,6 @@ const description = `${total} upcoming events across Litchfield County, Connecti
       Know of one we're missing? <a href={SUBMIT_URL} data-track-click="submit_event_click" data-track-location="calendar_intro">Submit it here</a>.
     </p>
     <EventsBrowse towns={towns} categories={categories} current="/events" />
-  </section>
-
-  <section class="cal-callout" aria-labelledby="cal-callout-title">
-    <div class="cal-callout-copy">
-      <p class="cal-callout-kicker">Community-run, reader-supported</p>
-      <h2 id="cal-callout-title">This calendar runs on people like you</h2>
-      <p>
-        The Litchfield Ledger is a community-run newsletter, not a big media company. A small team gathers every
-        event on this page by hand, week after week, and keeps it free for everyone in the county. It only
-        works because neighbors chip in. If the Ledger helps you find something to do, please help keep it going.
-      </p>
-    </div>
-    <a class="cal-callout-btn" href="https://litchfieldledger.beehiiv.com/upgrade" data-track-click="support_click" data-track-location="calendar_callout">Support the Ledger <span aria-hidden="true">→</span></a>
   </section>
 
   <EventsCalendar days={days} />
