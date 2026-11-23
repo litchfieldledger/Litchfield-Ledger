@@ -5,6 +5,7 @@ import PageHead from '../components/PageHead.astro';
 import { getLedgerPosts, getLedgerStats, getLatestIssue } from '../lib/beehiiv';
 import { getUpcomingEvents, getCalendarDays, townIndex, CATEGORY_META, CATEGORY_SLUGS } from '../lib/events';
 import type { Category } from '../lib/events';
+import { foliageSeason } from '../lib/season';
 import '../styles/home.css';
 
 const posts = await getLedgerPosts();
@@ -26,12 +27,8 @@ const townLinks = townIndex(calendarDays)
 const numberFmt = new Intl.NumberFormat('en-US');
 const submitUrl = 'https://litchfieldledger.beehiiv.com/add-your-event';
 
-// Seasonal guide card under This Week. Foliage runs Sept 1 through Nov 8
-// (evaluated at build time, Connecticut date), so it comes back every year.
-const nyToday = new Date().toLocaleDateString('en-CA', { timeZone: 'America/New_York' });
-const [, mm, dd] = nyToday.split('-').map(Number);
-const showFoliage = mm === 9 || mm === 10 || (mm === 11 && dd <= 8);
-const foliageYear = nyToday.slice(0, 4);
+// Seasonal guide card under This Week (see lib/season.ts for the window).
+const { active: showFoliage, year: foliageYear } = foliageSeason();
 
 const SITE = 'https://litchfieldledger.com';
 const orgJsonLd = {
